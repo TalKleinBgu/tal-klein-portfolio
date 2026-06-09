@@ -866,11 +866,6 @@
      legible, so below 900px it's swapped for category cards of skill chips
      (populated from the same data). Hidden by default on wide screens. */
   .skill-mobile { display: none; }
-  .skill-mobile .stag.io {
-    color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, var(--cell-bg));
-    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-  }
   @media (max-width: 900px) {
     .skillgraph { display: none; }
     .skill-mobile { display: grid; gap: 14px; margin-top: 22px; }
@@ -1111,31 +1106,21 @@
   /* No card chrome - the timeline sits straight on the page background. */
   .je-grid .timeline .card { background: transparent; border: none; box-shadow: none; padding: 20px 0 4px; }
 
-  /* Hover / keyboard-focus to expand - replaces the click toggle. Nothing is
-     open by default; every entry (incl. the first) needs a hover/focus. */
+  /* Expand timeline entries. The explicit `.open` class - toggled by tap/click
+     or Enter/Space - drives this on every device, so a second tap collapses an
+     entry that's already open. */
   .je-grid .exp-head { cursor: default; }
-  .je-grid .exp:hover .exp-body,
-  .je-grid .exp:focus-within .exp-body,
   .je-grid .exp.open .exp-body { grid-template-rows: 1fr; margin-top: 17px; }
-  .je-grid .exp:hover .chev,
-  .je-grid .exp:focus-within .chev,
   .je-grid .exp.open .chev { transform: rotate(180deg); }
+
   /* GPA shown up-front in the always-visible head (no hover needed). */
   .je-grid .gpa-meta { color: var(--accent); font-weight: 700; }
   .je-grid .gpa-meta svg { opacity: 1; }
 
-  /* Subtle affordance without a card: the title picks up the accent on hover. */
+  /* Subtle affordance: the title + timeline node take the accent when open. */
   .je-grid .exp .title { transition: color .18s; }
-  .je-grid .exp:hover .title,
-  .je-grid .exp:focus-within .title,
   .je-grid .exp.open .title { color: var(--accent); }
-  /* On touch screens the head is the tap target, so flag it as interactive. */
-  @media (hover: none) { .je-grid .exp-head { cursor: pointer; } }
-  /* …and the timeline node beside it grows + glows so it clearly marks where
-     you are. */
   .je-grid .timeline .card::after { transition: transform .2s ease, box-shadow .2s ease; }
-  .je-grid .exp:hover::after,
-  .je-grid .exp:focus-within::after,
   .je-grid .exp.open::after {
     transform: scale(1.25);
     box-shadow:
@@ -1143,6 +1128,28 @@
       0 0 0 5px color-mix(in srgb, var(--accent) 55%, transparent),
       0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
   }
+
+  /* Pointer devices also expand on hover / keyboard focus for a frictionless
+     desktop feel. Gated to (hover: hover) so touch devices rely only on the
+     `.open` toggle above - otherwise :focus-within would keep a tapped card
+     pinned open and a second tap couldn't close it. */
+  @media (hover: hover) {
+    .je-grid .exp:hover .exp-body,
+    .je-grid .exp:focus-within .exp-body { grid-template-rows: 1fr; margin-top: 17px; }
+    .je-grid .exp:hover .chev,
+    .je-grid .exp:focus-within .chev { transform: rotate(180deg); }
+    .je-grid .exp:hover .title,
+    .je-grid .exp:focus-within .title { color: var(--accent); }
+    .je-grid .exp:hover::after,
+    .je-grid .exp:focus-within::after {
+      transform: scale(1.25);
+      box-shadow:
+        0 0 0 4px var(--bg-bottom),
+        0 0 0 5px color-mix(in srgb, var(--accent) 55%, transparent),
+        0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+    }
+  }
+  @media (hover: none) { .je-grid .exp-head { cursor: pointer; } }
   /* Inline links inside a timeline entry (e.g. the volunteering org). */
   .je-grid .bullets a,
   .je-grid .sub a { color: var(--accent); font-weight: 600; text-decoration: none; }

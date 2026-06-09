@@ -840,18 +840,18 @@
       const wrap=document.getElementById('skill-mobile');
       if(!wrap)return;
       const frag=document.createDocumentFragment();
+      const last=LAYER_DEFS.length-1;
       LAYER_DEFS.forEach((labels,li)=>{
-        if(li===0)return;                  // skip the single "Me / TK" node
+        if(li===0||li===last)return;       // skip the "Me / TK" node and the Roles layer
         const card=document.createElement('div');
         card.className='skillcard';
         const h=document.createElement('h4');
         const sd=document.createElement('span');sd.className='sd';
         h.append(sd,document.createTextNode(LLABELS[li].trim()));
         const tags=document.createElement('div');tags.className='stags';
-        const isIO=li===LAYER_DEFS.length-1;
         labels.forEach(l=>{
           const s=document.createElement('span');
-          s.className='stag'+(isIO?' io':'');
+          s.className='stag';
           s.textContent=l;
           tags.appendChild(s);
         });
