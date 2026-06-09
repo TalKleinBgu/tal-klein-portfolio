@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Tal Klein Portfolio</title>
 
 <!-- SEO -->
@@ -445,6 +445,9 @@
       <span><i></i>Hidden Skill</span>
     </div>
   </div>
+  <!-- Mobile fallback: the network graph can't render legibly on a phone, so a
+       categorised chip list (built from the same data) takes its place. -->
+  <div class="skill-mobile" id="skill-mobile"></div>
 </section>
 
 <section class="wrap reveal" id="contact">
@@ -480,7 +483,17 @@
   const burger=document.getElementById('burger'),menu=document.getElementById('mobileMenu');
   burger.addEventListener('click',()=>{const open=burger.classList.toggle('open');menu.classList.toggle('open',open);burger.setAttribute('aria-expanded',open);});
   menu.querySelectorAll('a').forEach(el=>el.addEventListener('click',()=>{burger.classList.remove('open');menu.classList.remove('open');burger.setAttribute('aria-expanded',false);}));
-  function toggleExp(h){h.closest('.exp').classList.toggle('open');}
+
+  /* ── Timeline entries: tap / keyboard to expand ──────────────────────────
+     Desktop expands these on hover; touch devices have no hover, so a tap (or
+     Enter/Space on the focused head) toggles an `.open` class instead. */
+  document.querySelectorAll('.exp-head').forEach(head=>{
+    const toggle=()=>head.closest('.exp').classList.toggle('open');
+    head.addEventListener('click',e=>{ if(e.target.closest('a'))return; toggle(); });
+    head.addEventListener('keydown',e=>{
+      if(e.key==='Enter'||e.key===' '){ if(e.target.closest('a'))return; e.preventDefault(); toggle(); }
+    });
+  });
 
   /* ── Anchor navigation: land on the section heading, not its padding ──── */
   document.querySelectorAll('a[href^="#"]').forEach(link=>{
@@ -812,13 +825,41 @@
     }
 
     function size(){
-      dpr=window.devicePixelRatio||1;
       const rect=canvas.getBoundingClientRect();
+      if(rect.width===0)return;            // graph hidden (mobile) - skip work
+      dpr=window.devicePixelRatio||1;
       W=rect.width;H=rect.height;
       canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
       ctx.setTransform(dpr,0,0,dpr,0,0);
       palette();measure();position();buildEdges();draw();
     }
+
+    /* Mobile fallback view: the same skill layers rendered as readable category
+       cards with chips (the canvas graph is hidden under 900px via CSS). */
+    (function buildMobile(){
+      const wrap=document.getElementById('skill-mobile');
+      if(!wrap)return;
+      const frag=document.createDocumentFragment();
+      LAYER_DEFS.forEach((labels,li)=>{
+        if(li===0)return;                  // skip the single "Me / TK" node
+        const card=document.createElement('div');
+        card.className='skillcard';
+        const h=document.createElement('h4');
+        const sd=document.createElement('span');sd.className='sd';
+        h.append(sd,document.createTextNode(LLABELS[li].trim()));
+        const tags=document.createElement('div');tags.className='stags';
+        const isIO=li===LAYER_DEFS.length-1;
+        labels.forEach(l=>{
+          const s=document.createElement('span');
+          s.className='stag'+(isIO?' io':'');
+          s.textContent=l;
+          tags.appendChild(s);
+        });
+        card.append(h,tags);
+        frag.appendChild(card);
+      });
+      wrap.appendChild(frag);
+    })();
 
     themeBtn.addEventListener('click',()=>setTimeout(()=>{palette();draw();},60));
     let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,140);});

@@ -66,7 +66,12 @@
     overflow-x: hidden;
     position: relative;
     transition: color .4s ease;
+    /* Kill the grey flash iOS/Android paint over tapped links & buttons. */
+    -webkit-tap-highlight-color: transparent;
   }
+
+  /* Never let a wide element force horizontal scrolling on a phone. */
+  img, canvas, svg { max-width: 100%; }
 
   @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; animation: none !important; }
@@ -107,8 +112,8 @@
     /* Horizontal-only (longhand) so it doesn't override the section's
        vertical padding below - a `padding` shorthand here would win on
        specificity and zero-out the top/bottom spacing. */
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
     position: relative;
   }
 
@@ -133,7 +138,7 @@
   .nav {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 14px 24px;
+    padding: 14px max(24px, env(safe-area-inset-right)) 14px max(24px, env(safe-area-inset-left));
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -300,7 +305,8 @@
 
   /* ── Sections & typography ───────────────────────────────────────────── */
   section { padding-top: 120px; padding-bottom: 20px; }
-  @media (max-width: 600px) { section { padding-top: 64px; padding-bottom: 64px; } }
+  @media (max-width: 820px) { section { padding-top: 84px; padding-bottom: 40px; } }
+  @media (max-width: 600px) { section { padding-top: 64px; padding-bottom: 24px; } }
 
   .eyebrow {
     color: var(--accent);
@@ -856,6 +862,20 @@
     border-color: transparent;
   }
 
+  /* Mobile skills fallback: the canvas graph needs desktop width to stay
+     legible, so below 900px it's swapped for category cards of skill chips
+     (populated from the same data). Hidden by default on wide screens. */
+  .skill-mobile { display: none; }
+  .skill-mobile .stag.io {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--cell-bg));
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  @media (max-width: 900px) {
+    .skillgraph { display: none; }
+    .skill-mobile { display: grid; gap: 14px; margin-top: 22px; }
+  }
+
   /* ══ Skills section - ALTERNATIVE LAYOUTS (comparison page) ═══════════════
      The variants below are standalone candidates for the Skills section, all
      drawn from the same palette/tokens so they sit consistently next to the
@@ -1095,9 +1115,11 @@
      open by default; every entry (incl. the first) needs a hover/focus. */
   .je-grid .exp-head { cursor: default; }
   .je-grid .exp:hover .exp-body,
-  .je-grid .exp:focus-within .exp-body { grid-template-rows: 1fr; margin-top: 17px; }
+  .je-grid .exp:focus-within .exp-body,
+  .je-grid .exp.open .exp-body { grid-template-rows: 1fr; margin-top: 17px; }
   .je-grid .exp:hover .chev,
-  .je-grid .exp:focus-within .chev { transform: rotate(180deg); }
+  .je-grid .exp:focus-within .chev,
+  .je-grid .exp.open .chev { transform: rotate(180deg); }
   /* GPA shown up-front in the always-visible head (no hover needed). */
   .je-grid .gpa-meta { color: var(--accent); font-weight: 700; }
   .je-grid .gpa-meta svg { opacity: 1; }
@@ -1105,12 +1127,16 @@
   /* Subtle affordance without a card: the title picks up the accent on hover. */
   .je-grid .exp .title { transition: color .18s; }
   .je-grid .exp:hover .title,
-  .je-grid .exp:focus-within .title { color: var(--accent); }
+  .je-grid .exp:focus-within .title,
+  .je-grid .exp.open .title { color: var(--accent); }
+  /* On touch screens the head is the tap target, so flag it as interactive. */
+  @media (hover: none) { .je-grid .exp-head { cursor: pointer; } }
   /* …and the timeline node beside it grows + glows so it clearly marks where
      you are. */
   .je-grid .timeline .card::after { transition: transform .2s ease, box-shadow .2s ease; }
   .je-grid .exp:hover::after,
-  .je-grid .exp:focus-within::after {
+  .je-grid .exp:focus-within::after,
+  .je-grid .exp.open::after {
     transform: scale(1.25);
     box-shadow:
       0 0 0 4px var(--bg-bottom),
@@ -1212,7 +1238,7 @@
   }
 
   /* ── Footer ──────────────────────────────────────────────────────────── */
-  footer { text-align: center; padding: 32px 0 48px; color: var(--ink-faint); font-size: 13px; line-height: 1.8; }
+  footer { text-align: center; padding: 32px 16px calc(48px + env(safe-area-inset-bottom)); color: var(--ink-faint); font-size: 13px; line-height: 1.8; }
   footer .credit { display: block; }
   footer .credit code {
     font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
