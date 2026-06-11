@@ -1,10 +1,10 @@
-src/
-tailwind.config.js
-package.json
-package-lock.json
 compress-images.js
 lighthouse-report.json
 lighthouse-report2.json
 lh3.json
 lh4.json
 lh5-desktop.json
+audit_*.png
+final_*.png
+memory/
+node_modules/
