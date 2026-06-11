@@ -13,9 +13,9 @@
     --card-2: #f1ece1;
     --ink: #1c2b4a;
     --ink-soft: #4d5670;
-    --ink-faint: #838aa0;
-    --accent: #2563eb;
-    --accent-bright: #3b6df5;
+    --ink-faint: #636a7a;
+    --accent: #1d4ed8;
+    --accent-bright: #2563eb;
     --border: rgba(28,43,74,0.10);
     --border-soft: rgba(28,43,74,0.07);
     --cell-bg: #f8f3ea;
@@ -24,6 +24,30 @@
     --card-shadow: 0 12px 30px rgba(28,43,74,0.14), 0 3px 8px rgba(28,43,74,0.08);
   }
 
+  /* Dark theme — triggered by system preference when no explicit override is set */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-top: #131c30;
+      --bg-bottom: #0d1422;
+      --bg-grid: rgba(255,255,255,0.06);
+      --scroll-tint-color: #05080f;
+      --card: #1a2540;
+      --card-2: #202c49;
+      --ink: #eef1f7;
+      --ink-soft: #aab3c9;
+      --ink-faint: #8592ab;
+      --accent: #5b8cff;
+      --accent-bright: #7aa3ff;
+      --border: rgba(255,255,255,0.12);
+      --border-soft: rgba(255,255,255,0.08);
+      --cell-bg: #131e36;
+      --cell-border: rgba(255,255,255,0.10);
+      --shadow: rgba(0,0,0,.4);
+      --card-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4);
+    }
+  }
+
+  /* Dark theme — explicit user override (higher specificity, wins over @media) */
   [data-theme="dark"] {
     --bg-top: #131c30;
     --bg-bottom: #0d1422;
@@ -33,7 +57,7 @@
     --card-2: #202c49;
     --ink: #eef1f7;
     --ink-soft: #aab3c9;
-    --ink-faint: #7f8aa6;
+    --ink-faint: #8592ab;
     --accent: #5b8cff;
     --accent-bright: #7aa3ff;
     --border: rgba(255,255,255,0.12);
@@ -42,6 +66,27 @@
     --cell-border: rgba(255,255,255,0.10);
     --shadow: rgba(0,0,0,.4);
     --card-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4);
+  }
+
+  /* Light theme explicit override (overrides the @media dark preference) */
+  [data-theme="light"] {
+    --bg-top: #F4EDE1;
+    --bg-bottom: #E7DBC3;
+    --bg-grid: rgba(70,52,24,0.065);
+    --scroll-tint-color: #2a1d0c;
+    --card: #fefdfb;
+    --card-2: #f1ece1;
+    --ink: #1c2b4a;
+    --ink-soft: #4d5670;
+    --ink-faint: #636a7a;
+    --accent: #1d4ed8;
+    --accent-bright: #2563eb;
+    --border: rgba(28,43,74,0.10);
+    --border-soft: rgba(28,43,74,0.07);
+    --cell-bg: #f8f3ea;
+    --cell-border: rgba(28,43,74,0.08);
+    --shadow: rgba(70,52,24,.10);
+    --card-shadow: 0 12px 30px rgba(28,43,74,0.14), 0 3px 8px rgba(28,43,74,0.08);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -81,6 +126,23 @@
 /* ─── Components ─────────────────────────────────────────────────────────── */
 @layer components {
 
+  /* Skip-to-main-content link (visually hidden until focused) */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 9999;
+    padding: 10px 18px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 0 0 10px 0;
+    text-decoration: none;
+    transition: top .15s;
+  }
+  .skip-link:focus { top: 0; }
+
   /* Background decorations */
   .scroll-tint {
     display: none;
@@ -107,7 +169,7 @@
 
   /* Layout */
   .wrap {
-    max-width: 1230px;
+    max-width: min(1230px, 90vw);
     margin: 0 auto;
     /* Horizontal-only (longhand) so it doesn't override the section's
        vertical padding below - a `padding` shorthand here would win on
@@ -116,6 +178,8 @@
     padding-right: max(24px, env(safe-area-inset-right));
     position: relative;
   }
+  @media (min-width: 1600px) { .wrap { max-width: min(1500px, 90vw); } }
+  @media (min-width: 1920px) { .wrap { max-width: min(1700px, 88vw); } }
 
   /* ── Header / Nav ────────────────────────────────────────────────────── */
   header {
@@ -136,7 +200,7 @@
   }
 
   .nav {
-    max-width: 1280px;
+    max-width: min(1280px, 92vw);
     margin: 0 auto;
     padding: 14px max(24px, env(safe-area-inset-right)) 14px max(24px, env(safe-area-inset-left));
     display: flex;
@@ -144,7 +208,7 @@
     justify-content: space-between;
   }
 
-  .brand { display: flex; align-items: center; gap: 11px; cursor: pointer; }
+  .brand { display: flex; align-items: center; gap: 11px; cursor: pointer; text-decoration: none; color: inherit; }
 
   .logo {
     width: 38px;
@@ -227,6 +291,10 @@
   .theme-btn .moon { display: none; }
   [data-theme="dark"] .theme-btn .sun  { display: none; }
   [data-theme="dark"] .theme-btn .moon { display: block; }
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme="light"]) .theme-btn .sun  { display: none; }
+    html:not([data-theme="light"]) .theme-btn .moon { display: block; }
+  }
 
   /* Hamburger */
   .burger { position: relative; }
@@ -320,7 +388,7 @@
   .display {
     font-weight: 800;
     font-size: clamp(26px, 3.6vw, 38px);
-    line-height: 1.08;
+    line-height: 1.1;
     letter-spacing: -1px;
     text-align: center;
     margin-bottom: 45px;
@@ -364,7 +432,7 @@
   }
   @media (min-width: 820px) { .avatar { width: 340px; height: 340px; } }
   @media (min-width: 1120px) { .avatar { width: 370px; height: 370px; } }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 1%; display: none; }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: none; }
   .avatar.has-img img  { display: block; }
   .avatar .ph {
     color: var(--ink-faint);
@@ -389,12 +457,36 @@
 
   .hero-text { flex: 1; }
   .hero-hi {
+    margin-bottom: 16px;
+  }
+
+  .avail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: color-mix(in srgb, var(--accent) 9%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
     color: var(--accent);
-    font-weight: 700;
     font-size: 12.5px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: .15px;
+    padding: 5px 12px 5px 10px;
+    border-radius: 999px;
+  }
+
+  .avail-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    flex: none;
+    animation: avail-pulse 2.2s ease-out infinite;
+  }
+
+  @keyframes avail-pulse {
+    0%   { box-shadow: 0 0 0 0   rgba(34,197,94,.55); }
+    70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0   rgba(34,197,94,0); }
   }
   .hero-name {
     font-weight: 800;
@@ -452,10 +544,10 @@
   /* ── About ───────────────────────────────────────────────────────────── */
   .about-card {
     margin-top: 22px;
-    max-width: 980px;
+    max-width: 720px;
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
+    text-align: left;
   }
   .about-card p            { color: var(--ink-soft); font-size: 17px; line-height: 1.75; margin-bottom: 18px; }
   .about-card p:last-child { margin-bottom: 0; }
@@ -498,7 +590,7 @@
   }
   .ico svg { width: 21px; height: 21px; }
 
-  h3.title {
+  h3.title, h4.title {
     font-size: clamp(17px, 2.1vw, 20px);
     font-weight: 800;
     letter-spacing: -.4px;
@@ -562,7 +654,7 @@
   .divider { height: 1px; background: var(--border); margin: 17px 0; }
 
   ul.bullets              { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-  ul.bullets li           { display: flex; gap: 11px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.45; }
+  ul.bullets li           { display: flex; gap: 11px; color: var(--ink-soft); font-size: 14.5px; line-height: 1.5; }
   ul.bullets li::before {
     content: "";
     flex: none;
@@ -579,7 +671,7 @@
   /* Project cards stay single-column and compact so several fit side by side
      in the carousel; the metric chips are intentionally small. */
   .pcard .metrics { margin: 14px 0 0; gap: 7px; }
-  .pcard .statbox { padding: 6px 5px; border-radius: 9px; }
+  .pcard .statbox { padding: 6px 5px; border-radius: 10px; }
   .pcard .statbox .v { font-size: 15px; letter-spacing: -.3px; }
   .pcard .statbox .k { font-size: 9.5px; margin-top: 1px; letter-spacing: .2px; }
 
@@ -628,6 +720,24 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+  }
+  .project-hf {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    text-decoration: none;
+    transition: border-color .18s, transform .18s, box-shadow .18s;
+    line-height: 1;
+  }
+  .project-hf:hover {
+    border-color: #ff9d00;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px var(--shadow);
   }
   .project-git {
     width: 38px;
@@ -708,7 +818,7 @@
     border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   }
 
-  .pdesc { color: var(--ink-soft); font-size: 14px; line-height: 1.45; margin-top: 9px; }
+  .pdesc { color: var(--ink-soft); font-size: 14px; line-height: 1.58; margin-top: 9px; }
 
   .pub-tag {
     color: var(--accent);
@@ -748,13 +858,13 @@
   .skillcard {
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 15px;
+    border-radius: 16px;
     padding: 22px;
     box-shadow: var(--card-shadow);
     transition: transform .2s, box-shadow .2s;
   }
   .skillcard:hover { transform: translateY(-3px); box-shadow: 0 10px 26px var(--shadow); }
-  .skillcard h4 {
+  .skillcard h3 {
     font-size: 11.5px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -765,7 +875,7 @@
     align-items: center;
     gap: 9px;
   }
-  .skillcard h4 .sd { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .skillcard h3 .sd { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
   .stags { display: flex; flex-wrap: wrap; gap: 8px; }
   .stag {
     font-weight: 600;
@@ -1118,8 +1228,8 @@
   .je-grid .gpa-meta svg { opacity: 1; }
 
   /* Subtle affordance: the title + timeline node take the accent when open. */
-  .je-grid .exp .title { transition: color .18s; }
-  .je-grid .exp.open .title { color: var(--accent); }
+  .je-grid .exp h4.title { transition: color .18s; }
+  .je-grid .exp.open h4.title { color: var(--accent); }
   .je-grid .timeline .card::after { transition: transform .2s ease, box-shadow .2s ease; }
   .je-grid .exp.open::after {
     transform: scale(1.25);
@@ -1138,8 +1248,8 @@
     .je-grid .exp:focus-within .exp-body { grid-template-rows: 1fr; margin-top: 17px; }
     .je-grid .exp:hover .chev,
     .je-grid .exp:focus-within .chev { transform: rotate(180deg); }
-    .je-grid .exp:hover .title,
-    .je-grid .exp:focus-within .title { color: var(--accent); }
+    .je-grid .exp:hover h4.title,
+    .je-grid .exp:focus-within h4.title { color: var(--accent); }
     .je-grid .exp:hover::after,
     .je-grid .exp:focus-within::after {
       transform: scale(1.25);
@@ -1164,6 +1274,7 @@
     letter-spacing: .7px;
     margin-bottom: 10px;
   }
+  .courses-label-mt { margin-top: 14px; }
 
   /* Volunteering entry: a small photo of the dog beside the bullets, shown
      when the card expands. The <img> removes itself if the file is missing. */
@@ -1184,6 +1295,16 @@
   }
 
   /* ── Contact ─────────────────────────────────────────────────────────── */
+  .contact-lead {
+    text-align: center;
+    font-size: clamp(16px, 2vw, 20px);
+    margin-bottom: 40px;
+    line-height: 1.55;
+    max-width: 740px;
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--ink-soft);
+  }
   .contact-wrap { max-width: 960px; margin: 24px auto 0; }
 
   /* Four contact cards in a single row on desktop; fall back to 2×2 on
@@ -1265,10 +1386,13 @@
   .nav-cv:focus-visible,
   .iconbtn:focus-visible,
   .project-git:focus-visible,
+  .project-hf:focus-visible,
   .rail-arrow:focus-visible,
   .crow:focus-visible,
   .btn:focus-visible,
-  .dl-full:focus-visible {
+  .dl-full:focus-visible,
+  .mm-pad a:focus-visible,
+  .exp-head[tabindex]:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
