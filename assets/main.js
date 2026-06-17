@@ -1,9 +1,7 @@
-/* ── Theme init: restore saved preference (system preference handled by CSS) */
+/* ── Theme init: restore saved preference, else default to light (ignore system preference) */
 (function () {
   const saved = localStorage.getItem('theme');
-  if (saved === 'dark' || saved === 'light') {
-    document.documentElement.setAttribute('data-theme', saved);
-  }
+  document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
 })();
 
 /* ── Font activation: apply preloaded stylesheet ─────────────────────── */
