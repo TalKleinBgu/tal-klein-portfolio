@@ -1,7 +1,10 @@
 // Initialize Vercel Speed Insights
 import { injectSpeedInsights } from './vercel-speed-insights.js';
+import { isOptedOut } from './analytics-optout.js';
 
-// Inject speed insights with default settings
-injectSpeedInsights({
-  debug: false
-});
+if (!isOptedOut()) {
+  // Inject speed insights with default settings
+  injectSpeedInsights({
+    debug: false
+  });
+}
