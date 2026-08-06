@@ -1,6 +1,6 @@
-/* Engagement analytics on top of Vercel Web Analytics.
-   Vercel counts visitors and page views but not how long anyone stayed or how
-   far they read, so those are sent here as custom events.
+/* Engagement analytics, sent to Umami as custom events.
+   Umami already reports average visit duration on its own; these events add the
+   distribution behind that average plus what people actually did.
 
    Design notes:
    - Time is *active* time: the clock pauses while the tab is hidden.
@@ -10,19 +10,39 @@
    - Every event fires at most once per page view, so the counts are visitor
      counts, not click counts. */
 
-import { track } from './vercel-analytics.js';
-
 const TIME_THRESHOLDS = [10, 30, 60, 120, 300]; // seconds
 const SCROLL_MARKS = [25, 50, 75, 100];         // percent
 const SECTIONS = ['about', 'experience', 'projects', 'skills', 'contact'];
 const VISIT_KEY = 'analytics-seen';
+
+/* ── Delivery ────────────────────────────────────────────────────────────
+   window.umami only exists once the tracker script has loaded, and events can
+   fire before that, so queue anything sent too early and flush it on arrival. */
+const queued = [];
+
+function send(name, data) {
+  try { window.umami.track(name, data); } catch { /* never let analytics break the page */ }
+}
+
+function flush() {
+  while (queued.length) send(...queued.shift());
+}
+
+if (!window.umami) {
+  const started = Date.now();
+  const poll = setInterval(() => {
+    if (window.umami) { clearInterval(poll); flush(); }
+    else if (Date.now() - started > 15000) { clearInterval(poll); queued.length = 0; }
+  }, 200);
+}
 
 const sent = new Set();
 
 function once(name, data, key = name) {
   if (sent.has(key)) return;
   sent.add(key);
-  try { track(name, data); } catch { /* never let analytics break the page */ }
+  if (window.umami) send(name, data);
+  else queued.push([name, data]);
 }
 
 /* ── New vs returning ────────────────────────────────────────────────── */

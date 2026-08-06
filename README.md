@@ -20,8 +20,28 @@ Hosted on Vercel — every push to `main` redeploys automatically.
 
 ## Analytics
 
-Vercel Web Analytics and Speed Insights, plus custom engagement events sent from
-`assets/site-analytics.js`. Nothing runs on `localhost`.
+Two services, because they cover different things. Nothing runs on `localhost`.
+
+- **Vercel Web Analytics + Speed Insights** — visitors, page views, referrers,
+  countries, devices, and Core Web Vitals.
+- **Umami Cloud** — average visit duration plus the custom engagement events in
+  `assets/site-analytics.js`. Vercel's custom events are a Pro-only feature, so
+  they live here instead; Umami's free Hobby tier allows 100k events/month.
+
+### Umami setup (required once)
+
+1. Create a website at [cloud.umami.is](https://cloud.umami.is).
+2. Copy its **Website ID** from Settings → Websites.
+3. Paste it into `WEBSITE_ID` at the top of `assets/umami-init.js`.
+
+Until that ID is set, the tracker is not loaded at all and a note is logged to
+the console. Everything else keeps working.
+
+`HOST_URL` pins collection to `cloud.umami.is`. Umami Cloud otherwise auto-detects
+a regional collector, and those domains have changed more than once without
+notice — pinning keeps the `Content-Security-Policy` in `vercel.json` down to one
+allowed origin. If events ever stop arriving, check the browser console for a CSP
+violation first: the fix is to add the new collector origin to `connect-src`.
 
 ### Excluding my own visits
 
@@ -36,8 +56,8 @@ start counting again, and other people's visits are of course unaffected.
 
 ### Custom events
 
-Every event fires at most once per page view, so the counts in the Vercel
-dashboard are visitor counts rather than click counts.
+Sent to Umami. Every event fires at most once per page view, so the counts are
+visitor counts rather than click counts.
 
 | Event | Meaning |
 | --- | --- |

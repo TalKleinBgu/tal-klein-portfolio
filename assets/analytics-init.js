@@ -1,4 +1,5 @@
-// Initialize Vercel Web Analytics
+// Initialize Vercel Web Analytics (visitors, page views, referrers, countries).
+// Engagement events live in umami-init.js — Vercel's custom events are Pro-only.
 import { inject } from './vercel-analytics.js';
 import { isOptedOut } from './analytics-optout.js';
 
@@ -8,7 +9,4 @@ if (!isOptedOut()) {
     mode: 'auto',
     debug: false
   });
-
-  // Engagement events (time on page, scroll depth, interactions)
-  import('./site-analytics.js');
 }
