@@ -74,7 +74,38 @@ visitor counts rather than click counts.
 | `project_view` | Project card browsed to in the carousel (`project` property). |
 | `visitor_new` / `visitor_returning` | First visit vs. a repeat visit from the same browser. |
 | `cv_download`, `contact_email`, `contact_linkedin`, `contact_github` | Intent signals. |
+| `email_copied`, `phone_copied`, `page_printed` | Stronger intent — someone is taking the details away with them. |
 | `project_github`, `project_dataset`, `carousel_browse`, `theme_toggle` | Interactions. |
+| `rage_click` | Three clicks in one spot within a second — something looks clickable but isn't. |
+| `deep_read` | Human, 60s+ active, scrolled past 75%. The visit that actually matters. |
+| `connection_slow` | Visitor on 2G/3G — context for a bad Speed Insights sample. |
+
+### Telling people from bots
+
+Each visit ends with exactly one verdict event:
+
+| Verdict | Meaning |
+| --- | --- |
+| `visit_human` | Moved a pointer, touched, typed or scrolled with a wheel. |
+| `visit_passive` | Ran JavaScript, never interacted. Usually a scraper; occasionally a real person who opened a tab and walked away. |
+| `visit_automated` | Declared itself automation, or looked structurally impossible. `signals` says which checks tripped. |
+
+Supporting events: `human_confirmed` (with `via` and `ms_to_interact`) and
+`bot_suspected` (with the `signals` list).
+
+Two layers, because either can be defeated alone. The declarative layer reads
+`navigator.webdriver`, headless/bot user-agent strings, empty `navigator.languages`,
+and zero-sized window/screen. A stealth scraper can hide all of those — so the
+behavioural layer looks for a real pointer movement (with an actual delta, since
+some automation dispatches a single synthetic move at 0,0), touch, keypress or
+wheel. Verified against headless Chromium both as-is and with the automation
+flags patched out.
+
+**This cannot see vulnerability scanners.** `curl`, `nuclei`, `sqlmap` and friends
+never execute JavaScript, so they never load this file and never appear in Umami
+at all. Requests that never run JS are only visible in the Vercel Firewall and
+runtime logs. Treat every verdict here as a strong hint, not proof: privacy
+browsers, accessibility tooling and some in-app webviews produce false positives.
 
 Duration is reported as a *funnel of threshold events* rather than a single event
 at unload, because unload-time sends are unreliable on mobile. `session_end` is a
