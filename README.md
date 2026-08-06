@@ -56,8 +56,9 @@ windows and cleared site data start counting again, and attaching a custom domai
 later means opting out again on that domain. Other people's visits are of course
 unaffected.
 
-(The `canonical`/`og:url`/`og:image` tags in `index.html` still point at
-`talklein.dev`, which is not attached to this project — see the `TODO`s there.)
+If a custom domain is attached later, update the absolute URLs in `index.html`
+(`canonical`, `og:url`, `og:image`, `twitter:image`, the JSON-LD `url`), plus
+`sitemap.xml` and `robots.txt` — and redo the opt-out on the new origin.
 
 ### Custom events
 
