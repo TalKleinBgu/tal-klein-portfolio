@@ -325,8 +325,9 @@ function verdict() {
 addEventListener('pagehide', () => {
   pause();
   const seconds = activeSeconds();
+  const call = verdict();
 
-  once('visit_' + verdict(), {
+  once('visit_' + call, {
     signals: botFlags.join('+') || 'none',
     seconds,
     scroll: maxScroll,
@@ -334,11 +335,17 @@ addEventListener('pagehide', () => {
   });
 
   // Read the whole thing and stayed: the visit that actually matters.
-  if (verdict() === 'human' && seconds >= 60 && maxScroll >= 75) {
+  if (call === 'human' && seconds >= 60 && maxScroll >= 75) {
     once('deep_read', { seconds, scroll: maxScroll });
   }
 
+  // verdict and signals are repeated here on purpose: session_end is the one
+  // place that already carries seconds/scroll/sections, so keeping the call
+  // alongside them makes a visit readable from a single properties view.
   once('session_end', {
+    verdict: call,
+    signals: botFlags.join('+') || 'none',
+    interacted,
     duration: durationBucket(seconds),
     seconds,
     scroll: maxScroll,

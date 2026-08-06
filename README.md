@@ -93,6 +93,10 @@ Each visit ends with exactly one verdict event:
 Supporting events: `human_confirmed` (with `via` and `ms_to_interact`) and
 `bot_suspected` (with the `signals` list).
 
+`session_end` repeats `verdict`, `signals` and `interacted` alongside its
+`seconds`/`scroll`/`sections`, so a whole visit can be judged from that one
+event's properties without cross-referencing anything.
+
 Two layers, because either can be defeated alone. The declarative layer reads
 `navigator.webdriver`, headless/bot user-agent strings, empty `navigator.languages`,
 and zero-sized window/screen. A stealth scraper can hide all of those — so the
