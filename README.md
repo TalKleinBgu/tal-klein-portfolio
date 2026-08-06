@@ -45,14 +45,19 @@ violation first: the fix is to add the new collector origin to `connect-src`.
 
 ### Excluding my own visits
 
-Open **`https://talklein.dev/?analytics=off`** once in each browser/device I use.
-The choice is stored in `localStorage`, so every later visit from that browser is
-invisible to both Web Analytics and Speed Insights — no visitor, no page view, no
-events. `?analytics=on` undoes it. The query parameter is stripped from the URL
-right after it is applied.
+Open **`https://tal-klein-portfolio.vercel.app/?analytics=off`** once in each
+browser/device I use. The choice is stored in `localStorage`, so every later visit
+from that browser is invisible to Web Analytics, Speed Insights and Umami alike —
+no visitor, no page view, no events. `?analytics=on` undoes it. The query
+parameter is stripped from the URL right after it is applied.
 
-Caveats: it is per browser profile, so incognito windows and cleared site data
-start counting again, and other people's visits are of course unaffected.
+Caveats: `localStorage` is per browser profile *and per origin*, so incognito
+windows and cleared site data start counting again, and attaching a custom domain
+later means opting out again on that domain. Other people's visits are of course
+unaffected.
+
+(The `canonical`/`og:url`/`og:image` tags in `index.html` still point at
+`talklein.dev`, which is not attached to this project — see the `TODO`s there.)
 
 ### Custom events
 
