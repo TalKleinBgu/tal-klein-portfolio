@@ -86,7 +86,8 @@ Each visit ends with exactly one verdict event:
 
 | Verdict | Meaning |
 | --- | --- |
-| `visit_human` | Moved a pointer, touched, typed or scrolled with a wheel. |
+| `visit_human` | Interacted, and the pointer path looks like a hand. |
+| `visit_suspicious` | Interacted, but the mouse path is mechanical — steady speed or a dead-straight line. Security sandboxes simulate mouse movement on purpose, so "a pointer moved" is not proof on its own. |
 | `visit_passive` | Ran JavaScript, never interacted. Usually a scraper; occasionally a real person who opened a tab and walked away. |
 | `visit_automated` | Declared itself automation, or looked structurally impossible. `signals` says which checks tripped. |
 
@@ -97,13 +98,30 @@ Supporting events: `human_confirmed` (with `via` and `ms_to_interact`) and
 `seconds`/`scroll`/`sections`, so a whole visit can be judged from that one
 event's properties without cross-referencing anything.
 
-Two layers, because either can be defeated alone. The declarative layer reads
-`navigator.webdriver`, headless/bot user-agent strings, empty `navigator.languages`,
-and zero-sized window/screen. A stealth scraper can hide all of those — so the
-behavioural layer looks for a real pointer movement (with an actual delta, since
-some automation dispatches a single synthetic move at 0,0), touch, keypress or
-wheel. Verified against headless Chromium both as-is and with the automation
-flags patched out.
+Three layers, because each is defeatable alone.
+
+1. **Declarative** — `navigator.webdriver`, headless/bot user-agent strings, empty
+   `navigator.languages`, zero-sized window/screen.
+2. **Trust** — events synthesised by page script report `isTrusted: false` and are
+   never accepted as proof. Real input, including input driven by assistive
+   technology, comes from the browser and is trusted.
+3. **Shape** — the mouse path is scored, because a sandbox that simulates movement
+   defeats layers 1 and 2. Reported raw on `visit_*` and `session_end` so the
+   thresholds can be checked against real traffic:
+
+   | Property | Hand | Script |
+   | --- | --- | --- |
+   | `speed_cv` | ~0.5 | ~0.06 |
+   | `straightness` | ~0.92 | 1.0 |
+   | `turns` | ≥1 | 0 |
+
+   A path counts as mechanical when `speed_cv < 0.15`, or when it is straighter
+   than 0.98 with no direction change at all — deliberately conservative, so a
+   borderline path is called human.
+
+Verified in headless Chromium across four inputs: a scripted straight-line move
+(→ suspicious), a curved variable-speed move (→ human), JS-synthesised untrusted
+events (→ passive), and no interaction (→ passive).
 
 **This cannot see vulnerability scanners.** `curl`, `nuclei`, `sqlmap` and friends
 never execute JavaScript, so they never load this file and never appear in Umami
