@@ -13,7 +13,7 @@
 
 import { isOptedOut } from './analytics-optout.js';
 
-const WEBSITE_ID = 'REPLACE_WITH_UMAMI_WEBSITE_ID';
+const WEBSITE_ID = 'd717d343-6ff9-4616-9dbe-132d5219c023';
 const HOST_URL = 'https://cloud.umami.is';
 
 const configured = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(WEBSITE_ID);
