@@ -147,7 +147,7 @@ themeBtn.addEventListener('click',()=>{
 
 /* ── Scroll reveal ───────────────────────────────────────────────────── */
 document.querySelectorAll('.reveal').forEach(sec=>{
-  sec.querySelectorAll('.facts, .timeline .card, .pcard, .skill-mobile .skillcard, .contact-cta, .crow').forEach((el,i)=>{
+  sec.querySelectorAll('.facts, .timeline .card, .pcard, .sk-tile, .contact-cta, .crow').forEach((el,i)=>{
     el.classList.add('stagger');el.style.setProperty('--d',Math.min(i,8));
   });
 });
@@ -156,7 +156,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ── Cursor spotlight on cards (pointer devices only) ─────────────────── */
 if(window.matchMedia('(hover: hover)').matches){
-  document.querySelectorAll('.pcard, .crow').forEach(el=>{
+  document.querySelectorAll('.pcard, .crow, .sk-tile').forEach(el=>{
     el.classList.add('spot');
     el.addEventListener('pointermove',e=>{
       const r=el.getBoundingClientRect();
@@ -491,126 +491,45 @@ if(window.matchMedia('(hover: hover)').matches){
     palette();measure();position();buildEdges();focusNode=null;renderNodes();draw();
   }
 
-  (function buildMobile(){
-    const wrap=document.getElementById('skill-mobile');
-    if(!wrap)return;
-    const frag=document.createDocumentFragment();
-    const last=LAYER_DEFS.length-1;
-    LAYER_DEFS.forEach((labels,li)=>{
-      if(li===0||li===last)return;
-      const card=document.createElement('div');
-      card.className='skillcard';
-      const h=document.createElement('h3');
-      const sd=document.createElement('span');sd.className='sd';
-      h.append(sd,document.createTextNode(LLABELS[li].trim()));
-      const tags=document.createElement('div');tags.className='stags';
-      labels.forEach(l=>{
-        const s=document.createElement('span');
-        s.className='stag';
-        s.textContent=l;
-        tags.appendChild(s);
-      });
-      card.append(h,tags);
-      frag.appendChild(card);
-    });
-    wrap.appendChild(frag);
-  })();
-
   document.addEventListener('themechange',()=>{palette();repaintNodes();draw();});
+
+  /* Overview (evidence cards) / Network (this graph) toggle */
+  const tabs=[...document.querySelectorAll('.seg-btn')];
+  function select(tab){
+    tabs.forEach(t=>{
+      const on=t===tab,panel=document.getElementById(t.getAttribute('aria-controls'));
+      t.classList.toggle('on',on);
+      t.setAttribute('aria-selected',on);
+      t.tabIndex=on?0:-1;
+      if(panel)panel.hidden=!on;
+    });
+    if(tab.id==='tab-network')requestAnimationFrame(size);
+  }
+  tabs.forEach((t,i)=>{
+    t.addEventListener('click',()=>select(t));
+    t.addEventListener('keydown',e=>{
+      if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+      e.preventDefault();
+      const n=tabs[(i+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];
+      n.focus();select(n);
+    });
+  });
   let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(size,140);});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>size());
   window.addEventListener('load',size);
   size();
 })();
 
-/* ── Projects carousel ───────────────────────────────────────────────── */
+/* ── Projects: phones show the first three, the rest behind a toggle ── */
 (function(){
-  const viewport=document.getElementById('carousel');
-  const track=document.getElementById('track');
-  const prev=document.getElementById('railPrev'),next=document.getElementById('railNext'),dotsWrap=document.getElementById('railDots');
-  if(!track)return;
-  const N=track.children.length;
-  const cards=Array.from(track.children);
-
-  dotsWrap.textContent='1 / '+N;
-
-  let index=0;
-  let stepW=0,peek=0,pageCount=N;
-  function measure(){
-    stepW=cards[1]?cards[1].offsetLeft-cards[0].offsetLeft:cards[0]?.offsetWidth||0;
-    peek=window.innerWidth>=760?30:0;
-    const visible=window.innerWidth>=760?2:1;
-    const pc=Math.max(1,N-visible+1);
-    if(pc!==pageCount||!dotBtns||!dotBtns.children.length){pageCount=pc;buildDots();}
-    index=Math.min(index,pageCount-1);
-  }
-  function baseX(){
-    const maxLeft=Math.min(0,viewport.clientWidth-track.scrollWidth);
-    return Math.max(maxLeft,-cards[index].offsetLeft+peek);
-  }
-  const dotBtns=document.getElementById('railDotBtns');
-  function buildDots(){
-    if(!dotBtns)return;
-    dotBtns.replaceChildren();
-    for(let i=0;i<pageCount;i++){
-      const b=document.createElement('button');
-      b.type='button';b.className='rail-dot';
-      b.setAttribute('aria-label','Go to project '+(i+1));
-      b.addEventListener('click',()=>{index=i;render(true);});
-      dotBtns.appendChild(b);
-    }
-  }
-  /* Single-card (phone) view: let the rail hug the active card instead of
-     reserving the tallest card's height, which left a big gap under short ones. */
-  function fitHeight(){
-    if(window.innerWidth>=760){viewport.style.height='';return;}
-    const cs=getComputedStyle(viewport);
-    viewport.style.height=(cards[index].offsetHeight+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom))+'px';
-  }
-  function setActive(){
-    dotsWrap.textContent=(index+1)+' / '+pageCount;
-    if(dotBtns)[...dotBtns.children].forEach((b,i)=>{b.classList.toggle('on',i===index);b.setAttribute('aria-current',i===index?'true':'false');});
-  }
-  function render(animate){
-    track.classList.toggle('animate',!!animate);
-    if(animate){track.classList.add('moving');clearTimeout(movingT);movingT=setTimeout(()=>{if(!dragging)track.classList.remove('moving');},620);}
-    track.style.transform='translateX('+Math.round(baseX())+'px)';
-    fitHeight();
-    viewport.classList.toggle('has-prev',index>0&&index<pageCount-1);
-    viewport.classList.toggle('at-end',index>0&&index===pageCount-1);
-    setActive();
-  }
-  let movingT;
-  track.addEventListener('transitionend',()=>{if(!dragging)track.classList.remove('moving');});
-  function go(dir){index=(index+dir+pageCount)%pageCount;render(true);}
-  next.addEventListener('click',()=>go(1));
-  prev.addEventListener('click',()=>go(-1));
-  viewport.tabIndex=0;
-  viewport.setAttribute('aria-label','Projects - use the arrow keys to browse');
-  viewport.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'){e.preventDefault();go(1);}
-    else if(e.key==='ArrowLeft'){e.preventDefault();go(-1);}
+  const grid=document.getElementById('pgrid'),btn=document.getElementById('pmore');
+  if(!grid||!btn)return;
+  const label=btn.firstChild;
+  btn.addEventListener('click',()=>{
+    const open=grid.classList.toggle('expanded');
+    btn.setAttribute('aria-expanded',open);
+    btn.classList.toggle('open',open);
+    label.textContent=open?'Show fewer projects':'Show all '+grid.children.length+' projects';
+    if(!open)document.getElementById('projects').scrollIntoView({behavior:'smooth'});
   });
-
-  let dragging=false,startX=0,startTf=0,moved=0;
-  function curTf(){const m=getComputedStyle(track).transform;if(m&&m!=='none'){return new DOMMatrixReadOnly(m).m41;}return baseX();}
-  function down(x){dragging=true;moved=0;startX=x;startTf=curTf();track.classList.remove('animate');track.classList.add('moving');}
-  function move(x){if(!dragging)return;moved=x-startX;track.style.transform='translate3d('+Math.round(startTf+moved)+'px,0,0)';}
-  function up(){if(!dragging)return;dragging=false;
-    if(Math.abs(moved)>stepW*0.18){if(moved<0)index=(index+1)%pageCount;else index=(index-1+pageCount)%pageCount;}
-    render(true);
-  }
-  viewport.addEventListener('pointerdown',e=>{
-    if(e.target.closest('a, h3, p, .chip, .statbox, .bullets'))return;
-    down(e.clientX);viewport.setPointerCapture(e.pointerId);
-  });
-  viewport.addEventListener('pointermove',e=>{if(dragging){move(e.clientX);}});
-  viewport.addEventListener('pointerup',up);
-  viewport.addEventListener('pointercancel',up);
-  viewport.addEventListener('dragstart',e=>e.preventDefault());
-
-  function init(){measure();index=0;track.classList.remove('animate');render(false);}
-  window.addEventListener('load',init);
-  setTimeout(init,60);
-  let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{measure();render(false);},120);});
 })();

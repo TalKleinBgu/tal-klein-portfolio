@@ -314,7 +314,7 @@ if ('IntersectionObserver' in window) {
   }
 }
 
-/* ── Which project cards get browsed to in the carousel ──────────────── */
+/* ── Which project cards actually get looked at ─────────────────────── */
 function projectName(el) {
   const card = el.closest('.pcard');
   const title = card && card.querySelector('h3.title');
@@ -323,11 +323,9 @@ function projectName(el) {
 }
 
 if ('IntersectionObserver' in window) {
-  const viewport = document.getElementById('carousel');
-  const cards = document.querySelectorAll('#track .pcard');
-  if (viewport && cards.length) {
-    // The carousel slides cards with translateX inside a clipping viewport, so
-    // using it as the IntersectionObserver root reports the card on screen.
+  const cards = document.querySelectorAll('#pgrid .pcard');
+  if (cards.length) {
+    // Cards hidden behind "Show all" on phones never intersect until opened.
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -335,7 +333,7 @@ if ('IntersectionObserver' in window) {
         once('project_view', { project: name }, `project_view:${name}`);
         observer.unobserve(entry.target);
       }
-    }, { root: viewport, threshold: 0.6 });
+    }, { threshold: 0.6 });
 
     for (const card of cards) observer.observe(card);
   }
@@ -365,8 +363,16 @@ document.addEventListener('click', (event) => {
     once('theme_toggle', { to: from === 'dark' ? 'light' : 'dark' });
     return;
   }
-  if (link.id === 'railPrev' || link.id === 'railNext') {
-    once('carousel_browse');
+  if (link.id === 'pmore') {
+    once('projects_expand');
+    return;
+  }
+  if (link.id === 'tab-network') {
+    once('skills_network');
+    return;
+  }
+  if (link.id === 'copyEmail') {
+    once('contact_copy_email');
     return;
   }
 
