@@ -316,16 +316,15 @@ if ('IntersectionObserver' in window) {
 
 /* ── Which project cards actually get looked at ─────────────────────── */
 function projectName(el) {
-  const card = el.closest('.pcard');
-  const title = card && card.querySelector('h3.title');
+  const card = el.closest('.prow');
+  const title = card && card.querySelector('.prow-title');
   const text = (title && title.textContent) || el.getAttribute('aria-label') || '';
   return text.trim().slice(0, 60) || 'unknown';
 }
 
 if ('IntersectionObserver' in window) {
-  const cards = document.querySelectorAll('#pgrid .pcard');
+  const cards = document.querySelectorAll('#plist .prow');
   if (cards.length) {
-    // Cards hidden behind "Show all" on phones never intersect until opened.
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -363,8 +362,10 @@ document.addEventListener('click', (event) => {
     once('theme_toggle', { to: from === 'dark' ? 'light' : 'dark' });
     return;
   }
-  if (link.id === 'pmore') {
-    once('projects_expand');
+  if (link.matches('.prow-head')) {
+    if (link.getAttribute('aria-expanded') !== 'true') {
+      once('project_open', { project: projectName(link) }, `project_open:${projectName(link)}`);
+    }
     return;
   }
   if (link.id === 'tab-network') {

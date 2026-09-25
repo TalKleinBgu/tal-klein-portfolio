@@ -147,7 +147,7 @@ themeBtn.addEventListener('click',()=>{
 
 /* ── Scroll reveal ───────────────────────────────────────────────────── */
 document.querySelectorAll('.reveal').forEach(sec=>{
-  sec.querySelectorAll('.facts, .timeline .card, .pcard, .sk-tile, .contact-cta, .crow').forEach((el,i)=>{
+  sec.querySelectorAll('.facts, .timeline .card, .prow, .sk-row, .contact-cta, .crow').forEach((el,i)=>{
     el.classList.add('stagger');el.style.setProperty('--d',Math.min(i,8));
   });
 });
@@ -156,7 +156,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ── Cursor spotlight on cards (pointer devices only) ─────────────────── */
 if(window.matchMedia('(hover: hover)').matches){
-  document.querySelectorAll('.pcard, .crow, .sk-tile').forEach(el=>{
+  document.querySelectorAll('.crow').forEach(el=>{
     el.classList.add('spot');
     el.addEventListener('pointermove',e=>{
       const r=el.getBoundingClientRect();
@@ -520,16 +520,11 @@ if(window.matchMedia('(hover: hover)').matches){
   size();
 })();
 
-/* ── Projects: phones show the first three, the rest behind a toggle ── */
-(function(){
-  const grid=document.getElementById('pgrid'),btn=document.getElementById('pmore');
-  if(!grid||!btn)return;
-  const label=btn.firstChild;
+/* ── Projects: one line each, click a row to open its details ─────────── */
+document.querySelectorAll('.prow-head').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const open=grid.classList.toggle('expanded');
+    const open=btn.getAttribute('aria-expanded')!=='true';
     btn.setAttribute('aria-expanded',open);
-    btn.classList.toggle('open',open);
-    label.textContent=open?'Show fewer projects':'Show all '+grid.children.length+' projects';
-    if(!open)document.getElementById('projects').scrollIntoView({behavior:'smooth'});
+    btn.closest('.prow').classList.toggle('open',open);
   });
-})();
+});

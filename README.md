@@ -75,7 +75,7 @@ visitor counts rather than click counts.
 | `visitor_new` / `visitor_returning` | First visit vs. a repeat visit from the same browser. |
 | `cv_download`, `contact_email`, `contact_linkedin`, `contact_github` | Intent signals. |
 | `email_copied`, `phone_copied`, `page_printed` | Stronger intent — someone is taking the details away with them. |
-| `project_github`, `project_dataset`, `projects_expand`, `skills_network`, `contact_copy_email`, `theme_toggle` | Interactions. |
+| `project_github`, `project_dataset`, `project_open`, `skills_network`, `contact_copy_email`, `theme_toggle` | Interactions. |
 | `rage_click` | Three clicks in one spot within a second — something looks clickable but isn't. |
 | `deep_read` | Human, 60s+ active, scrolled past 75%. The visit that actually matters. |
 | `connection_slow` | Visitor on 2G/3G — context for a bad Speed Insights sample. |
