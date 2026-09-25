@@ -314,20 +314,17 @@ if ('IntersectionObserver' in window) {
   }
 }
 
-/* ── Which project cards get browsed to in the carousel ──────────────── */
+/* ── Which project cards actually get looked at ─────────────────────── */
 function projectName(el) {
-  const card = el.closest('.pcard');
-  const title = card && card.querySelector('h3.title');
+  const card = el.closest('.prow');
+  const title = card && card.querySelector('.prow-title');
   const text = (title && title.textContent) || el.getAttribute('aria-label') || '';
   return text.trim().slice(0, 60) || 'unknown';
 }
 
 if ('IntersectionObserver' in window) {
-  const viewport = document.getElementById('carousel');
-  const cards = document.querySelectorAll('#track .pcard');
-  if (viewport && cards.length) {
-    // The carousel slides cards with translateX inside a clipping viewport, so
-    // using it as the IntersectionObserver root reports the card on screen.
+  const cards = document.querySelectorAll('#plist .prow');
+  if (cards.length) {
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -335,7 +332,7 @@ if ('IntersectionObserver' in window) {
         once('project_view', { project: name }, `project_view:${name}`);
         observer.unobserve(entry.target);
       }
-    }, { root: viewport, threshold: 0.6 });
+    }, { threshold: 0.6 });
 
     for (const card of cards) observer.observe(card);
   }
@@ -365,8 +362,18 @@ document.addEventListener('click', (event) => {
     once('theme_toggle', { to: from === 'dark' ? 'light' : 'dark' });
     return;
   }
-  if (link.id === 'railPrev' || link.id === 'railNext') {
-    once('carousel_browse');
+  if (link.matches('.prow-head')) {
+    if (link.getAttribute('aria-expanded') !== 'true') {
+      once('project_open', { project: projectName(link) }, `project_open:${projectName(link)}`);
+    }
+    return;
+  }
+  if (link.id === 'tab-network') {
+    once('skills_network');
+    return;
+  }
+  if (link.id === 'copyEmail') {
+    once('contact_copy_email');
     return;
   }
 

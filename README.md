@@ -71,11 +71,11 @@ visitor counts rather than click counts.
 | `session_end` | Best-effort summary at unload: `duration` bucket, `seconds`, max `scroll` %, `sections` reached. |
 | `scroll_25` … `scroll_100` | Scroll depth reached. |
 | `section_about` … `section_contact` | Section scrolled into view. |
-| `project_view` | Project card browsed to in the carousel (`project` property). |
+| `project_view` | Project card scrolled into view (`project` property). |
 | `visitor_new` / `visitor_returning` | First visit vs. a repeat visit from the same browser. |
 | `cv_download`, `contact_email`, `contact_linkedin`, `contact_github` | Intent signals. |
 | `email_copied`, `phone_copied`, `page_printed` | Stronger intent — someone is taking the details away with them. |
-| `project_github`, `project_dataset`, `carousel_browse`, `theme_toggle` | Interactions. |
+| `project_github`, `project_dataset`, `project_open`, `skills_network`, `contact_copy_email`, `theme_toggle` | Interactions. |
 | `rage_click` | Three clicks in one spot within a second — something looks clickable but isn't. |
 | `deep_read` | Human, 60s+ active, scrolled past 75%. The visit that actually matters. |
 | `connection_slow` | Visitor on 2G/3G — context for a bad Speed Insights sample. |
