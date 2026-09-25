@@ -4,6 +4,8 @@
   document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
 })();
 
+const REDUCE_MOTION=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ── Font activation: apply preloaded stylesheet ─────────────────────── */
 const fontPreload = document.getElementById('font-preload');
 if (fontPreload) fontPreload.rel = 'stylesheet';
@@ -121,15 +123,42 @@ themeBtn.addEventListener('click',()=>{
   const ids=[...new Set(links.map(a=>a.getAttribute('href')))];
   const secs=ids.map(id=>document.querySelector(id)).filter(Boolean);
   if(!secs.length)return;
-  const setActive=id=>links.forEach(a=>{
-    const on=a.getAttribute('href')===id;
-    a.classList.toggle('active',on);
-    if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');
+  const ind=document.querySelector('.nav-ind');
+  function moveInd(a){
+    if(!ind)return;
+    if(!a||!a.offsetWidth){ind.classList.remove('on');return;}
+    ind.style.setProperty('--ix',a.offsetLeft+'px');
+    ind.style.setProperty('--iw',a.offsetWidth+'px');
+    ind.classList.add('on');
+  }
+  const current=()=>document.querySelector('.nav-links a.active');
+  document.querySelectorAll('.nav-links a:not(.nav-cv)').forEach(a=>{
+    a.addEventListener('pointerenter',()=>moveInd(a));
+    a.addEventListener('focus',()=>moveInd(a));
   });
+  const navLinks=document.querySelector('.nav-links');
+  if(navLinks){
+    navLinks.addEventListener('pointerleave',()=>moveInd(current()));
+    navLinks.addEventListener('focusout',()=>moveInd(current()));
+  }
+  window.addEventListener('resize',()=>moveInd(current()));
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>moveInd(current()));
+  const setActive=id=>{
+    links.forEach(a=>{
+      const on=a.getAttribute('href')===id;
+      a.classList.toggle('active',on);
+      if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');
+    });
+    moveInd(current());
+  };
   const spy=new IntersectionObserver(es=>{
     es.forEach(e=>{if(e.isIntersecting)setActive('#'+e.target.id);});
   },{rootMargin:'-45% 0px -50% 0px'});
   secs.forEach(s=>spy.observe(s));
+  const hero=document.getElementById('top');
+  if(hero)new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting)setActive('#top');});
+  },{rootMargin:'-45% 0px -50% 0px'}).observe(hero);
 })();
 
 /* ── Copy email ──────────────────────────────────────────────────────── */
@@ -143,6 +172,52 @@ themeBtn.addEventListener('click',()=>{
     btn.classList.add('copied');
     setTimeout(()=>{label.textContent='Copy email';btn.classList.remove('copied');},1800);
   });
+})();
+
+/* ── Project charts: bar lengths come from data-w (CSP forbids inline styles) */
+document.querySelectorAll('.pc-bar[data-w]').forEach(b=>b.style.setProperty('--w',b.dataset.w+'%'));
+
+/* ── Hero numbers count up once on load ──────────────────────────────── */
+(function(){
+  if(REDUCE_MOTION())return;
+  document.querySelectorAll('.hero-stats .v').forEach((el,i)=>{
+    const m=el.textContent.match(/^([\d,]+)(.*)$/);
+    if(!m)return;
+    const target=parseInt(m[1].replace(/,/g,''),10),suffix=m[2],final=el.textContent;
+    if(!(target>1))return;
+    const dur=1400,delay=600+i*120;
+    el.textContent='0'+suffix;
+    setTimeout(()=>{
+      const t0=performance.now();
+      (function tick(t){
+        const k=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-k,3);
+        el.textContent=Math.round(target*e).toLocaleString('en-US')+suffix;
+        if(k<1)requestAnimationFrame(tick);else el.textContent=final;
+      })(t0);
+    },delay);
+  });
+})();
+
+/* ── Journey line fills as you scroll; each dot lights once passed ───── */
+(function(){
+  const tls=[...document.querySelectorAll('.timeline')];
+  if(!tls.length)return;
+  let ticking=false;
+  function update(){
+    ticking=false;
+    const mark=window.innerHeight*0.62;
+    tls.forEach(tl=>{
+      const r=tl.getBoundingClientRect(),h=r.height-48;
+      const p=h>0?Math.max(0,Math.min(1,(mark-r.top-24)/h)):0;
+      tl.style.setProperty('--fill',p.toFixed(3));
+      tl.querySelectorAll(':scope > .card').forEach(c=>{
+        c.classList.toggle('passed',c.getBoundingClientRect().top+30<mark);
+      });
+    });
+  }
+  window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener('resize',update);
+  update();
 })();
 
 /* ── Scroll reveal ───────────────────────────────────────────────────── */
@@ -200,11 +275,18 @@ if(window.matchMedia('(hover: hover)').matches){
     }
   }
 
+  /* A few "signals" run along random edges, like activations firing. */
+  let pulses=[];
+  function spawn(){
+    const e=edges[Math.floor(Math.random()*edges.length)];
+    return e?{e,t:0,speed:0.004+Math.random()*0.006}:null;
+  }
   function draw(){
     ctx.setTransform(dpr,0,0,dpr,0,0);
     ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
     const dark=getEffectiveTheme()==='dark';
     const nc=dark?'180,210,255':'116,101,76';
+    const pc=dark?'123,156,255':'36,71,214';
     ctx.lineWidth=0.75;
     edges.forEach(e=>{
       ctx.strokeStyle=`rgba(${nc},${dark?0.11:0.095})`;
@@ -213,6 +295,14 @@ if(window.matchMedia('(hover: hover)').matches){
     nodes.forEach(n=>{
       ctx.fillStyle=`rgba(${nc},${dark?0.32:0.18})`;
       ctx.beginPath();ctx.arc(n.x,n.y,2.6,0,Math.PI*2);ctx.fill();
+    });
+    pulses.forEach(p=>{
+      const {from:a,to:b}=p.e,x=a.x+(b.x-a.x)*p.t,y=a.y+(b.y-a.y)*p.t;
+      const fade=Math.sin(Math.PI*p.t);
+      const g=ctx.createRadialGradient(x,y,0,x,y,9);
+      g.addColorStop(0,`rgba(${pc},${0.55*fade})`);g.addColorStop(1,`rgba(${pc},0)`);
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(${pc},${0.8*fade})`;ctx.beginPath();ctx.arc(x,y,1.8,0,Math.PI*2);ctx.fill();
     });
     /* Erase the net across the content band (About → Skills) with feathered
        edges, so it lives in the hero and contact areas without hard seams. */
@@ -240,6 +330,25 @@ if(window.matchMedia('(hover: hover)').matches){
 
   let raf;
   window.addEventListener('scroll',()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(draw);},{passive:true});
+  /* animate only while the net is actually on screen (hero / contact),
+     the tab is visible, and the visitor hasn't asked for reduced motion */
+  function netVisible(){
+    if(!clearEls.length)return true;
+    const top=clearEls[0].getBoundingClientRect().top,bottom=clearEls[clearEls.length-1].getBoundingClientRect().bottom;
+    return top>60||bottom<window.innerHeight-60;
+  }
+  let last=0;
+  function loop(t){
+    requestAnimationFrame(loop);
+    if(document.hidden||REDUCE_MOTION()||t-last<33)return;   // ~30fps is plenty
+    last=t;
+    if(!netVisible()){if(pulses.length){pulses=[];draw();}return;}
+    while(pulses.length<7){const p=spawn();if(!p)break;p.t=Math.random()*0.3;pulses.push(p);}
+    pulses.forEach(p=>{p.t+=p.speed;});
+    pulses=pulses.map(p=>p.t>=1?spawn()||p:p);
+    draw();
+  }
+  requestAnimationFrame(loop);
   document.addEventListener('themechange',draw);
   let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,120);});
   resize();
