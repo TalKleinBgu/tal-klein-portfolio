@@ -21,18 +21,22 @@
     --cell-bg: #f8f3ea;
     --cell-border: rgba(28,43,74,0.08);
     --shadow: rgba(70,52,24,.10);
-    --card-shadow: 0 12px 30px rgba(28,43,74,0.14), 0 3px 8px rgba(28,43,74,0.08);
+    --card-shadow: 0 1px 2px rgba(28,43,74,0.05), 0 8px 24px -6px rgba(28,43,74,0.12), 0 24px 48px -24px rgba(70,52,24,0.18);
+    --glow-a: rgba(59,110,245,.08);
+    --glow-b: rgba(217,164,92,.11);
+    --grain-opacity: .05;
+    --ring: color-mix(in srgb, var(--accent) 22%, transparent);
   }
 
   /* Dark theme — triggered by system preference when no explicit override is set */
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg-top: #131c30;
-      --bg-bottom: #0d1422;
+      --bg-top: #0f1729;
+      --bg-bottom: #0a1020;
       --bg-grid: rgba(255,255,255,0.06);
       --scroll-tint-color: #05080f;
-      --card: #1a2540;
-      --card-2: #202c49;
+      --card: #16213a;
+      --card-2: #1c2844;
       --ink: #eef1f7;
       --ink-soft: #aab3c9;
       --ink-faint: #8592ab;
@@ -40,21 +44,25 @@
       --accent-bright: #7aa3ff;
       --border: rgba(255,255,255,0.12);
       --border-soft: rgba(255,255,255,0.08);
-      --cell-bg: #131e36;
+      --cell-bg: #111b31;
       --cell-border: rgba(255,255,255,0.10);
       --shadow: rgba(0,0,0,.4);
-      --card-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4);
+      --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -8px rgba(0,0,0,0.55);
+      --glow-a: rgba(91,140,255,.16);
+      --glow-b: rgba(124,92,255,.11);
+      --grain-opacity: .07;
+      --ring: color-mix(in srgb, var(--accent) 30%, transparent);
     }
   }
 
   /* Dark theme — explicit user override (higher specificity, wins over @media) */
   [data-theme="dark"] {
-    --bg-top: #131c30;
-    --bg-bottom: #0d1422;
+    --bg-top: #0f1729;
+    --bg-bottom: #0a1020;
     --bg-grid: rgba(255,255,255,0.06);
     --scroll-tint-color: #05080f;
-    --card: #1a2540;
-    --card-2: #202c49;
+    --card: #16213a;
+    --card-2: #1c2844;
     --ink: #eef1f7;
     --ink-soft: #aab3c9;
     --ink-faint: #8592ab;
@@ -62,10 +70,14 @@
     --accent-bright: #7aa3ff;
     --border: rgba(255,255,255,0.12);
     --border-soft: rgba(255,255,255,0.08);
-    --cell-bg: #131e36;
+    --cell-bg: #111b31;
     --cell-border: rgba(255,255,255,0.10);
     --shadow: rgba(0,0,0,.4);
-    --card-shadow: 0 12px 30px rgba(0,0,0,0.5), 0 3px 8px rgba(0,0,0,0.4);
+    --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -8px rgba(0,0,0,0.55);
+    --glow-a: rgba(91,140,255,.16);
+    --glow-b: rgba(124,92,255,.11);
+    --grain-opacity: .07;
+    --ring: color-mix(in srgb, var(--accent) 30%, transparent);
   }
 
   /* Light theme explicit override (overrides the @media dark preference) */
@@ -86,7 +98,11 @@
     --cell-bg: #f8f3ea;
     --cell-border: rgba(28,43,74,0.08);
     --shadow: rgba(70,52,24,.10);
-    --card-shadow: 0 12px 30px rgba(28,43,74,0.14), 0 3px 8px rgba(28,43,74,0.08);
+    --card-shadow: 0 1px 2px rgba(28,43,74,0.05), 0 8px 24px -6px rgba(28,43,74,0.12), 0 24px 48px -24px rgba(70,52,24,0.18);
+    --glow-a: rgba(59,110,245,.08);
+    --glow-b: rgba(217,164,92,.11);
+    --grain-opacity: .05;
+    --ring: color-mix(in srgb, var(--accent) 22%, transparent);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,8 +116,26 @@
     /* Anchor jumps stop ~70px down so the target heading clears both the
        sticky nav and the top-fade zone - never landing dimmed underneath. */
     scroll-padding-top: 70px;
-    background: color-mix(in srgb, var(--bg-top), var(--bg-bottom) calc(var(--scroll, 0) * 100%)) fixed;
+    background: var(--bg-top);
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--ink) 22%, transparent) transparent;
+    accent-color: var(--accent);
   }
+  ::selection { background: color-mix(in srgb, var(--accent) 22%, transparent); color: var(--ink); }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--ink) 20%, transparent);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  ::-webkit-scrollbar-thumb:hover { background-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+
+  /* Theme switch: circular reveal via the View Transitions API (JS), so the
+     default cross-fade is disabled. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 
   body {
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -144,8 +178,15 @@
   .skip-link:focus { top: 0; }
 
   /* Background decorations */
-  .scroll-tint {
-    display: none;
+  /* Page background: a static viewport gradient on its own fixed layer
+     (repainting <html> per scroll frame was costly), soft drifting colour
+     glows and a fine film grain for depth. */
+  .bg-base {
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--bg-top) 0%, color-mix(in srgb, var(--bg-top), var(--bg-bottom) 60%) 100%);
   }
 
   #nn-bg {
@@ -153,9 +194,18 @@
     inset: 0;
     z-index: -2;
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.88) 25%, rgba(0,0,0,1) 55%, rgba(0,0,0,.9) 100%);
-    mask-image:        linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.88) 25%, rgba(0,0,0,1) 55%, rgba(0,0,0,.9) 100%);
+    /* vertical fade x a horizontal one that quiets the net behind the hero
+       copy and lets it bloom around the portrait */
+    -webkit-mask-image:
+      linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.9) 25%, #000 55%, rgba(0,0,0,.9) 100%),
+      linear-gradient(90deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.35) 42%, #000 72%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,.9) 25%, #000 55%, rgba(0,0,0,.9) 100%),
+      linear-gradient(90deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.35) 42%, #000 72%);
+    mask-composite: intersect;
   }
+  @media (max-width: 819px) { #nn-bg { opacity: .55; } }
 
   .bg-art {
     position: fixed;
@@ -164,8 +214,36 @@
     pointer-events: none;
     overflow: hidden;
   }
-  .glow-tr { display: none; }
-  .glow-bl { display: none; }
+  .glow {
+    position: absolute;
+    width: 60vmax;
+    height: 60vmax;
+    border-radius: 50%;
+    filter: blur(20px);
+    will-change: transform;
+  }
+  .glow-tr {
+    top: -28vmax;
+    right: -18vmax;
+    background: radial-gradient(closest-side, var(--glow-a), transparent);
+    animation: glow-drift-a 26s ease-in-out infinite alternate;
+  }
+  .glow-bl {
+    bottom: -30vmax;
+    left: -22vmax;
+    background: radial-gradient(closest-side, var(--glow-b), transparent);
+    animation: glow-drift-b 32s ease-in-out infinite alternate;
+  }
+  @keyframes glow-drift-a { to { transform: translate3d(-8vmax, 6vmax, 0) scale(1.08); } }
+  @keyframes glow-drift-b { to { transform: translate3d(9vmax, -7vmax, 0) scale(1.1); } }
+  .grain {
+    position: absolute;
+    inset: 0;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+  [data-theme="dark"] .grain { mix-blend-mode: soft-light; filter: invert(1); }
 
   /* Layout */
   .wrap {
@@ -195,7 +273,7 @@
      the background gradient (between --bg-top and --bg-bottom) so it blends
      into the page palette instead of standing out as a darker block. */
   header.scrolled {
-    background: color-mix(in srgb, color-mix(in srgb, var(--bg-top), var(--bg-bottom)) 78%, transparent);
+    background: color-mix(in srgb, var(--bg-top) 84%, transparent);
     backdrop-filter: saturate(160%) blur(14px);
     -webkit-backdrop-filter: saturate(160%) blur(14px);
     box-shadow: 0 1px 0 var(--border-soft), 0 8px 24px -18px var(--shadow);
@@ -272,11 +350,12 @@
   .nav-cv {
     background: linear-gradient(90deg, var(--accent), var(--accent-bright));
     color: #fff !important;
-    padding: 6px 13px;
-    border-radius: 9px;
-    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-weight: 700;
     font-size: 13px;
-    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--accent) 55%, transparent), inset 0 1px 0 rgba(255,255,255,.18);
+    transition: transform .2s, box-shadow .2s;
   }
   .nav-cv:hover {
     transform: translateY(-1px);
@@ -286,16 +365,17 @@
   .iconbtn {
     width: 40px;
     height: 40px;
-    border-radius: 11px;
+    border-radius: 12px;
     border: 1px solid var(--border);
-    background: transparent;
+    background: color-mix(in srgb, var(--card) 45%, transparent);
     color: var(--ink);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: .18s;
+    transition: color .2s, border-color .2s, background .2s, transform .2s;
   }
+  .iconbtn:active { transform: scale(.94); }
   .iconbtn:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
   .iconbtn svg { width: 20px; height: 20px; }
 
@@ -304,6 +384,9 @@
   .nav-social svg { width: 18px; height: 18px; }
   @media (max-width: 460px) { .nav-social { display: none; } }
 
+  .theme-btn svg { transition: transform .5s cubic-bezier(.34,1.56,.64,1); }
+  .theme-btn:hover svg { transform: rotate(20deg); }
+  .theme-btn.spin svg { transform: rotate(180deg); }
   .theme-btn .moon { display: none; }
   [data-theme="dark"] .theme-btn .sun  { display: none; }
   [data-theme="dark"] .theme-btn .moon { display: block; }
@@ -629,11 +712,26 @@
     box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 60%, transparent), inset 0 1px 0 rgba(255,255,255,.18);
   }
   .btn:active { transform: translateY(0) scale(.98); }
+  .btn svg { transition: transform .25s ease; flex: none; }
+  .btn:hover .btn-arrow { transform: translateY(3px); }
+  .cv-download:hover svg, .mm-dl:hover svg { transform: translateY(2px); }
+  .btn-primary { position: relative; overflow: hidden; isolation: isolate; }
+  /* light sheen sweeping across primary buttons on hover */
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.28) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform .7s ease;
+    z-index: -1;
+  }
+  .btn-primary:hover::after { transform: translateX(120%); }
   .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 35%, transparent);
   }
-  .btn-secondary { background: var(--card); color: var(--ink); border: 1px solid var(--border); }
+  .btn-secondary { background: var(--card); color: var(--ink); border: 1px solid var(--border); box-shadow: 0 1px 2px rgba(0,0,0,.04); }
   .btn-secondary:hover { transform: translateY(-2px); box-shadow: 0 10px 22px var(--shadow); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
   .btn-secondary.copied { color: #15803d; border-color: #22c55e; }
 
@@ -829,6 +927,21 @@
     border-radius: 4px;
   }
   @media (max-width: 759px) { .carousel { transition: height .4s cubic-bezier(.22,.61,.36,1); } }
+  /* feather the clipped edges instead of a hard cut through the peeking card */
+  @media (min-width: 760px) {
+    .carousel {
+      -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 72px), transparent);
+      mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 72px), transparent);
+    }
+    .carousel.has-prev {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 56px, #000 calc(100% - 72px), transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 56px, #000 calc(100% - 72px), transparent);
+    }
+    .carousel.at-end {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 56px);
+      mask-image: linear-gradient(90deg, transparent, #000 56px);
+    }
+  }
   .carousel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .track {
@@ -867,6 +980,17 @@
     transform-origin: 0 50%;
     transition: transform .35s ease;
   }
+  .spot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--accent) 9%, transparent), transparent 60%);
+  }
+  .spot:hover::after { opacity: 1; }
   .pcard:hover { border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
   .pcard:hover::before { transform: scaleX(1); }
   @media (max-width: 759px) {
@@ -1111,6 +1235,17 @@
     border: 1px solid var(--border);
     border-radius: 999px;
   }
+  .skill-node { transition: opacity .2s, color .2s, border-color .2s, box-shadow .2s; cursor: default; }
+  .skillgraph.focus .skill-node { opacity: .28; }
+  .skillgraph.focus .skill-node.lit { opacity: 1; }
+  .skillgraph.focus .skill-node.hidden-skill.lit {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+  .skillgraph.focus .skill-node.self {
+    box-shadow: 0 0 0 3px var(--ring), 0 6px 16px -6px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+  .skillgraph-hint { text-align: center; color: var(--ink-faint); font-size: 12.5px; margin-top: 6px; }
   .skill-layer-label {
     position: absolute;
     color: var(--ink-soft);
@@ -1344,7 +1479,7 @@
     height: 12px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 0 4px var(--bg-bottom), 0 0 0 5px color-mix(in srgb, var(--accent) 45%, transparent);
+    box-shadow: 0 0 0 4px var(--ring);
   }
   @media (max-width: 600px) {
     .timeline               { padding-left: 24px; }
@@ -1395,7 +1530,31 @@
   .je-col .col-sub { color: var(--ink-faint); font-size: 13px; font-weight: 600; margin-bottom: 2px; }
   .je-col .timeline { margin-top: 20px; }
   /* No card chrome - the timeline sits straight on the page background. */
-  .je-grid .timeline .card { background: transparent; border: none; box-shadow: none; padding: 20px 0 4px; }
+  .je-grid .timeline .card {
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none;
+    padding: 18px 18px 16px;
+    margin-left: -18px;
+    border-radius: 16px;
+    transition: background .25s, border-color .25s, box-shadow .25s;
+  }
+  .je-grid .timeline .card + .card { margin-top: 10px; }
+  .je-grid .timeline .card::after { left: -14px; top: 24px; }
+  @media (max-width: 600px) { .je-grid .timeline .card::after { left: -6px; } }
+  .je-grid .exp.open,
+  .je-grid .exp:focus-within {
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    border-color: var(--border-soft);
+    box-shadow: var(--card-shadow);
+  }
+  @media (hover: hover) {
+    .je-grid .exp:hover {
+      background: color-mix(in srgb, var(--card) 70%, transparent);
+      border-color: var(--border-soft);
+      box-shadow: var(--card-shadow);
+    }
+  }
 
   /* Expand timeline entries. The explicit `.open` class - toggled by tap/click
      or Enter/Space - drives this on every device, so a second tap collapses an
@@ -1415,9 +1574,8 @@
   .je-grid .exp.open::after {
     transform: scale(1.25);
     box-shadow:
-      0 0 0 4px var(--bg-bottom),
-      0 0 0 5px color-mix(in srgb, var(--accent) 55%, transparent),
-      0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+      0 0 0 5px var(--ring),
+      0 0 14px color-mix(in srgb, var(--accent) 55%, transparent);
   }
 
   /* Pointer devices also expand on hover / keyboard focus for a frictionless
@@ -1435,9 +1593,8 @@
     .je-grid .exp:focus-within::after {
       transform: scale(1.25);
       box-shadow:
-        0 0 0 4px var(--bg-bottom),
-        0 0 0 5px color-mix(in srgb, var(--accent) 55%, transparent),
-        0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+        0 0 0 5px var(--ring),
+        0 0 14px color-mix(in srgb, var(--accent) 55%, transparent);
     }
   }
   @media (hover: none) { .je-grid .exp-head { cursor: pointer; } }
@@ -1530,7 +1687,7 @@
   }
   @media (max-width: 600px) { .crow { padding: 12px; } }
   .crow:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 28px var(--shadow); }
-  .crow { box-shadow: none; }
+  .crow { box-shadow: none; position: relative; overflow: hidden; }
   @media (max-width: 480px) {
     .crow { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px; }
     .crow .ci { width: 36px; height: 36px; }
@@ -1606,8 +1763,22 @@
   footer .credit a:hover { text-decoration: underline; }
 
   /* ── Scroll reveal ───────────────────────────────────────────────────── */
-  .reveal    { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal    { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1); }
   .reveal.in { opacity: 1; transform: none; }
+  /* children of a revealed section rise in one after another (JS sets --d).
+     fill-mode "backwards" so hover transforms work once it's done. */
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .reveal:not(.in) .stagger { opacity: 0; }
+  .reveal.in .stagger { animation: rise .6s cubic-bezier(.22,.61,.36,1) backwards; animation-delay: calc(var(--d, 0) * 70ms + 120ms); }
+  .enter { animation: rise .8s cubic-bezier(.22,.61,.36,1) backwards; }
+  .hero-hi.enter    { animation-delay: .05s; }
+  .hero-name.enter  { animation-delay: .12s; }
+  .hero-role.enter  { animation-delay: .2s; }
+  .hero-lead.enter  { animation-delay: .28s; }
+  .hero-btns.enter  { animation-delay: .36s; }
+  .hero-stats.enter { animation-delay: .46s; }
+  @keyframes pop-in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+  .avatar.enter     { animation: pop-in 1s cubic-bezier(.22,.61,.36,1) .1s backwards; }
 
   /* ── Focus-visible rings (keyboard accessibility) ────────────────────── */
   .nav-links a:focus-visible,

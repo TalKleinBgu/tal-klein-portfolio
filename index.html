@@ -31,8 +31,7 @@
 <meta name="twitter:image:alt"   content="Tal Klein — Data Scientist &amp; ML Researcher">
 
 <!-- Theme color -->
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9f1e4">
-<meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#131c30">
+<meta name="theme-color" id="themeColor" content="#f4ede1">
 
 <!-- Favicon (inline SVG - no file needed) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-family='Arial%2Csans-serif' font-weight='bold' font-size='14'%3ETK%3C/text%3E%3C/svg%3E">
@@ -80,11 +79,12 @@
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
-<div class="scroll-tint" aria-hidden="true"></div>
+<div class="bg-base" aria-hidden="true"></div>
 <canvas id="nn-bg" aria-hidden="true"></canvas>
 <div class="bg-art" aria-hidden="true">
-  <div class="glow-tr"></div>
-  <div class="glow-bl"></div>
+  <div class="glow glow-tr"></div>
+  <div class="glow glow-bl"></div>
+  <div class="grain"></div>
 </div>
 
 <header>
@@ -120,17 +120,17 @@
 <main id="main-content">
 <section class="hero wrap" id="top">
   <div class="hero-grid">
-    <div class="avatar has-img" id="avatar">
+    <div class="avatar has-img enter" id="avatar">
       <span class="ring" aria-hidden="true"></span>
       <img id="avatarImg" src="./assets/photo.webp" alt="Tal Klein" width="750" height="1230" fetchpriority="high" decoding="async">
     </div>
     <div class="hero-text">
-      <div class="hero-hi"><span class="avail-badge"><span class="avail-dot" aria-hidden="true"></span>Available for immediate start</span></div>
-      <h1 class="hero-name">Tal <span class="hl">Klein</span></h1>
-      <div class="hero-role">Data Scientist <span class="amp">&amp;</span> <span class="role-hl">ML Researcher</span></div>
-      <p class="hero-lead">M.Sc. graduate focused on advanced Machine Learning and Data Science. Experienced in NLP and Causal Inference, with a passion for impactful, real-world solutions.</p>
-      <div class="hero-btns">
-        <a href="#projects" class="btn btn-primary">Explore Work<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></a>
+      <div class="hero-hi enter"><span class="avail-badge"><span class="avail-dot" aria-hidden="true"></span>Available for immediate start</span></div>
+      <h1 class="hero-name enter">Tal <span class="hl">Klein</span></h1>
+      <div class="hero-role enter">Data Scientist <span class="amp">&amp;</span> <span class="role-hl">ML Researcher</span></div>
+      <p class="hero-lead enter">M.Sc. graduate focused on advanced Machine Learning and Data Science. Experienced in NLP and Causal Inference, with a passion for impactful, real-world solutions.</p>
+      <div class="hero-btns enter">
+        <a href="#projects" class="btn btn-primary">Explore Work<svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></a>
         <a href="#contact" class="btn btn-secondary cv-download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download CV</a>
         <div class="hero-social">
           <a class="iconbtn" href="https://www.linkedin.com/in/talklein21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
@@ -141,7 +141,7 @@
           </a>
         </div>
       </div>
-      <ul class="hero-stats" aria-label="Highlights">
+      <ul class="hero-stats enter" aria-label="Highlights">
         <li><span class="v">M.Sc.</span><span class="k">GPA 92 · Meitar</span></li>
         <li><span class="v">4,000+</span><span class="k">Verdicts analysed</span></li>
         <li><span class="v">7</span><span class="k">ML projects</span></li>
@@ -492,6 +492,7 @@
       <span><i class="dom"></i>Input / Output</span>
       <span><i></i>Hidden Skill</span>
     </div>
+    <p class="skillgraph-hint">Hover over any skill to trace its connections</p>
   </div>
   <!-- Mobile fallback: the network graph can't render legibly on a phone, so a
        categorised chip list (built from the same data) takes its place. -->
@@ -501,7 +502,7 @@
 <section class="wrap reveal" id="contact">
   <div class="eyebrow center">Get in Touch</div>
   <h2 class="display center">Let's Connect! <span aria-hidden="true">😊</span></h2>
-  <p class="contact-lead">I'm open to exciting opportunities in Data Science, Machine Learning, Deep Learning, and AI. Whether you want to collaborate on a research project, discuss a complex data challenge, or just say hello - feel free to reach out! 🙂</p>
+  <p class="contact-lead">I'm open to exciting opportunities in Data Science, Machine Learning, Deep Learning, and AI. Whether you want to collaborate on a research project, discuss a complex data challenge, or just say hello - feel free to reach&nbsp;out!&nbsp;🙂</p>
   <div class="contact-wrap">
     <div class="contact-cta">
       <a class="btn btn-primary" href="mailto:kleintal7@gmail.com"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>Send me an email</a>
