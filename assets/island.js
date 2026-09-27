@@ -613,7 +613,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=3', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=4', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
@@ -653,6 +653,9 @@
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
+        // Keep the proven grass surface underneath until the GLB meadow
+        // material is verified on all production GPUs.
+        mesh.visible = !isMeadow;
         // Broad triangulated meadows can self-shadow across shallow slopes.
         mesh.receiveShadow = !isMeadow;
         mesh.castShadow = !isMeadow;
@@ -660,13 +663,11 @@
       }
       islandGroup.add(terrain);
       if (terrainFallbackGroup) {
-        islandGroup.remove(terrainFallbackGroup);
-        terrainFallbackGroup.traverse((object) => {
+        terrainFallbackGroup.children.forEach((object) => {
+          if (object.name === 'Procedural meadow plateau') return;
+          object.visible = false;
           if (object.geometry) object.geometry.dispose();
-          if (object.material) {
-            const materials = Array.isArray(object.material) ? object.material : [object.material];
-            materials.forEach((material) => material.dispose());
-          }
+          if (object.material) object.material.dispose();
         });
       }
     } catch (error) {
@@ -811,6 +812,7 @@
       roughness: 0.85
     });
     const grassMesh = new THREE.Mesh(grassGeo, grassMat);
+    grassMesh.name = 'Procedural meadow plateau';
     grassMesh.position.y = 0.12;
     grassMesh.receiveShadow = true;
     terrainFallbackGroup.add(grassMesh);
