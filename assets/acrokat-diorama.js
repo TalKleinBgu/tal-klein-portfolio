@@ -4711,10 +4711,10 @@ function Ld(e,t,n,r){
     v(H,1.46,.055,1.28,p,0,ty-.22,-.04);
     v(H,1.48,.024,1.3,cyanGlow,0,ty-.18,-.04);
     // 3 wrap-around curtain-wall glass windows per floor
-    for(let wx of[-.42,0,.42]){
-      v(H,.36,.34,.04,h[(fl+Math.round(wx*3))%3],wx,ty,.56);
+    [-.42,0,.42].forEach((wx,colIdx)=>{
+      v(H,.36,.34,.04,h[(fl+colIdx)%3],wx,ty,.56);
       v(H,.02,.36,.06,p,wx,ty,.57);
-    }
+    });
     // Side glass panels
     for(let side of[-1,1]){
       v(H,.04,.34,.78,h[(fl+1)%3],side*.69,ty,-.04);
