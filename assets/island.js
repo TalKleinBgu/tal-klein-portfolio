@@ -514,7 +514,8 @@
     clock = new THREE.Clock();
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xF0F4F1);
-    scene.fog = new THREE.FogExp2(0xF0F4F1, 0.011);
+    // Keep the far shoreline atmospheric without washing miniature details out.
+    scene.fog = new THREE.FogExp2(0xF0F4F1, 0.0065);
 
     const w = window.innerWidth || 1440;
     const h = window.innerHeight || 900;
@@ -630,31 +631,82 @@
   function buildIslandBase() {
     // Procedural vibrant meadow grass texture
     const gCanvas = document.createElement('canvas');
-    gCanvas.width = 256;
-    gCanvas.height = 256;
+    gCanvas.width = 512;
+    gCanvas.height = 512;
     const gCtx = gCanvas.getContext('2d');
-    gCtx.fillStyle = '#4EA866';
-    gCtx.fillRect(0, 0, 256, 256);
-    for (let i = 0; i < 600; i++) {
-      gCtx.fillStyle = i % 2 === 0 ? 'rgba(62, 145, 84, 0.35)' : 'rgba(102, 190, 122, 0.35)';
-      gCtx.fillRect((i * 37) % 256, (i * 73) % 256, 6, 6);
+    gCtx.fillStyle = '#4D985B';
+    gCtx.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 5200; i++) {
+      const x = (i * 197) % 512, y = (i * 311 + Math.floor(i / 9) * 17) % 512;
+      gCtx.fillStyle = i % 3 === 0 ? 'rgba(139,190,106,0.34)' : i % 3 === 1 ? 'rgba(31,93,50,0.22)' : 'rgba(218,210,128,0.13)';
+      gCtx.save();
+      gCtx.translate(x, y);
+      gCtx.rotate((i % 17) * 0.18);
+      gCtx.fillRect(-1, -4 - (i % 5), 2, 5 + (i % 5));
+      gCtx.restore();
     }
     const grassTex = new THREE.CanvasTexture(gCanvas);
     grassTex.wrapS = THREE.RepeatWrapping;
     grassTex.wrapT = THREE.RepeatWrapping;
-    grassTex.repeat.set(8, 8);
+    grassTex.repeat.set(7, 7);
+    grassTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
-    // 1. Bottom dark slate-earth bevel (thick floating island base like acrokat.me)
-    const rockGeo = new THREE.CylinderGeometry(12.0, 9.2, 2.3, 64);
-    const rockMat = new THREE.MeshStandardMaterial({ color: 0x4A5D66, roughness: 0.88 });
+    // A softly irregular, stratified limestone edge reads as sculpted terrain.
+    const rockGeo = new THREE.CylinderGeometry(12.0, 9.2, 2.3, 96, 8);
+    const rockPositions = rockGeo.attributes.position;
+    for (let i = 0; i < rockPositions.count; i++) {
+      const x = rockPositions.getX(i), y = rockPositions.getY(i), z = rockPositions.getZ(i);
+      const radius = Math.max(Math.hypot(x, z), 1);
+      const angle = Math.atan2(z, x);
+      const variation = Math.sin(angle * 7 + y * 1.8) * 0.11 + Math.sin(angle * 13 - y * 2.2) * 0.045;
+      const scale = 1 + variation / radius;
+      rockPositions.setXYZ(i, x * scale, y + Math.sin(angle * 5) * 0.035, z * scale);
+    }
+    rockGeo.computeVertexNormals();
+
+    const stoneCanvas = document.createElement('canvas');
+    stoneCanvas.width = 512;
+    stoneCanvas.height = 512;
+    const stoneCtx = stoneCanvas.getContext('2d');
+    stoneCtx.fillStyle = '#9A8A72';
+    stoneCtx.fillRect(0, 0, 512, 512);
+    for (let i = 0; i < 3200; i++) {
+      const x = (i * 197) % 512, y = (i * 311 + Math.floor(i / 7) * 13) % 512;
+      const radius = 1 + (i % 6) * 0.7;
+      stoneCtx.fillStyle = i % 3 === 0 ? 'rgba(238,225,199,0.18)' : 'rgba(54,44,32,0.10)';
+      stoneCtx.beginPath();
+      stoneCtx.ellipse(x, y, radius * 1.8, radius, (i % 11) * 0.17, 0, Math.PI * 2);
+      stoneCtx.fill();
+    }
+    const stoneTex = new THREE.CanvasTexture(stoneCanvas);
+    stoneTex.wrapS = THREE.RepeatWrapping;
+    stoneTex.wrapT = THREE.RepeatWrapping;
+    stoneTex.repeat.set(3, 1.5);
+    stoneTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+    const rockMat = new THREE.MeshStandardMaterial({ map: stoneTex, color: 0xE4D1B1, roughness: 0.96, bumpMap: stoneTex, bumpScale: 0.055 });
     const rockMesh = new THREE.Mesh(rockGeo, rockMat);
     rockMesh.position.y = -1.35;
     rockMesh.receiveShadow = true;
     islandGroup.add(rockMesh);
 
-    // 2. Crisp light sage/limestone bevel rim around the island
+    // Individual shoreline stones break up the straight-sided island silhouette.
+    const shoreStoneGeo = new THREE.IcosahedronGeometry(0.95, 1);
+    for (let i = 0; i < 24; i++) {
+      const angle = (i / 24) * Math.PI * 2;
+      const stone = new THREE.Mesh(shoreStoneGeo, rockMat);
+      const radial = 12.05 + Math.sin(i * 4.1) * 0.16;
+      const size = 0.9 + ((i * 7) % 5) * 0.07;
+      stone.position.set(Math.cos(angle) * radial, -0.53 + Math.sin(i * 2.7) * 0.08, Math.sin(angle) * radial);
+      stone.scale.set(size * 1.5, size * 0.78, size * 1.12);
+      stone.rotation.set(Math.sin(i * 1.6) * 0.22, angle, Math.cos(i * 2.3) * 0.18);
+      stone.castShadow = true;
+      stone.receiveShadow = true;
+      islandGroup.add(stone);
+    }
+
+    // 2. Warm limestone bevel beneath the grass edge
     const sandGeo = new THREE.CylinderGeometry(12.35, 11.9, 0.44, 64);
-    const sandMat = new THREE.MeshStandardMaterial({ color: 0xA7D7B8, roughness: 0.82 });
+    const sandMat = new THREE.MeshStandardMaterial({ map: stoneTex, color: 0xB9A98E, roughness: 0.92, bumpMap: stoneTex, bumpScale: 0.025 });
     const sandMesh = new THREE.Mesh(sandGeo, sandMat);
     sandMesh.position.y = -0.18;
     sandMesh.receiveShadow = true;
@@ -728,9 +780,9 @@
   // ─── Winding River, Coastal Bay & Arched Stone Bridge (like acrokat.me) ────
   function buildRiverAndStoneBridge() {
     const waterMat = new THREE.MeshStandardMaterial({
-      color: 0x38BDF8,
-      roughness: 0.15,
-      metalness: 0.18
+      color: 0x63BBC0,
+      roughness: 0.24,
+      metalness: 0.08
     });
 
     // Winding river channel cutting from mid-east to the southeastern coastal bay
@@ -1982,10 +2034,10 @@
     canvas.height = 512;
     const ctx = canvas.getContext('2d');
     const grad = ctx.createLinearGradient(0, 0, 512, 512);
-    grad.addColorStop(0, '#38BDF8');
-    grad.addColorStop(0.4, '#0284C7');
-    grad.addColorStop(0.85, '#0369A1');
-    grad.addColorStop(1, '#075985');
+    grad.addColorStop(0, '#C3EAEB');
+    grad.addColorStop(0.4, '#83CED2');
+    grad.addColorStop(0.85, '#65B9C1');
+    grad.addColorStop(1, '#A8DDE0');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 512, 512);
 
@@ -2001,9 +2053,9 @@
 
     const oceanMat = new THREE.MeshStandardMaterial({
       map: tex,
-      color: 0x38BDF8,
-      roughness: 0.12,
-      metalness: 0.25,
+      color: 0xC5E8E8,
+      roughness: 0.3,
+      metalness: 0.06,
       transparent: true,
       opacity: 0.94
     });
@@ -2161,7 +2213,7 @@
 
   function buildVignetteOverlay() {
     const vig = document.getElementById('islandVignette');
-    if (vig) vig.style.opacity = '0.75';
+    if (vig) vig.style.opacity = '0.4';
   }
 
   // ─── Events, Raycasting & View Switching ───────────────────────────────────
@@ -2466,7 +2518,7 @@
     const vig = document.getElementById('islandVignette');
     if (vig && camera && controls) {
       const dist = camera.position.distanceTo(controls.target);
-      const factor = Math.max(0.45, Math.min(0.95, 1.35 - (dist / 32)));
+      const factor = Math.max(0.22, Math.min(0.58, 0.78 - (dist / 60)));
       vig.style.opacity = factor.toFixed(2);
     }
 
@@ -2567,3 +2619,4 @@
     initIsland();
   }
 })();
+
