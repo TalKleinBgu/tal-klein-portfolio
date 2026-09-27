@@ -613,7 +613,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=4', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=5', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
