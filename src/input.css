@@ -2129,7 +2129,7 @@
     outline-offset: 3px;
   }
 
-  /* ─── 🏝️ Interactive 3D Island Experience (acrokat.me aesthetic) ────────── */
+  /* ─── 🏝️ Interactive 3D Island Experience (Blue-Harmonized Aesthetic) ────────── */
   .island-view {
     position: fixed;
     inset: 0;
@@ -2138,8 +2138,8 @@
     min-height: 680px;
     z-index: 1000;
     isolation: isolate;
-    color: #244544;
-    background: #edf4f3;
+    color: #162d50;
+    background: #eef3f9;
     font-family: Arial, Helvetica, sans-serif;
     opacity: 1;
     visibility: visible;
@@ -2184,7 +2184,7 @@
     display: none !important;
   }
 
-  /* Left Editorial Hero Section (exact acrokat.me typography) */
+  /* Left Editorial Hero Section (Blue-tinted typography matching Classic Site) */
   .island-intro {
     z-index: 3;
     text-align: left;
@@ -2202,19 +2202,23 @@
     font-size: clamp(64px, 7.6vw, 116px);
     font-weight: 400;
     line-height: 0.95;
-    color: #244544;
+    color: #173463;
   }
 
-  .island-hero-name span {
-    color: #8faea0;
+  .island-hero-name .hero-last {
+    color: #2563eb;
+  }
+
+  .island-hero-name span:not(.hero-last) {
+    color: #60a5fa;
   }
 
   .island-hero-role {
     letter-spacing: 0.02em;
     margin: 22px 0 0 5px;
     font-size: 14px;
-    font-weight: 400;
-    color: #244544;
+    font-weight: 500;
+    color: #26487a;
   }
 
   .island-social-links {
@@ -2226,17 +2230,18 @@
   }
 
   .island-social-links a {
-    opacity: 0.65;
+    opacity: 0.72;
     place-items: center;
     width: 32px;
     height: 32px;
-    color: #121317;
-    transition: opacity 0.2s, transform 0.2s;
+    color: #173463;
+    transition: opacity 0.2s, transform 0.2s, color 0.2s;
     display: grid;
   }
 
   .island-social-links a:hover {
     opacity: 1;
+    color: #2563eb;
     transform: translateY(-2px);
   }
 
@@ -2253,27 +2258,29 @@
     padding: 9px 18px;
     font-size: 13px;
     font-weight: 600;
-    color: #244544;
-    background: rgba(255, 255, 255, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: #1e3a6e;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(37, 99, 235, 0.18);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 9999px;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(39, 74, 67, 0.08);
+    box-shadow: 0 4px 16px rgba(30, 58, 110, 0.08);
     transition: all 0.2s ease;
   }
 
   .island-classic-btn svg {
     width: 14px;
     height: 14px;
+    color: #2563eb;
     transition: transform 0.2s ease;
   }
 
   .island-classic-btn:hover {
     background: #ffffff;
-    color: #16302b;
-    box-shadow: 0 8px 22px rgba(39, 74, 67, 0.14);
+    color: #2563eb;
+    border-color: rgba(37, 99, 235, 0.35);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.16);
     transform: translateY(-1.5px);
   }
 
@@ -2303,7 +2310,7 @@
     margin: auto;
     transition: opacity 0.25s;
     display: block;
-    box-shadow: 0 0 0 5px #fffdf252, 0 1px 6px #526d5933;
+    box-shadow: 0 0 0 5px #dbeafe80, 0 1px 6px #1e3a8a33;
   }
 
   .acro-explore.hovered .acro-point,
@@ -2317,18 +2324,19 @@
     backdrop-filter: blur(12px);
     opacity: 0;
     pointer-events: none;
-    background: #ffffffba;
-    border: 1px solid #ffffffd9;
+    background: #ffffffc8;
+    border: 1px solid #ffffffe6;
     border-radius: 10px;
     padding: 10px 14px;
     font-size: 14px;
-    color: #244544;
+    font-weight: 500;
+    color: #173463;
     transition: opacity 0.2s, transform 0.2s;
     position: absolute;
     bottom: 43px;
     left: 50%;
     transform: translate(-50%, 5px);
-    box-shadow: 0 5px 18px #355d5010;
+    box-shadow: 0 5px 18px #1e3a8a14;
   }
 
   .acro-explore.hovered .acro-hover-label,
@@ -2355,7 +2363,7 @@
     display: grid;
     position: absolute;
     transform: translate(-50%, -145%);
-    box-shadow: 0 4px 14px #355d5018;
+    box-shadow: 0 4px 14px #1e3a8a18;
   }
 
   .acro-camera-link[data-hover="true"],
@@ -2378,7 +2386,7 @@
     transform: translate(-50%, -50%);
   }
 
-  /* 3D Projected Anchor & Frosted-Glass Summary Card (exact Screenshots #3 & #4 style) */
+  /* 3D Projected Anchor & Frosted-Glass Summary Card */
   .acro-anchor {
     z-index: 4;
     pointer-events: none;
@@ -2396,8 +2404,8 @@
     -webkit-backdrop-filter: blur(18px) saturate(120%);
     backdrop-filter: blur(18px) saturate(120%);
     pointer-events: auto;
-    background: linear-gradient(135deg, #ffffffdc, #ffffffae);
-    border: 1px solid #ffffffe0;
+    background: linear-gradient(135deg, #ffffffe4, #f8fafcb8);
+    border: 1px solid #ffffffe6;
     border-radius: 17px;
     width: 288px;
     padding: 19px 20px 17px;
@@ -2406,8 +2414,8 @@
     top: 20px;
     left: 0;
     transform: translate(-50%, 0);
-    box-shadow: 0 12px 36px #274a4315, inset 0 1px #fff;
-    color: #244544;
+    box-shadow: 0 12px 36px #1e3a8a18, inset 0 1px #fff;
+    color: #173463;
     text-align: left;
   }
 
@@ -2421,7 +2429,7 @@
     font-size: 21px;
     font-weight: 400;
     display: flex;
-    color: #244544;
+    color: #162d50;
   }
 
   .acro-card h2 img {
@@ -2432,7 +2440,7 @@
   }
 
   .acro-card-role {
-    color: #264b43;
+    color: #2563eb;
     margin: 14px 0 5px;
     font-size: 14px;
     font-weight: 600;
@@ -2440,7 +2448,7 @@
   }
 
   .acro-card-desc {
-    color: #527268;
+    color: #476282;
     margin: 0;
     font-size: 14px;
     line-height: 1.5;
@@ -2449,7 +2457,7 @@
   .acro-card-actions {
     margin-top: 12px;
     padding-top: 10px;
-    border-top: 1px solid rgba(82, 114, 104, 0.14);
+    border-top: 1px solid rgba(37, 99, 235, 0.14);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -2461,7 +2469,7 @@
     padding: 0;
     font-size: 12.5px;
     font-weight: 600;
-    color: #264b43;
+    color: #2563eb;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -2470,12 +2478,12 @@
   }
 
   .acro-card-more:hover {
-    color: #122b25;
+    color: #1d4ed8;
     transform: translateX(2px);
   }
 
   .acro-card-close {
-    color: #648579;
+    color: #5b7696;
     background: transparent;
     border: 0;
     border-radius: 50%;
@@ -2515,14 +2523,14 @@
 
   .acro-load-caption {
     letter-spacing: 0.04em;
-    color: #657d78;
+    color: #526d8c;
     margin-bottom: 11px;
     font-size: 12px;
     display: block;
   }
 
   .acro-load-track {
-    background: #ccdcd780;
+    background: #cbd8ea80;
     border-radius: 2px;
     height: 2px;
     position: relative;
@@ -2531,7 +2539,7 @@
 
   .acro-load-fill {
     border-radius: inherit;
-    background: #688d83;
+    background: #3b82f6;
     height: 100%;
     transition: width 0.45s;
     display: block;
@@ -2555,18 +2563,18 @@
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
     pointer-events: auto;
-    background: #ffffff91;
+    background: #ffffff96;
     border: 1px solid #ffffffd9;
     border-radius: 50px;
     align-items: center;
     gap: 2px;
     padding: 6px 9px;
     display: flex;
-    box-shadow: 0 5px 20px #53746709;
+    box-shadow: 0 5px 20px #1e3a8a0d;
   }
 
   .island-pill-controls button {
-    color: #54746a;
+    color: #365780;
     background: transparent;
     border: 0;
     border-radius: 50%;
@@ -2577,11 +2585,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.18s ease;
+    transition: background 0.18s ease, color 0.18s ease;
   }
 
   .island-pill-controls button:hover {
-    background: #d6e6df66;
+    background: #dbeafe88;
+    color: #2563eb;
   }
 
 

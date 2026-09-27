@@ -110,26 +110,51 @@
       jumpLabel: 'Explore Technical Stack & Projects'
     },
 
+    helpdesk: {
+      id: 'helpdesk',
+      name: 'IT Support & Help Desk Tower',
+      logo: './assets/acrokat/brands/helpdesk-icon.svg',
+      role: 'IT Support & Help Desk · Matrix Israel',
+      cardDesc: 'Enterprise troubleshooting across hardware, software & networks with rapid diagnosis and high-SLA ticket resolution',
+      tag: 'Enterprise IT Operations · Matrix Israel (2020–2021)',
+      title: 'Matrix IT Support & Help Desk Control Tower',
+      subtitle: 'Enterprise Technical Support, Diagnostics & Network Ops',
+      icon: '🎧',
+      desc: 'Rising above the central plaza, the glass-and-steel Help Desk Control Tower commemorates my foundation in enterprise IT operations at Matrix Israel — diagnosing complex hardware, software, and network incidents in real time while communicating clearly with clients under pressure.',
+      stats: [
+        { v: 'Matrix', k: 'Enterprise IT' },
+        { v: 'Tier 1–2', k: 'Rapid Triage' },
+        { v: '2020–21', k: 'Center, Israel' }
+      ],
+      bullets: [
+        'Provided comprehensive technical support and troubleshooting for enterprise clients across hardware, software, OS, and network infrastructure.',
+        'Resolved high-volume help-desk tickets with a focus on rapid root-cause diagnosis, SLA compliance, and empathetic user communication.',
+        'Built strong systems-thinking habits that directly inform how I design resilient, production-grade ML & data pipelines today.'
+      ],
+      jumpSection: '#experience',
+      jumpLabel: 'View IT Experience in Classic CV'
+    },
+
     blaze: {
       id: 'blaze',
-      name: 'Dairy Farm, Guide Dog & Court',
+      name: 'Dairy Farm, Cows & Guide Dog',
       logo: './assets/acrokat/brands/dairy-icon.svg',
       role: 'Family Dairy Farm · Guide-Dog Trainer · Basketball',
-      cardDesc: 'Grew up on our family dairy farm with cows, fostered a guide-dog puppy for 1+ year & lifelong basketball player',
+      cardDesc: 'Grew up on our family dairy farm with Holstein cows, raised a Golden Retriever guide-dog puppy right alongside the pasture & lifelong hoops player',
       tag: 'Personal Roots · Farm, Guide Dog & Basketball',
-      title: 'Family Dairy Barn, Guide-Dog Foster & Half Court',
+      title: 'Family Dairy Barn, Holstein Herd & Guide-Dog Pasture',
       subtitle: '05:00 AM Farm Grit · Guide-Dog Puppy · Lifelong Hoops',
       icon: '🐄',
       image: './assets/guide-dog.webp',
-      desc: 'Who I am beyond algorithms: growing up working alongside Holstein cows on our family dairy farm, raising and training a future guide-dog puppy for the blind for over a year, and shooting hoops on the basketball court my entire life (click the basketball on the court to shoot a 3-pointer!).',
+      desc: 'Who I am beyond algorithms: growing up working alongside Holstein cows on our family dairy farm, raising and socializing our Golden Retriever guide-dog puppy right by the pasture for over 1.5 years, and shooting hoops on the basketball court my entire life (click the basketball on the court to shoot a 3-pointer!).',
       stats: [
         { v: 'Dairy', k: 'Family Farm Roots' },
-        { v: '1+ Yr', k: 'Guide-Dog Foster' },
+        { v: '1.5 Yr', k: 'Guide-Dog Raiser' },
         { v: 'Hoops', k: 'Lifelong Player' }
       ],
       bullets: [
         'Raised on a family dairy farm with Holstein cows — instilling 05:00 AM work ethic, ownership, and hands-on problem solving.',
-        'Fostered and trained a Golden Retriever guide-dog puppy for 1+ year with the Israel Guide Dog Center, bringing him to BGU lectures and labs daily.',
+        'Raised and trained a Golden Retriever guide-dog puppy for 1.5 years with the Israel Guide Dog Center, bringing him from the farm pasture to BGU lectures and labs daily.',
         'Lifelong basketball player — built for team chemistry, court vision, and clutch execution under pressure.'
       ],
       jumpSection: '#about',
