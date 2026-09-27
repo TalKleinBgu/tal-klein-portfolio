@@ -176,6 +176,10 @@
   let islandGroup;
   let raycaster, mouse;
   let interactiveTargets = [];
+  let landmarkGroups = {};
+  let landmarkPins = [];
+  let oceanMesh = null;
+  let animWaterRipple = null;
   let hoveredLandmarkId = null;
   let isIslandVisible = true;
   let isPaused = false;
@@ -185,6 +189,7 @@
   let animBasketball = null;
   let ballShotProgress = -1;
   let animBoat = null;
+  let animRowBoat = null;
   let animPuppy = null;
   let animCows = [];
   let animCar = null;
@@ -199,6 +204,11 @@
   let cameraTargetPos = null;
   let controlsTargetLook = null;
   let isCameraTransitioning = false;
+  // Save camera state before landmark zoom so we can restore on modal close
+  let savedCameraPos = null;
+  let savedCameraTarget = null;
+  // Track hovered group for bounce scale animation
+  let hoveredGroup = null;
 
   // ─── Procedural High-Resolution Texture Generators ─────────────────────────
   function createBrickMaterial(brickHex, mortarHex, repeatX = 4, repeatY = 4) {
@@ -564,6 +574,9 @@
     buildCoastalPier();     // Front-right wooden pier, sandy beach & bobbing sailboat
 
     buildTreesAndStreetFurniture();
+    buildOcean();
+    buildFloatingLabels();
+    buildVignetteOverlay();
 
     raycaster = new THREE.Raycaster();
     mouse = new THREE.Vector2(-999, -999);
@@ -629,10 +642,10 @@
     const grassTex = new THREE.CanvasTexture(gCanvas);
     grassTex.wrapS = THREE.RepeatWrapping;
     grassTex.wrapT = THREE.RepeatWrapping;
-    grassTex.repeat.set(6, 6);
+    grassTex.repeat.set(8, 8);
 
     // 1. Bottom dark slate-earth bevel (thick floating island base like acrokat.me)
-    const rockGeo = new THREE.CylinderGeometry(9.7, 7.2, 2.1, 64);
+    const rockGeo = new THREE.CylinderGeometry(12.0, 9.2, 2.3, 64);
     const rockMat = new THREE.MeshStandardMaterial({ color: 0x4A5D66, roughness: 0.88 });
     const rockMesh = new THREE.Mesh(rockGeo, rockMat);
     rockMesh.position.y = -1.35;
@@ -640,7 +653,7 @@
     islandGroup.add(rockMesh);
 
     // 2. Crisp light sage/limestone bevel rim around the island
-    const sandGeo = new THREE.CylinderGeometry(9.95, 9.65, 0.42, 64);
+    const sandGeo = new THREE.CylinderGeometry(12.35, 11.9, 0.44, 64);
     const sandMat = new THREE.MeshStandardMaterial({ color: 0xA7D7B8, roughness: 0.82 });
     const sandMesh = new THREE.Mesh(sandGeo, sandMat);
     sandMesh.position.y = -0.18;
@@ -648,7 +661,7 @@
     islandGroup.add(sandMesh);
 
     // 3. Main vibrant spring-meadow grass plateau
-    const grassGeo = new THREE.CylinderGeometry(9.6, 9.8, 0.48, 64);
+    const grassGeo = new THREE.CylinderGeometry(11.9, 12.2, 0.52, 64);
     const grassMat = new THREE.MeshStandardMaterial({
       map: grassTex,
       color: 0x58B36E,
@@ -661,31 +674,30 @@
 
     // 4. Upper northern terrace for BGU & IDF Outpost
     const upperTerrace = new THREE.Mesh(
-      new THREE.CylinderGeometry(5.6, 5.9, 0.5, 48),
+      new THREE.CylinderGeometry(6.6, 7.0, 0.54, 48),
       new THREE.MeshStandardMaterial({ map: grassTex, color: 0x4EA363, roughness: 0.85 })
     );
-    upperTerrace.position.set(-1.5, 0.55, -3.6);
+    upperTerrace.position.set(-2.0, 0.55, -4.5);
     upperTerrace.receiveShadow = true;
     upperTerrace.castShadow = true;
     islandGroup.add(upperTerrace);
 
     // Stone retaining wall trim around upper terrace
     const wallTrim = new THREE.Mesh(
-      new THREE.CylinderGeometry(5.72, 5.82, 0.35, 48),
+      new THREE.CylinderGeometry(6.72, 6.92, 0.36, 48),
       stoneCorniceMat
     );
-    wallTrim.position.set(-1.5, 0.42, -3.6);
+    wallTrim.position.set(-2.0, 0.42, -4.5);
     wallTrim.receiveShadow = true;
     islandGroup.add(wallTrim);
 
     // Scattered wildflower patches across the meadow
     const flowerColors = [0xF472B6, 0xFBBF24, 0xA78BFA, 0xF87171, 0x34D399, 0x60A5FA];
-    for (let i = 0; i < 35; i++) {
-      const angle = (i / 35) * Math.PI * 2 + i * 0.618;
-      const dist = 3.2 + (i % 5) * 1.2 + Math.sin(i * 3.7) * 0.8;
+    for (let i = 0; i < 48; i++) {
+      const angle = (i / 48) * Math.PI * 2 + i * 0.618;
+      const dist = 3.6 + (i % 6) * 1.3 + Math.sin(i * 3.7) * 0.9;
       const fx = Math.cos(angle) * dist;
       const fz = Math.sin(angle) * dist;
-      // Skip flowers where buildings stand
       if (Math.abs(fx) < 2.5 && Math.abs(fz) < 2.5) continue;
       const flower = new THREE.Mesh(
         new THREE.SphereGeometry(0.06 + (i % 3) * 0.02, 6, 6),
@@ -697,9 +709,9 @@
 
     // Low ground-cover bushes scattered around
     const bushGreen = [0x3D8458, 0x4D9B6A, 0x2D6A4F];
-    for (let i = 0; i < 18; i++) {
-      const angle = (i / 18) * Math.PI * 2 + 0.3;
-      const dist = 4.5 + (i % 4) * 1.1;
+    for (let i = 0; i < 24; i++) {
+      const angle = (i / 24) * Math.PI * 2 + 0.3;
+      const dist = 5.2 + (i % 5) * 1.3;
       const bx = Math.cos(angle) * dist;
       const bz = Math.sin(angle) * dist;
       if (Math.abs(bx) < 3 && Math.abs(bz) < 3) continue;
@@ -789,22 +801,26 @@
     const plazaMat = createCobbleMaterial(4, 4);
 
     // Central plaza in front of AI & Legal NLP HQ
-    const mainPlaza = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.85, 0.06, 32), plazaMat);
+    const mainPlaza = new THREE.Mesh(new THREE.CylinderGeometry(3.0, 3.05, 0.06, 32), plazaMat);
     mainPlaza.position.set(-0.2, 0.37, 1.4);
     mainPlaza.receiveShadow = true;
     islandGroup.add(mainPlaza);
 
     const paths = [
-      // Avenue from HQ Plaza to BGU Hall
-      { x: -1.9, y: 0.58, z: -1.4, w: 1.25, l: 4.4, rot: 0.48 },
+      // Avenue from HQ Plaza to BGU Hall & IDF terrace
+      { x: -2.2, y: 0.58, z: -1.8, w: 1.3, l: 5.6, rot: 0.48 },
+      // Path extending into BGU Upper Courtyard
+      { x: -3.8, y: 0.82, z: -4.4, w: 1.2, l: 3.4, rot: 0.32 },
       // Avenue from HQ Plaza to Builder's Tech Hub
-      { x: -3.2, y: 0.37, z: 0.6, w: 1.2, l: 4.8, rot: 1.35 },
+      { x: -3.8, y: 0.37, z: 0.8, w: 1.2, l: 5.6, rot: 1.42 },
       // Avenue from HQ Plaza to Streetball Court
-      { x: -2.5, y: 0.37, z: 3.5, w: 1.15, l: 4.2, rot: 0.78 },
+      { x: -2.8, y: 0.37, z: 3.8, w: 1.2, l: 5.0, rot: 0.72 },
       // Avenue across Stone Bridge to Puppy Haven & Dairy Barn
-      { x: 2.8, y: 0.37, z: 0.8, w: 1.15, l: 5.6, rot: -1.2 },
+      { x: 3.2, y: 0.37, z: 1.0, w: 1.2, l: 6.4, rot: -1.2 },
       // Path from Bridge to Dairy Barn
-      { x: 4.8, y: 0.37, z: -1.6, w: 1.1, l: 4.4, rot: -0.25 }
+      { x: 5.4, y: 0.37, z: -1.8, w: 1.15, l: 5.2, rot: -0.28 },
+      // Path leading south to the Coastal Pier and Water Descent
+      { x: 4.8, y: 0.37, z: 3.8, w: 1.2, l: 4.2, rot: 0.42 }
     ];
 
     paths.forEach(p => {
@@ -827,10 +843,19 @@
       });
     });
 
+    // Stone steps ascending from lower avenue up to BGU terrace level
+    for (let s = 0; s < 3; s++) {
+      const step = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.1, 0.35), stoneCorniceMat);
+      step.position.set(-2.8 + s * 0.15, 0.38 + s * 0.14, -2.6 - s * 0.28);
+      step.rotation.y = 0.48;
+      step.receiveShadow = true;
+      islandGroup.add(step);
+    }
+
     // Stone park benches along the cobblestone avenues
     const benchMat = new THREE.MeshStandardMaterial({ color: 0x78716C, roughness: 0.75 });
     const benchWood = new THREE.MeshStandardMaterial({ color: 0x92400E, roughness: 0.8 });
-    [[-1.8, 0.37, 2.6, 0.48], [1.0, 0.37, 2.4, -0.3]].forEach(([bx, by, bz, brot]) => {
+    [[-1.8, 0.37, 2.6, 0.48], [1.0, 0.37, 2.4, -0.3], [-4.2, 0.37, 2.2, 1.2]].forEach(([bx, by, bz, brot]) => {
       const bench = new THREE.Group();
       bench.position.set(bx, by, bz);
       bench.rotation.y = brot;
@@ -852,6 +877,9 @@
 
   function registerInteractive(group, landmarkId) {
     group.userData.landmarkId = landmarkId;
+    group.userData.baseY = group.position.y;
+    group.userData.baseScale = 1.0;
+    landmarkGroups[landmarkId] = group;
     group.traverse(child => {
       if (child.isMesh) {
         child.userData.landmarkId = landmarkId;
@@ -863,7 +891,7 @@
   // ─── 1. Foreground Centerpiece: AI & Legal NLP HQ (Google DeepMind style) ──
   function buildResearchHQ() {
     const group = new THREE.Group();
-    group.position.set(-0.4, 0.36, 0.6);
+    group.position.set(-0.2, 0.36, 1.2);
     group.rotation.y = 0.18;
 
     const brickMat = createBrickMaterial('#8C4A32', '#E2DDD5', 4, 3);
@@ -1022,7 +1050,7 @@
   // ─── 2. Ben-Gurion University Hall (University of Michigan style) ──────────
   function buildBGUHall() {
     const group = new THREE.Group();
-    group.position.set(-3.1, 0.8, -4.1);
+    group.position.set(-4.2, 0.82, -5.4);
     group.rotation.y = 0.32;
 
     const sandstoneBrick = createBrickMaterial('#C89D70', '#EFECE6', 4, 3);
@@ -1131,7 +1159,7 @@
   // ─── 3. The Builder's Tech Lab (Modern Wood & Steel Pavilion) ─────
   function buildTechHub() {
     const group = new THREE.Group();
-    group.position.set(-5.8, 0.36, -0.2);
+    group.position.set(-7.4, 0.36, -0.4);
     group.rotation.y = 0.65;
 
     const cedarBrick = createBrickMaterial('#B46535', '#78350F', 3, 3);
@@ -1208,7 +1236,7 @@
   // ─── 4. The Heritage Dairy Barn (רפת המשפחה — Red Brick/Wood & Silo) ──────
   function buildDairyBarn() {
     const group = new THREE.Group();
-    group.position.set(5.4, 0.36, -3.2);
+    group.position.set(6.6, 0.36, -4.0);
     group.rotation.y = -0.38;
 
     const redBarnMat = createBrickMaterial('#B91C1C', '#FCA5A5', 4, 3);
@@ -1357,129 +1385,178 @@
     islandGroup.add(group);
   }
 
-  // ─── 5. Guide-Dog Puppy Haven (Cozy Cottage & Golden Retriever in Vest) ───
+  // ─── 5. Guide-Dog Puppy Haven (Kennel + Yard & Realistic Golden Retriever) ─
   function buildPuppyHaven() {
     const group = new THREE.Group();
-    group.position.set(5.6, 0.36, 0.9);
+    group.position.set(6.5, 0.36, 1.2);
     group.rotation.y = -0.55;
 
-    const stuccoBrick = createBrickMaterial('#F5EFE6', '#D6CFC2', 3, 2);
-    const terracottaRoof = createRoofShingleMaterial('#C2410C', 4, 3);
+    const woodDark = new THREE.MeshStandardMaterial({ color: 0x92400E, roughness: 0.82 });
+    const woodLight = new THREE.MeshStandardMaterial({ color: 0xB45309, roughness: 0.78 });
+    const roofMat = createRoofShingleMaterial('#C2410C', 3, 2);
 
-    // Cozy Cottage House
-    const house = new THREE.Mesh(new THREE.BoxGeometry(2.05, 1.35, 1.75), stuccoBrick);
-    house.position.y = 0.675;
-    house.castShadow = true;
-    house.receiveShadow = true;
-    group.add(house);
+    // ── Doghouse / Kennel ──
+    const houseBase = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.95, 1.0), woodLight);
+    houseBase.position.set(0, 0.475, 0);
+    houseBase.castShadow = true;
+    houseBase.receiveShadow = true;
+    group.add(houseBase);
 
-    // Pitched Shingle Roof & Chimney
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.68, 0.95, 4), terracottaRoof);
-    roof.position.y = 1.82;
-    roof.rotation.y = Math.PI / 4;
-    roof.castShadow = true;
-    group.add(roof);
+    // Gabled roof
+    const roofL = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.06, 0.58), roofMat);
+    roofL.position.set(0, 0.99, -0.24);
+    roofL.rotation.x = -0.42;
+    roofL.castShadow = true;
+    group.add(roofL);
+    const roofR = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.06, 0.58), roofMat);
+    roofR.position.set(0, 0.99, 0.24);
+    roofR.rotation.x = 0.42;
+    roofR.castShadow = true;
+    group.add(roofR);
+    const ridge = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.08, 0.08), new THREE.MeshStandardMaterial({ color: 0x7C2D12, roughness: 0.7 }));
+    ridge.position.set(0, 1.22, 0);
+    group.add(ridge);
 
-    const chimney = new THREE.Mesh(
-      new THREE.BoxGeometry(0.32, 0.75, 0.32),
-      createBrickMaterial('#9A3412', '#E5E7EB', 1, 1)
-    );
-    chimney.position.set(0.55, 1.95, -0.35);
-    chimney.castShadow = true;
-    group.add(chimney);
+    // Arch entrance
+    const archBg = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.62, 0.12), woodDark);
+    archBg.position.set(0, 0.34, 0.52);
+    group.add(archBg);
+    const archHole = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.14, 12, 1, true, Math.PI, Math.PI),
+      new THREE.MeshStandardMaterial({ color: 0x1E293B }));
+    archHole.rotation.z = Math.PI / 2;
+    archHole.position.set(0, 0.52, 0.52);
+    group.add(archHole);
 
-    // Warm Windows & Blue Cottage Door
-    [-0.58, 0.58].forEach(wx => {
-      const win = createMultiPaneWindow(0.46, 0.5, true, false);
-      win.position.set(wx, 0.76, 0.89);
-      group.add(win);
+    // Nameplate
+    const plate = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.18, 0.05),
+      new THREE.MeshStandardMaterial({ color: 0xFCD34D, roughness: 0.4 }));
+    plate.position.set(0, 0.88, 0.52);
+    group.add(plate);
+
+    // ── Small fenced yard ──
+    const fenceMatW = new THREE.MeshStandardMaterial({ color: 0xF5F5F4, roughness: 0.75 });
+    const yardPosts = [
+      [-0.82, 1.4], [0.82, 1.4], [-0.82, 2.5], [0.82, 2.5], [0, 2.5]
+    ];
+    yardPosts.forEach(([px, pz]) => {
+      const p = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.48, 0.08), fenceMatW);
+      p.position.set(px, 0.24, pz);
+      p.castShadow = true;
+      group.add(p);
+    });
+    const rail1 = new THREE.Mesh(new THREE.BoxGeometry(1.68, 0.06, 0.06), fenceMatW);
+    rail1.position.set(0, 0.35, 2.5);
+    group.add(rail1);
+    const rail2 = new THREE.Mesh(new THREE.BoxGeometry(1.68, 0.06, 0.06), fenceMatW);
+    rail2.position.set(0, 0.16, 2.5);
+    group.add(rail2);
+    [-0.82, 0.82].forEach(px => {
+      const side = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 1.14), fenceMatW);
+      side.position.set(px, 0.35, 1.95);
+      group.add(side);
     });
 
-    const door = new THREE.Mesh(
-      new THREE.BoxGeometry(0.44, 0.82, 0.1),
-      new THREE.MeshStandardMaterial({ color: 0x2563EB, roughness: 0.5 })
-    );
-    door.position.set(0, 0.42, 0.89);
-    group.add(door);
+    // Water bowl
+    const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.09, 0.08, 10),
+      new THREE.MeshStandardMaterial({ color: 0x94A3B8, roughness: 0.3, metalness: 0.5 }));
+    bowl.position.set(0.45, 0.04, 1.8);
+    group.add(bowl);
+    const water = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.03, 10),
+      new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.1 }));
+    water.position.set(0.45, 0.07, 1.8);
+    group.add(water);
 
-    // Signboard
-    const dogSign = createSignBoardMesh(1.75, 0.45, (ctx, w, h) => {
-      ctx.fillStyle = '#1D4ED8';
-      ctx.font = '800 36px "Plus Jakarta Sans", Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('🦮 GUIDE DOG HAVEN', w / 2, h / 2 - 10);
-      ctx.fillStyle = '#334155';
-      ctx.font = '700 23px "Plus Jakarta Sans", Arial, sans-serif';
-      ctx.fillText('Foster & Training · אומנה', w / 2, h / 2 + 22);
-    });
-    dogSign.position.set(0, 1.38, 0.92);
-    group.add(dogSign);
-
-    // Blue Agility Training Tunnel on the Lawn
-    const tunnel = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.32, 0.32, 0.95, 20, 1, true),
-      new THREE.MeshStandardMaterial({ color: 0x0284C7, roughness: 0.5, side: THREE.DoubleSide })
-    );
-    tunnel.rotation.z = Math.PI / 2;
-    tunnel.position.set(-1.1, 0.32, 1.45);
-    tunnel.castShadow = true;
-    group.add(tunnel);
-
-    // Detailed Golden Retriever Puppy in Official Blue Guide-Dog Training Vest
+    // ── Realistic Golden Retriever (more organic shapes) ──
     const puppy = new THREE.Group();
-    puppy.position.set(0.35, 0, 1.55);
-    puppy.rotation.y = -0.4;
+    puppy.position.set(0.2, 0, 1.9);
+    puppy.rotation.y = -1.0;
 
-    const goldenMat = new THREE.MeshStandardMaterial({ color: 0xEAB308, roughness: 0.65 });
-    const vestMat = new THREE.MeshStandardMaterial({ color: 0x1D4ED8, roughness: 0.45 });
-    const darkMat = new THREE.MeshStandardMaterial({ color: 0x1E293B });
+    const goldenMat = new THREE.MeshStandardMaterial({ color: 0xD97706, roughness: 0.6 });
+    const goldenLightMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.55 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x1C1917 });
+    const noseMat = new THREE.MeshStandardMaterial({ color: 0x292524, roughness: 0.3 });
 
-    const pBody = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.28, 0.26), goldenMat);
-    pBody.position.y = 0.28;
-    pBody.castShadow = true;
-    puppy.add(pBody);
+    // Body — use sphere for roundness
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.22, 10, 8), goldenMat);
+    body.scale.set(1.45, 0.85, 0.9);
+    body.position.y = 0.28;
+    body.castShadow = true;
+    puppy.add(body);
 
-    // Blue Training Cape/Vest with white cross emblem
-    const vest = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.3, 0.29), vestMat);
-    vest.position.set(0.02, 0.29, 0);
-    puppy.add(vest);
+    // Belly lighter patch
+    const belly = new THREE.Mesh(new THREE.SphereGeometry(0.16, 8, 6), goldenLightMat);
+    belly.scale.set(0.9, 0.65, 0.8);
+    belly.position.set(0, 0.22, 0);
+    puppy.add(belly);
 
-    // Guide Harness Handle
-    const handle = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.16), frameMatWhite);
-    handle.position.set(0.08, 0.46, 0);
-    puppy.add(handle);
+    // Neck
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.13, 0.18, 8), goldenMat);
+    neck.position.set(0.28, 0.36, 0);
+    neck.rotation.z = -0.5;
+    puppy.add(neck);
 
-    const pHead = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.22, 0.24), goldenMat);
-    pHead.position.set(0.28, 0.42, 0);
-    puppy.add(pHead);
+    // Head
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 10, 8), goldenMat);
+    head.scale.set(1.1, 0.95, 1.0);
+    head.position.set(0.42, 0.46, 0);
+    head.castShadow = true;
+    puppy.add(head);
 
-    const snout = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.11, 0.14), goldenMat);
-    snout.position.set(0.4, 0.38, 0);
+    // Snout
+    const snout = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 6), goldenLightMat);
+    snout.scale.set(1.3, 0.75, 0.9);
+    snout.position.set(0.55, 0.42, 0);
     puppy.add(snout);
 
-    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), darkMat);
-    nose.position.set(0.48, 0.4, 0);
+    // Nose
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.038, 8, 8), noseMat);
+    nose.position.set(0.64, 0.45, 0);
     puppy.add(nose);
 
-    // Floppy Golden Ears
-    [-0.13, 0.13].forEach(ez => {
-      const ear = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.15, 0.05), goldenMat);
-      ear.position.set(0.25, 0.39, ez);
+    // Eyes
+    [-0.07, 0.07].forEach(ez => {
+      const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 7, 7), darkMat);
+      eye.position.set(0.55, 0.5, ez);
+      puppy.add(eye);
+      const shine = new THREE.Mesh(new THREE.SphereGeometry(0.008, 5, 5),
+        new THREE.MeshStandardMaterial({ color: 0xFFFFFF }));
+      shine.position.set(0.57, 0.51, ez + 0.01);
+      puppy.add(shine);
+    });
+
+    // Floppy ears
+    [-0.12, 0.12].forEach(ez => {
+      const ear = new THREE.Mesh(new THREE.SphereGeometry(0.1, 7, 6), goldenMat);
+      ear.scale.set(0.45, 1.1, 0.65);
+      ear.position.set(0.37, 0.38, ez * 1.4);
       puppy.add(ear);
     });
 
-    // Tail
-    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.045, 0.24, 8), goldenMat);
-    tail.position.set(-0.28, 0.38, 0);
-    tail.rotation.z = 0.65;
+    // Blue guide vest
+    const vestMat = new THREE.MeshStandardMaterial({ color: 0x1D4ED8, roughness: 0.45 });
+    const vest = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8, 6), vestMat);
+    vest.scale.set(1.2, 0.8, 0.95);
+    vest.position.set(0.04, 0.3, 0);
+    puppy.add(vest);
+
+    // Tail — curved cylinder
+    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.045, 0.3, 8), goldenMat);
+    tail.position.set(-0.3, 0.38, 0);
+    tail.rotation.z = -0.7;
     puppy.add(tail);
 
-    // 4 Legs
-    [[-0.16, -0.08], [-0.16, 0.08], [0.16, -0.08], [0.16, 0.08]].forEach(([lx, lz]) => {
-      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.08), goldenMat);
-      leg.position.set(lx, 0.1, lz);
-      puppy.add(leg);
+    // 4 Legs — rounded cylinders
+    [[-0.15, -0.1], [-0.15, 0.1], [0.15, -0.1], [0.15, 0.1]].forEach(([lx, lz]) => {
+      const upper = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.14, 8), goldenMat);
+      upper.position.set(lx, 0.15, lz);
+      puppy.add(upper);
+      const lower = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, 0.12, 8), goldenMat);
+      lower.position.set(lx, 0.04, lz);
+      puppy.add(lower);
+      const paw = new THREE.Mesh(new THREE.SphereGeometry(0.048, 7, 5), goldenLightMat);
+      paw.scale.set(1.1, 0.6, 1.2);
+      paw.position.set(lx, -0.02, lz);
+      puppy.add(paw);
     });
 
     animPuppy = puppy;
@@ -1492,7 +1569,7 @@
   // ─── 6. Streetball Half-Court (Maccabi / NBA Hardwood, Hoop & Swish Ball) ─
   function buildBasketballCourt() {
     const group = new THREE.Group();
-    group.position.set(-4.3, 0.37, 4.3);
+    group.position.set(-5.6, 0.37, 5.4);
     group.rotation.y = 0.42;
 
     // Court Canvas Texture with crisp painted 3-point arc, free-throw key & center lines
@@ -1610,7 +1687,7 @@
   // ─── 7. IDF C4I Tactical Comms Outpost (Radar & Blinking Beacon) ──────────
   function buildIDFOutpost() {
     const group = new THREE.Group();
-    group.position.set(0.85, 0.8, -5.2);
+    group.position.set(1.4, 0.82, -6.6);
     group.rotation.y = -0.15;
 
     const bunkerBrick = createBrickMaterial('#64748B', '#94A3B8', 3, 2);
@@ -1673,7 +1750,7 @@
   // ─── 8. Coastal Pier, Sandy Beach & Sailboat ──────────────────────────────
   function buildCoastalPier() {
     const group = new THREE.Group();
-    group.position.set(4.9, 0.36, 3.6);
+    group.position.set(6.6, 0.36, 5.2);
     group.rotation.y = -0.55;
 
     const woodMat = new THREE.MeshStandardMaterial({ color: 0xA16207, roughness: 0.8 });
@@ -1789,17 +1866,72 @@
       islandGroup.add(tree);
     }
 
-    // Place dense Cherry Blossom & Evergreen Trees around the island (matching acrokat.me composition)
-    addMultiClusterTree(2.3, 0.36, -1.6, 1.18, true);   // Prominent Sakura between HQ & Barn
-    addMultiClusterTree(-3.3, 0.36, 2.0, 1.14, true);   // Sakura between HQ, Tech Hub & Court
-    addMultiClusterTree(1.8, 0.36, 3.2, 1.08, true);    // Sakura near River Bridge
-    addMultiClusterTree(-5.8, 0.8, -3.4, 1.1, true);    // Sakura beside BGU Hall
-    addMultiClusterTree(7.6, 0.36, -0.6, 1.05, true);   // Sakura east of Puppy Haven
+    // Realistic Apple Tree with bright red fruit (just like in acrokat.me reference)
+    function addAppleTree(x, y, z, scale) {
+      const tree = new THREE.Group();
+      tree.position.set(x, y, z);
+      tree.scale.setScalar(scale);
 
-    addMultiClusterTree(-0.8, 0.8, -6.0, 1.15, false);  // Lush green tree north ridge
-    addMultiClusterTree(3.2, 0.36, -5.0, 1.05, false);  // Green tree near Dairy Silo
-    addMultiClusterTree(-7.2, 0.36, 1.7, 1.04, false);  // Green tree west ridge
-    addMultiClusterTree(-1.2, 0.36, 5.8, 1.02, false);  // Green tree south coast
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.15, 1.0, 8), trunkMat);
+      trunk.position.y = 0.5;
+      trunk.castShadow = true;
+      tree.add(trunk);
+
+      const b1 = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.45, 6), trunkMat);
+      b1.position.set(0.15, 0.8, 0.1);
+      b1.rotation.z = -0.5;
+      tree.add(b1);
+
+      const appleGreens = [0x4EA866, 0x3E9154, 0x66BE7A];
+      const puffs = [
+        [0, 1.35, 0, 0.52],
+        [-0.25, 1.2, 0.18, 0.42],
+        [0.28, 1.25, -0.15, 0.44],
+        [0.1, 1.3, 0.28, 0.4]
+      ];
+      puffs.forEach((p, idx) => {
+        const sphere = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(p[3], 1),
+          new THREE.MeshStandardMaterial({ color: appleGreens[idx % appleGreens.length], roughness: 0.75 })
+        );
+        sphere.position.set(p[0], p[1], p[2]);
+        sphere.castShadow = true;
+        tree.add(sphere);
+      });
+
+      const appleMat = new THREE.MeshStandardMaterial({ color: 0xDC2626, roughness: 0.35 });
+      const apples = [
+        [-0.32, 1.15, 0.22],
+        [0.32, 1.1, -0.12],
+        [0.12, 1.12, 0.35],
+        [-0.15, 1.05, -0.28],
+        [0.22, 1.38, 0.18],
+        [-0.2, 1.35, -0.18]
+      ];
+      apples.forEach(([ax, ay, az]) => {
+        const apple = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), appleMat);
+        apple.position.set(ax, ay, az);
+        apple.castShadow = true;
+        tree.add(apple);
+      });
+
+      animTreeGroups.push(tree);
+      islandGroup.add(tree);
+    }
+
+    // Place dense Cherry Blossom, Apple & Evergreen Trees around the island
+    addAppleTree(-3.6, 0.36, 1.5, 1.15);                // Apple tree near Tech Hub path (matching reference photo!)
+    addAppleTree(0.8, 0.36, 2.5, 1.05);                 // Apple tree near central plaza
+    addMultiClusterTree(2.8, 0.36, -1.8, 1.22, true);   // Prominent Sakura between HQ & Barn
+    addMultiClusterTree(-3.5, 0.36, 2.2, 1.18, true);   // Sakura between HQ, Tech Hub & Court
+    addMultiClusterTree(2.2, 0.36, 3.6, 1.1, true);     // Sakura near River Bridge
+    addMultiClusterTree(-6.4, 0.8, -3.8, 1.15, true);   // Sakura beside BGU Hall
+    addMultiClusterTree(8.2, 0.36, -0.8, 1.1, true);    // Sakura east of Puppy Haven
+
+    addMultiClusterTree(-1.0, 0.8, -7.2, 1.2, false);   // Lush green tree north ridge
+    addMultiClusterTree(4.2, 0.36, -5.8, 1.12, false);  // Green tree near Dairy Silo
+    addMultiClusterTree(-8.2, 0.36, 1.8, 1.1, false);   // Green tree west ridge
+    addMultiClusterTree(-1.8, 0.36, 6.5, 1.08, false);  // Green tree south coast
 
     // Vintage Streetlamps along the Cobblestone Avenues
     const lamps = [
@@ -1807,7 +1939,8 @@
       [1.3, 0.36, 1.8],
       [-2.4, 0.58, -1.6],
       [2.2, 0.36, 0.2],
-      [4.1, 0.36, 1.7]
+      [4.1, 0.36, 1.7],
+      [-4.5, 0.37, 2.8]
     ];
     lamps.forEach(([lx, ly, lz]) => {
       islandGroup.add(createStreetLamp(lx, ly, lz));
@@ -1838,6 +1971,197 @@
     });
     animCar = car;
     islandGroup.add(car);
+  }
+
+  // ─── Surrounding Ocean & Waterside Descent ─────────────────────────────────
+  function buildOcean() {
+    const oceanGeo = new THREE.PlaneGeometry(240, 240, 32, 32);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    const grad = ctx.createLinearGradient(0, 0, 512, 512);
+    grad.addColorStop(0, '#38BDF8');
+    grad.addColorStop(0.4, '#0284C7');
+    grad.addColorStop(0.85, '#0369A1');
+    grad.addColorStop(1, '#075985');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 512, 512);
+
+    for (let i = 0; i < 600; i++) {
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + (0.03 + Math.random() * 0.08) + ')';
+      ctx.fillRect(Math.random() * 512, Math.random() * 512, 6 + Math.random() * 14, 2.5);
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(16, 16);
+
+    const oceanMat = new THREE.MeshStandardMaterial({
+      map: tex,
+      color: 0x38BDF8,
+      roughness: 0.12,
+      metalness: 0.25,
+      transparent: true,
+      opacity: 0.94
+    });
+
+    oceanMesh = new THREE.Mesh(oceanGeo, oceanMat);
+    oceanMesh.rotation.x = -Math.PI / 2;
+    oceanMesh.position.y = -0.92;
+    oceanMesh.receiveShadow = true;
+    scene.add(oceanMesh);
+
+    // Shore surf ripple rings around the island base
+    const rippleMat = new THREE.MeshBasicMaterial({
+      color: 0xBAE6FD,
+      transparent: true,
+      opacity: 0.55,
+      side: THREE.DoubleSide
+    });
+    const shoreRing = new THREE.Mesh(new THREE.RingGeometry(12.4, 14.2, 64), rippleMat);
+    shoreRing.rotation.x = -Math.PI / 2;
+    shoreRing.position.set(1.6, -0.89, 0);
+    scene.add(shoreRing);
+    animWaterRipple = shoreRing;
+
+    buildWaterDescent();
+  }
+
+  // Descent from island edge down into water + low moored rowboat
+  function buildWaterDescent() {
+    const descentGroup = new THREE.Group();
+    descentGroup.position.set(6.8, 0, 5.0);
+    descentGroup.rotation.y = -0.45;
+
+    const stoneMat = stoneCorniceMat;
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0x854D0E, roughness: 0.85 });
+
+    // Stone steps descending from island terrace (y = 0.36) down into water (y = -0.75)
+    const numSteps = 7;
+    for (let i = 0; i < numSteps; i++) {
+      const stepY = 0.3 - (i * 0.16);
+      const stepZ = 0.3 + (i * 0.32);
+      const step = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.18, 0.4), stoneMat);
+      step.position.set(0, stepY, stepZ);
+      step.receiveShadow = true;
+      step.castShadow = true;
+      descentGroup.add(step);
+
+      if (i % 2 === 0) {
+        [-0.78, 0.78].forEach(rx => {
+          const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.65, 8), woodMat);
+          post.position.set(rx, stepY + 0.35, stepZ);
+          descentGroup.add(post);
+        });
+      }
+    }
+
+    // Wooden handrails
+    [-0.78, 0.78].forEach(rx => {
+      const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 2.5, 8), woodMat);
+      rail.position.set(rx, -0.05, 1.25);
+      rail.rotation.x = 0.45;
+      descentGroup.add(rail);
+    });
+
+    // Floating wooden pontoon dock at water level
+    const pontoon = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.15, 2.6), woodMat);
+    pontoon.position.set(0.2, -0.78, 3.4);
+    pontoon.castShadow = true;
+    pontoon.receiveShadow = true;
+    descentGroup.add(pontoon);
+
+    // Mooring posts
+    [[-0.9, 2.4], [0.9, 2.4], [-0.9, 4.4], [0.9, 4.4]].forEach(([px, pz]) => {
+      const p = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.5, 8), woodMat);
+      p.position.set(px + 0.2, -0.55, pz);
+      descentGroup.add(p);
+    });
+
+    // Classic small wooden rowboat moored to the dock
+    const rowboat = new THREE.Group();
+    rowboat.position.set(1.8, -0.82, 3.6);
+    rowboat.rotation.y = 0.8;
+
+    const boatWood = new THREE.MeshStandardMaterial({ color: 0x78350F, roughness: 0.75 });
+    const rHull = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.32, 1.6), boatWood);
+    rHull.position.y = 0.12;
+    rHull.castShadow = true;
+    rowboat.add(rHull);
+
+    const rSeat = new THREE.Mesh(new THREE.BoxGeometry(0.64, 0.05, 0.25), woodMat);
+    rSeat.position.set(0, 0.2, 0);
+    rowboat.add(rSeat);
+
+    // Wooden oars
+    const oarMat = new THREE.MeshStandardMaterial({ color: 0xD97706, roughness: 0.6 });
+    [-0.45, 0.45].forEach((ox, idx) => {
+      const oar = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.1, 6), oarMat);
+      oar.position.set(ox, 0.25, 0);
+      oar.rotation.z = (idx === 0 ? 0.35 : -0.35);
+      oar.rotation.x = 0.2;
+      rowboat.add(oar);
+    });
+
+    animRowBoat = rowboat;
+    descentGroup.add(rowboat);
+
+    islandGroup.add(descentGroup);
+  }
+
+  // ─── 3D Floating Landmark Pins (acrokat.me style) ─────────────────────────
+  function buildFloatingLabels() {
+    const container = document.getElementById('islandPins');
+    if (!container) return;
+    container.innerHTML = '';
+    landmarkPins = [];
+
+    const pinDefs = [
+      { id: 'bgu_campus', label: 'Ben-Gurion', offset: new THREE.Vector3(0, 3.6, 0) },
+      { id: 'research_hq', label: 'AI Research', offset: new THREE.Vector3(0, 3.6, 0) },
+      { id: 'tech_hub', label: "Builder's Lab", offset: new THREE.Vector3(0, 3.2, 0) },
+      { id: 'dairy_barn', label: 'Dairy Farm', offset: new THREE.Vector3(0, 3.2, 0) },
+      { id: 'puppy_haven', label: 'Guide Dog', offset: new THREE.Vector3(0, 2.0, 0) },
+      { id: 'idf_outpost', label: 'IDF Comms', offset: new THREE.Vector3(0, 4.4, 0) },
+      { id: 'coastal_pier', label: 'The Pier', offset: new THREE.Vector3(0, 2.2, 0) }
+      // Basketball court is omitted intentionally per user request!
+    ];
+
+    pinDefs.forEach(p => {
+      const pinEl = document.createElement('div');
+      pinEl.className = 'island-pin';
+      pinEl.dataset.landmark = p.id;
+      pinEl.innerHTML = `
+        <div class="island-pin-card">${p.label}</div>
+        <div class="island-pin-dot"></div>
+      `;
+
+      pinEl.addEventListener('mouseenter', () => {
+        hoveredLandmarkId = p.id;
+        renderer.domElement.style.cursor = 'pointer';
+      });
+      pinEl.addEventListener('mouseleave', () => {
+        if (hoveredLandmarkId === p.id) hoveredLandmarkId = null;
+      });
+      pinEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (LANDMARKS[p.id] && landmarkGroups[p.id]) {
+          focusCameraOnLandmark(landmarkGroups[p.id]);
+          openLandmarkModal(LANDMARKS[p.id]);
+        }
+      });
+
+      container.appendChild(pinEl);
+      landmarkPins.push({ id: p.id, el: pinEl, offset: p.offset });
+    });
+  }
+
+  function buildVignetteOverlay() {
+    const vig = document.getElementById('islandVignette');
+    if (vig) vig.style.opacity = '0.75';
   }
 
   // ─── Events, Raycasting & View Switching ───────────────────────────────────
@@ -1934,15 +2258,27 @@
     if (hits.length > 0) {
       const id = hits[0].object.userData.landmarkId;
       renderer.domElement.style.cursor = 'pointer';
+
+      // Find the top-level group for this hit so we can scale it
+      let obj = hits[0].object;
+      while (obj.parent && obj.parent !== islandGroup && obj.parent !== scene) obj = obj.parent;
+      if (obj !== hoveredGroup) {
+        if (hoveredGroup) hoveredGroup._targetScale = 1.0;
+        hoveredGroup = obj;
+        hoveredGroup._targetScale = 1.055;
+      }
+
       if (id !== hoveredLandmarkId) {
         hoveredLandmarkId = id;
-        if (badge && LANDMARKS[id]) {
-          badge.textContent = `${LANDMARKS[id].icon}  ${LANDMARKS[id].title} — Click to inspect`;
+        // Basketball court: no floating badge, just cursor change
+        if (badge && LANDMARKS[id] && id !== 'basketball_court') {
+          badge.textContent = `${LANDMARKS[id].icon}  ${LANDMARKS[id].title}`;
           badge.classList.add('visible');
         }
       }
     } else {
       renderer.domElement.style.cursor = 'grab';
+      if (hoveredGroup) { hoveredGroup._targetScale = 1.0; hoveredGroup = null; }
       if (hoveredLandmarkId !== null) {
         hoveredLandmarkId = null;
         if (badge) badge.classList.remove('visible');
@@ -1953,6 +2289,10 @@
   function focusCameraOnLandmark(mesh) {
     const worldPos = new THREE.Vector3();
     mesh.getWorldPosition(worldPos);
+
+    // Save current camera state so we can return to exactly this view on modal close
+    savedCameraPos = camera.position.clone();
+    savedCameraTarget = controls ? controls.target.clone() : new THREE.Vector3(DEFAULT_TARGET.x, DEFAULT_TARGET.y, DEFAULT_TARGET.z);
 
     controlsTargetLook = worldPos.clone().add(new THREE.Vector3(0, 0.6, 0));
     const offset = new THREE.Vector3(9.5, 7.5, 11.5);
@@ -2019,6 +2359,14 @@
     if (!modal) return;
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
+    // Restore previous camera position and look target so view doesn't get stuck in zoom
+    if (savedCameraPos && savedCameraTarget) {
+      cameraTargetPos = savedCameraPos.clone();
+      controlsTargetLook = savedCameraTarget.clone();
+      isCameraTransitioning = true;
+      savedCameraPos = null;
+      savedCameraTarget = null;
+    }
     if (controls && !isPaused) controls.autoRotate = true;
   }
 
@@ -2080,6 +2428,48 @@
 
     if (controls) controls.update();
 
+    // Smooth building scale bounce and rise on hover
+    Object.values(landmarkGroups).forEach(grp => {
+      const isHovered = (grp.userData.landmarkId === hoveredLandmarkId);
+      const targetScale = isHovered ? 1.055 : 1.0;
+      const targetY = (grp.userData.baseY !== undefined ? grp.userData.baseY : 0.36) + (isHovered ? 0.12 : 0);
+      grp.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
+      grp.position.y += (targetY - grp.position.y) * 0.14;
+    });
+
+    // Project 3D floating landmark pins to screen space (acrokat style)
+    if (landmarkPins.length > 0 && camera) {
+      const tempV = new THREE.Vector3();
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      landmarkPins.forEach(pin => {
+        const grp = landmarkGroups[pin.id];
+        if (!grp) return;
+        grp.getWorldPosition(tempV);
+        tempV.add(pin.offset);
+        tempV.project(camera);
+
+        if (tempV.z > 1.0) {
+          pin.el.style.opacity = '0';
+          pin.el.style.pointerEvents = 'none';
+        } else {
+          const sx = (tempV.x * 0.5 + 0.5) * w;
+          const sy = (-(tempV.y * 0.5) + 0.5) * h;
+          pin.el.style.opacity = '1';
+          pin.el.style.pointerEvents = 'auto';
+          pin.el.style.transform = `translate3d(${Math.round(sx)}px, ${Math.round(sy)}px, 0) translate(-50%, -100%)`;
+        }
+      });
+    }
+
+    // Dynamic tilt-shift / side blur vignette that intensifies during zoom-in
+    const vig = document.getElementById('islandVignette');
+    if (vig && camera && controls) {
+      const dist = camera.position.distanceTo(controls.target);
+      const factor = Math.max(0.45, Math.min(0.95, 1.35 - (dist / 32)));
+      vig.style.opacity = factor.toFixed(2);
+    }
+
     if (!isPaused) {
       // Gentle boat bobbing on the water
       if (animBoat) {
@@ -2087,10 +2477,22 @@
         animBoat.rotation.z = Math.sin(t * 1.6) * 0.05;
       }
 
+      // Wooden rowboat bobbing near the water descent dock
+      if (animRowBoat) {
+        animRowBoat.position.y = -0.82 + Math.sin(t * 2.4 + 1.2) * 0.03;
+        animRowBoat.rotation.z = Math.sin(t * 1.8 + 0.5) * 0.04;
+      }
+
+      // Shore surf ripple pulsing
+      if (animWaterRipple) {
+        const rScale = 1.0 + Math.sin(t * 1.5) * 0.022;
+        animWaterRipple.scale.set(rScale, rScale, 1);
+      }
+
       // Guide dog puppy happy bounce
       if (animPuppy) {
         animPuppy.position.y = Math.abs(Math.sin(t * 3.5)) * 0.05;
-        animPuppy.rotation.y = -0.4 + Math.sin(t * 2.0) * 0.12;
+        animPuppy.rotation.y = -1.0 + Math.sin(t * 2.0) * 0.1;
       }
 
       // Dairy cows subtle grazing motion

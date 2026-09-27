@@ -2195,6 +2195,96 @@
     transform: translateX(-50%) translateY(0);
   }
 
+  /* Tilt-Shift & Side Blur Vignette Overlay (acrokat.me aesthetic) */
+  .island-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    background: radial-gradient(circle at 62% 48%, transparent 45%, rgba(240, 244, 241, 0.45) 80%, rgba(240, 244, 241, 0.88) 100%),
+                linear-gradient(to right, rgba(240, 244, 241, 0.88) 0%, rgba(240, 244, 241, 0.4) 22%, transparent 42%);
+    opacity: 0.85;
+    transition: opacity 0.4s ease;
+  }
+
+  /* 3D Floating Landmark Pins Layer */
+  .island-pins-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 8;
+    overflow: hidden;
+  }
+
+  .island-pin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translate(-50%, -100%);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    will-change: transform;
+    user-select: none;
+  }
+
+  .island-pin-card {
+    background: rgba(248, 250, 252, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.08);
+    border-radius: 12px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: #1E293B;
+    white-space: nowrap;
+    margin-bottom: 6px;
+    transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .island-pin:hover .island-pin-card {
+    transform: scale(1.08) translateY(-2px);
+    background: #FFFFFF;
+    color: #2563EB;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.18);
+  }
+
+  .island-pin-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.18s ease;
+  }
+
+  .island-pin:hover .island-pin-dot {
+    transform: scale(1.18);
+    background: rgba(37, 99, 235, 0.35);
+  }
+
+  .island-pin-dot::after {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .island-pin:hover .island-pin-dot::after {
+    background: #2563EB;
+  }
+
   /* Left Editorial Hero Section (acrokat typography) */
   .island-intro {
     position: absolute;
