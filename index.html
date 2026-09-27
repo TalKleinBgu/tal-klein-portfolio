@@ -129,6 +129,15 @@
       <h1 class="hero-name enter">Tal <span class="hl">Klein</span></h1>
       <div class="hero-role enter">Data Scientist <span class="amp">&amp;</span> <span class="role-hl">ML Researcher</span></div>
       <p class="hero-lead enter">M.Sc. graduate focused on advanced Machine Learning and Data Science. Experienced in NLP and Causal Inference, with a passion for impactful, real-world solutions.</p>
+      
+      <div class="hero-pills enter" aria-label="Core Specializations">
+        <span class="hero-pill"><span class="hero-pill-dot" aria-hidden="true"></span>LLMs &amp; Fine-Tuning</span>
+        <span class="hero-pill"><span class="hero-pill-dot" aria-hidden="true"></span>Hebrew NLP</span>
+        <span class="hero-pill"><span class="hero-pill-dot" aria-hidden="true"></span>Causal Inference</span>
+        <span class="hero-pill"><span class="hero-pill-dot" aria-hidden="true"></span>Multimodal AI</span>
+        <span class="hero-pill"><span class="hero-pill-dot" aria-hidden="true"></span>Information Retrieval</span>
+      </div>
+
       <div class="hero-btns enter">
         <a href="#projects" class="btn btn-primary">Explore Work<svg class="btn-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></a>
         <a href="#contact" class="btn btn-secondary cv-download"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download CV</a>
@@ -141,11 +150,23 @@
           </a>
         </div>
       </div>
-      <ul class="hero-stats enter" aria-label="Highlights">
-        <li><span class="v">M.Sc.</span><span class="k">GPA 92 · Meitar</span></li>
-        <li><span class="v">4,000+</span><span class="k">Verdicts analysed</span></li>
-        <li><span class="v">7</span><span class="k">ML projects</span></li>
-        <li><span class="v">1</span><span class="k">Paper under review</span></li>
+      <ul class="hero-stats enter" aria-label="Key Achievements">
+        <li>
+          <span class="v">M.Sc.</span>
+          <span class="k">GPA 92 · Meitar Excellence</span>
+        </li>
+        <li>
+          <span class="v">4,000+</span>
+          <span class="k">Verdicts Analysed (NLP)</span>
+        </li>
+        <li>
+          <span class="v">7</span>
+          <span class="k">Production &amp; Research ML</span>
+        </li>
+        <li>
+          <span class="v">1</span>
+          <span class="k">Paper Under Review</span>
+        </li>
       </ul>
     </div>
   </div>
@@ -175,10 +196,38 @@
       <div class="eyebrow">Selected Work</div>
       <h2 class="display">Projects</h2>
     </div>
-    <p class="sec-note">Click a project for results, details and code.</p>
+    <p class="sec-note">Filter, search, or toggle between list and grid views.</p>
   </div>
+
+  <div class="proj-toolbar">
+    <div class="proj-filters" role="tablist" aria-label="Filter projects by category">
+      <button type="button" class="proj-filter-btn active" data-filter="all">All <span class="count">7</span></button>
+      <button type="button" class="proj-filter-btn" data-filter="nlp-llm">NLP &amp; LLMs <span class="count">3</span></button>
+      <button type="button" class="proj-filter-btn" data-filter="multimodal">Vision &amp; Audio <span class="count">2</span></button>
+      <button type="button" class="proj-filter-btn" data-filter="search-ir">Search &amp; Algorithms <span class="count">2</span></button>
+    </div>
+    <div class="proj-actions">
+      <div class="proj-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="projSearchInput" class="proj-search-input" placeholder="Search tech or topic..." aria-label="Search projects">
+      </div>
+      <button type="button" id="projExpandToggle" class="proj-expand-toggle" aria-expanded="false" title="Expand or collapse all project details">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>
+        <span>Expand All</span>
+      </button>
+      <div class="view-toggle-group" role="group" aria-label="View layout">
+        <button type="button" class="view-btn active" id="viewListBtn" title="List View" aria-pressed="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+        <button type="button" class="view-btn" id="viewGridBtn" title="Grid View" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="plist" id="plist">
-    <article class="prow">
+    <article class="prow" data-category="search-ir" data-keywords="search ir bm25 tfidf pagerank gcp wikipedia information retrieval hybrid ranking python 6.4m">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p01">
           <span class="prow-num">01</span>
@@ -198,7 +247,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="nlp-llm" data-keywords="nlp llms gemini hebrew dialogue silence tagging assemblyai hugging face agreement cohen kappa audio 315 segments">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p02">
           <span class="prow-num">02</span>
@@ -218,7 +267,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="multimodal" data-keywords="vision multimodal video prediction yolo blip-2 blip2 pytorch ucf101 continuity next-frame 4 pipelines">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p03">
           <span class="prow-num">03</span>
@@ -237,7 +286,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="nlp-llm" data-keywords="llms fine-tuning lora qlora peft gemma gemma-3 pytorch rag question answering sft sherlock 22 ablation 0.71 f1">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p04">
           <span class="prow-num">04</span>
@@ -257,7 +306,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="multimodal" data-keywords="generative audio music lyrics midi lstm word2vec pytorch melody song 153 features">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p05">
           <span class="prow-num">05</span>
@@ -276,7 +325,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="search-ir" data-keywords="search maps openstreetmap a* osm folium pathfinding campus bgu navigation routing python 4 route modes">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p06">
           <span class="prow-num">06</span>
@@ -295,7 +344,7 @@
         </div>
       </div></div>
     </article>
-    <article class="prow">
+    <article class="prow" data-category="nlp-llm" data-keywords="nlp legal classification court verdict alephbert dictabert gpt-4 gpt4 bert transformers hebrew sentencing 91% accuracy 4271 paragraphs">
       <h3 class="prow-h">
         <button type="button" class="prow-head" aria-expanded="false" aria-controls="p07">
           <span class="prow-num">07</span>
@@ -414,9 +463,10 @@
       <h3 class="display">Education</h3>
 
       <div class="timeline">
-        <div class="card exp">
+        <div class="card exp pub-card-accent">
           <div class="exp-head" tabindex="0" role="button" aria-expanded="false">
             <div class="exp-left"><div>
+              <span class="pub-badge-springer">Springer · AI &amp; Law</span>
               <h4 class="title">Publication – Under Review</h4>
               <div class="sub">Artificial Intelligence and Law (Springer)</div>
               <div class="meta-line"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2026</div>
@@ -506,7 +556,11 @@
     </div>
   </div>
   <div class="sk-rows" id="skills-overview" role="tabpanel" aria-labelledby="tab-overview">
-  <div class="toolbox">
+    <div class="skills-search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="skillsSearchInput" class="skills-search-input" placeholder="Search skills &amp; tools (e.g. PyTorch, LoRA, GCP)..." aria-label="Search skills">
+    </div>
+    <div class="toolbox">
     <div class="tb-col">
       <h3 class="tb-h"><span class="sk-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><polyline points="7 10 10 13 7 16"/><line x1="12.5" y1="16" x2="17" y2="16"/></svg></span>Foundations</h3>
       <ul><li>Python</li><li>SQL</li><li>Linux</li><li>Git</li><li>Docker</li><li>Jupyter</li><li>VS Code</li></ul>
@@ -565,13 +619,20 @@
   </div>
 </section>
 
-<footer>
-  <a href="#top" class="to-top" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></a>
-  <span class="credit">© 2026 Tal Klein</span>
-  <span class="credit">Built by Tal Klein <span class="x">×</span> Claude Code · <code>git commit -m "ship it 🚀"</code></span>
 </footer>
+
+<button id="floatingTopBtn" class="floating-top-btn" aria-label="Scroll back to top">
+  <svg class="progress-ring" viewBox="0 0 50 50" aria-hidden="true">
+    <circle id="floatingProgressCircle" cx="25" cy="25" r="23"></circle>
+  </svg>
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
 </main>
 
-<script src="./assets/main.js?v=8" defer></script>
+<script src="./assets/main.js?v=9" defer></script>
 </body>
 </html>

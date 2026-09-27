@@ -161,13 +161,31 @@ themeBtn.addEventListener('click',()=>{
   },{rootMargin:'-45% 0px -50% 0px'}).observe(hero);
 })();
 
+/* ── Toast notification system ───────────────────────────────────────── */
+function showToast(message) {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg><span>${message}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('dismissing');
+    setTimeout(() => toast.remove(), 260);
+  }, 2400);
+}
+
 /* ── Copy email ──────────────────────────────────────────────────────── */
 (function(){
   const btn=document.getElementById('copyEmail');
   if(!btn)return;
   const label=btn.querySelector('span');
   btn.addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(btn.dataset.email);label.textContent='Copied!';}
+    try{
+      await navigator.clipboard.writeText(btn.dataset.email);
+      label.textContent='Copied!';
+      showToast('Email copied to clipboard!');
+    }
     catch(_){window.location.href='mailto:'+btn.dataset.email;return;}
     btn.classList.add('copied');
     setTimeout(()=>{label.textContent='Copy email';btn.classList.remove('copied');},1800);
@@ -629,11 +647,144 @@ if(window.matchMedia('(hover: hover)').matches){
   size();
 })();
 
-/* ── Projects: one line each, click a row to open its details ─────────── */
-document.querySelectorAll('.prow-head').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const open=btn.getAttribute('aria-expanded')!=='true';
-    btn.setAttribute('aria-expanded',open);
-    btn.closest('.prow').classList.toggle('open',open);
+/* ── Projects: Filtering, Search, View Layout & Accordions ─────────────── */
+(function(){
+  const plist = document.getElementById('plist');
+  const prows = [...document.querySelectorAll('.prow')];
+  if (!plist || !prows.length) return;
+
+  let activeCategory = 'all';
+  let searchQuery = '';
+
+  function applyFilters() {
+    prows.forEach(row => {
+      const cat = row.dataset.category || '';
+      const text = ((row.dataset.keywords || '') + ' ' + (row.textContent || '')).toLowerCase();
+      const matchCat = activeCategory === 'all' || cat === activeCategory;
+      const matchSearch = !searchQuery || text.includes(searchQuery);
+      const isVisible = matchCat && matchSearch;
+      row.classList.toggle('filtered-out', !isVisible);
+    });
+  }
+
+  // Category filter buttons
+  document.querySelectorAll('.proj-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.proj-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.filter || 'all';
+      applyFilters();
+    });
   });
-});
+
+  // Search input
+  const searchInput = document.getElementById('projSearchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', e => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      applyFilters();
+    });
+  }
+
+  // View toggle: List vs Grid
+  const listBtn = document.getElementById('viewListBtn');
+  const gridBtn = document.getElementById('viewGridBtn');
+
+  function setView(isGrid) {
+    plist.classList.toggle('grid-view', isGrid);
+    if (listBtn) {
+      listBtn.classList.toggle('active', !isGrid);
+      listBtn.setAttribute('aria-pressed', !isGrid);
+    }
+    if (gridBtn) {
+      gridBtn.classList.toggle('active', isGrid);
+      gridBtn.setAttribute('aria-pressed', isGrid);
+    }
+    try { localStorage.setItem('proj-view', isGrid ? 'grid' : 'list'); } catch (_) {}
+  }
+
+  if (listBtn) listBtn.addEventListener('click', () => setView(false));
+  if (gridBtn) gridBtn.addEventListener('click', () => setView(true));
+
+  // Restore saved view preference if any
+  try {
+    if (localStorage.getItem('proj-view') === 'grid') setView(true);
+  } catch (_) {}
+
+  // Expand / Collapse all toggle
+  const expandToggle = document.getElementById('projExpandToggle');
+  if (expandToggle) {
+    const expandLabel = expandToggle.querySelector('span');
+    expandToggle.addEventListener('click', () => {
+      const isExpanded = expandToggle.getAttribute('aria-expanded') === 'true';
+      const next = !isExpanded;
+      expandToggle.setAttribute('aria-expanded', next);
+      if (expandLabel) expandLabel.textContent = next ? 'Collapse All' : 'Expand All';
+      prows.forEach(prow => {
+        prow.classList.toggle('open', next);
+        const head = prow.querySelector('.prow-head');
+        if (head) head.setAttribute('aria-expanded', next);
+      });
+    });
+  }
+
+  // Accordion drawer toggle on click
+  document.querySelectorAll('.prow-head').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (plist.classList.contains('grid-view')) return; // in grid view, details remain accessible
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', open);
+      btn.closest('.prow').classList.toggle('open', open);
+    });
+  });
+})();
+
+/* ── Skills Overview: Real-time Search / Highlight ────────────────────── */
+(function(){
+  const input = document.getElementById('skillsSearchInput');
+  const items = [...document.querySelectorAll('.tb-col li')];
+  if (!input || !items.length) return;
+
+  input.addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) {
+      items.forEach(li => {
+        li.classList.remove('sk-match', 'sk-dim');
+      });
+      return;
+    }
+    items.forEach(li => {
+      const text = li.textContent.toLowerCase();
+      const match = text.includes(q);
+      li.classList.toggle('sk-match', match);
+      li.classList.toggle('sk-dim', !match);
+    });
+  });
+})();
+
+/* ── Floating Back to Top Button with Circular Scroll Progress ────────── */
+(function(){
+  const btn = document.getElementById('floatingTopBtn');
+  const circle = document.getElementById('floatingProgressCircle');
+  if (!btn || !circle) return;
+
+  const circumference = 2 * Math.PI * 23; // r = 23 -> ~144.5
+  circle.style.strokeDasharray = `${circumference}`;
+  circle.style.strokeDashoffset = `${circumference}`;
+
+  function update() {
+    const scrollY = window.scrollY;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docH > 0 ? Math.min(1, Math.max(0, scrollY / docH)) : 0;
+    
+    circle.style.strokeDashoffset = `${circumference * (1 - progress)}`;
+    btn.classList.toggle('visible', scrollY > 380);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
