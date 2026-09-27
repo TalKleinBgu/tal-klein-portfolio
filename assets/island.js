@@ -15,16 +15,16 @@
       title: 'Ben-Gurion University Hall',
       subtitle: 'Software & Information Systems Engineering · Beer Sheva',
       icon: '🎓',
-      desc: 'After completing military service, Tal embarked on a 7-year academic and research journey at Ben-Gurion University of the Negev—completing both his B.Sc. (Cum Laude) and M.Sc. (GPA 92) while teaching hundreds of engineering students.',
+      desc: 'After military service, I began a seven-year academic and research journey at Ben-Gurion University of the Negev, earning my B.Sc. (Cum Laude) and M.Sc. (GPA 92) while teaching hundreds of engineering students.',
       stats: [
         { v: '92', k: 'M.Sc. GPA' },
         { v: '89.4', k: 'B.Sc. Cum Laude' },
         { v: '2020–26', k: 'Teaching Assistant' }
       ],
       bullets: [
-        'M.Sc. Thesis: "Analyzing Temporal Dynamics in Judicial Ruling Citations: An NLP-Driven Approach to Legal Change".',
-        'Awarded the prestigious Meitar Legal-Tech Center Research Excellence Fellowship.',
-        'Teaching Assistant for "Introduction to Artificial Intelligence" & "Technological Entrepreneurship".'
+        'My M.Sc. thesis analyzes temporal dynamics in judicial ruling citations using NLP.',
+        'I received the Meitar Legal-Tech Center Research Excellence Fellowship.',
+        'I taught "Introduction to Artificial Intelligence" and "Technological Entrepreneurship".'
       ],
       jumpSection: '#experience',
       jumpLabel: 'View Academic Journey in Classic CV'
@@ -42,9 +42,9 @@
         { v: 'Q1', k: 'Springer Journal' }
       ],
       bullets: [
-        'Architected a custom Legal-HeBERT + BiLSTM sequential classifier outperforming standard transformers by +7 F1 points.',
-        'Engineered an end-to-end data pipeline parsing 185,000 raw Hebrew Supreme Court rulings.',
-        'Applied Difference-in-Differences (DiD) causal inference to prove significant doctrine shifts.'
+        'I built a Legal-HeBERT + BiLSTM classifier that outperformed standard transformers by 7 F1 points.',
+        'I engineered a pipeline to parse 185,000 Hebrew Supreme Court rulings.',
+        'I used Difference-in-Differences causal inference to measure shifts in legal doctrine.'
       ],
       jumpSection: '#projects',
       jumpLabel: 'Explore Research & Publications'
@@ -62,49 +62,49 @@
         { v: '100%', k: 'Recall@10' }
       ],
       bullets: [
-        'Wikipedia IR Engine: Custom inverted indexes, BM25 + PageRank fusion deployed on Google Cloud Platform.',
-        'Who Speaks When: Real-time speaker diarization & Whisper ASR transcription pipeline.',
-        'Multi-Modal Genre Classification (ViT + BERT) & Deep Q-Network (DQN) autonomous agents.'
+        'I built a Wikipedia search engine with custom inverted indexes and BM25 + PageRank on Google Cloud.',
+        'I developed real-time speaker diarization and a Whisper transcription pipeline.',
+        'I worked on multimodal genre classification and autonomous Deep Q-Network agents.'
       ],
       jumpSection: '#projects',
       jumpLabel: 'See All 6 Engineering Projects'
     },
     puppy_haven: {
       id: 'puppy_haven',
-      tag: 'Community & Volunteering · מעבר לקוד',
+      tag: 'Community & Volunteering',
       title: 'Guide-Dog Puppy Haven',
-      subtitle: 'Israel Guide Dog Center · אומנה לכלב נחייה',
+      subtitle: 'Israel Guide Dog Center for the Blind',
       icon: '🦮',
       image: './assets/guide-dog.webp',
-      desc: 'One of the most meaningful chapters outside of engineering: raising and training a future guide dog puppy from 8 weeks old for over a year—attending university lectures, labs, and daily socialization together.',
+      desc: 'One of my most meaningful experiences outside engineering was raising and training a future guide dog from eight weeks old for over a year, including bringing the puppy to lectures, labs, and daily outings.',
       stats: [
         { v: '1+ Yr', k: 'Full-Time Foster' },
         { v: '24/7', k: 'Training & Care' },
         { v: '100%', k: 'Heart & Impact' }
       ],
       bullets: [
-        'Fostered and trained a service puppy in collaboration with the Israel Guide Dog Center for the Blind.',
-        'Taught foundational obedience, calm navigation in crowded university campuses, and obstacle awareness.',
-        'Prepared the puppy for advanced formal guide-dog certification to empower a visually impaired partner.'
+        'I fostered and trained a guide-dog puppy with the Israel Guide Dog Center for the Blind.',
+        'I taught foundational obedience, calm navigation in busy campuses, and obstacle awareness.',
+        'I helped prepare the puppy for formal guide-dog certification.'
       ],
       jumpSection: '#about',
       jumpLabel: 'Read More in About Me'
     },
     basketball_court: {
       id: 'basketball_court',
-      tag: 'Passion & Team Spirit · כדורסל',
+      tag: 'Passion & Team Spirit',
       title: 'Maccabi & NBA Streetball Court',
       subtitle: 'Yellow-and-Blue Hardwood · Click to Shoot a 3-Pointer!',
       icon: '🏀',
-      desc: 'Whether playing pickup games on the court or following the NBA, EuroLeague, and Maccabi Tel Aviv, basketball is where strategy, tempo, and teamwork come alive.',
+      desc: 'I play pickup basketball and follow the NBA, EuroLeague, and Maccabi Tel Aviv. The game keeps me thinking about strategy, tempo, and teamwork.',
       stats: [
         { v: 'NBA', k: '& EuroLeague' },
         { v: 'MTA', k: 'Yellow & Blue' },
         { v: '3PT', k: 'Swish Animation' }
       ],
       bullets: [
-        'Lifelong basketball player and avid follower of NBA and EuroLeague analytics.',
-        'Brings the same court vision, unselfish passing, and clutch execution to engineering teams.',
+        'I have played basketball for years and follow the NBA and EuroLeague.',
+        'I bring court vision, unselfish teamwork, and focus to engineering teams.',
         'Interactive Easter Egg: Clicking the court triggers a high-arcing 3-point swish into the net!'
       ],
       jumpSection: '#about',
@@ -112,23 +112,23 @@
     },
     dairy_barn: {
       id: 'dairy_barn',
-      tag: 'Family Roots & Work Ethic · רפת המשפחה',
+      tag: 'Family Roots & Work Ethic',
       title: 'The Heritage Dairy Barn',
       subtitle: 'Agricultural Roots · Grounded Problem Solving',
       icon: '🐄',
-      desc: 'Growing up with a family dairy farm (רפת) instilled an unmistakable work ethic early on: waking up before dawn, taking full ownership, and solving real physical problems with zero shortcuts.',
+      desc: 'Growing up on my family dairy farm taught me to work hard, take ownership, and solve practical problems without shortcuts.',
       stats: [
         { v: '05:00', k: 'Early Mornings' },
         { v: '100%', k: 'Grit & Ownership' },
         { v: 'Roots', k: 'Family Farm' }
       ],
       bullets: [
-        'Grew up helping run the family dairy farm—learning responsibility, resilience, and teamwork from childhood.',
-        'Combines grounded, pragmatic agricultural grit with advanced academic research.',
-        'A reminder that behind every complex algorithm is real-world execution.'
+        'I grew up helping run the family dairy farm and learned responsibility, resilience, and teamwork early.',
+        'I bring that practical mindset to academic research and engineering.',
+        'My farm roots keep me focused on real-world execution.'
       ],
       jumpSection: '#about',
-      jumpLabel: 'Learn More About Tal'
+      jumpLabel: 'Learn More About Me'
     },
     idf_outpost: {
       id: 'idf_outpost',
@@ -136,39 +136,39 @@
       title: 'IDF C4I Tactical Comms Outpost',
       subtitle: 'Combat Communications & Crypto Systems · Full Honors',
       icon: '📡',
-      desc: 'Where technical leadership under pressure began: serving as a Combat Communications Specialist in the Israel Defense Forces, managing encrypted RF networks and field command infrastructure.',
+      desc: 'I began developing technical leadership under pressure as a Combat Communications Specialist in the Israel Defense Forces, managing encrypted RF networks and field command infrastructure.',
       stats: [
         { v: '3 Yrs', k: 'Full Service' },
         { v: 'C4I', k: 'Encrypted Comms' },
         { v: '24/7', k: 'Mission Critical' }
       ],
       bullets: [
-        'Maintained and troubleshot mission-critical encrypted communication networks and tactical relays.',
-        'Trained field operators and commanders on high-reliability C4I hardware and protocols.',
-        'Discharged with full honors before beginning engineering studies at Ben-Gurion University.'
+        'I maintained and troubleshot mission-critical encrypted communication networks and tactical relays.',
+        'I trained field operators and commanders on reliable C4I hardware and protocols.',
+        'I completed my service with full honors before beginning engineering studies at Ben-Gurion University.'
       ],
       jumpSection: '#experience',
       jumpLabel: 'View Full Timeline'
     },
     coastal_pier: {
       id: 'coastal_pier',
-      tag: 'Nature, Beaches & Travel · חופים וטיולים',
+      tag: 'Nature, Beaches & Travel',
       title: 'The Mediterranean Pier & Cove',
       subtitle: 'Beaches, Trails & Open Horizons',
       icon: '⛵',
-      desc: 'Beyond datasets and neural networks, Tal recharges by the sea, hiking nature trails, and exploring new coastlines around the world.',
+      desc: 'Beyond datasets and neural networks, I recharge by the sea, hike nature trails, and explore new coastlines around the world.',
       stats: [
         { v: 'Sea', k: '& Coastlines' },
         { v: 'Trails', k: 'Nature & Hiking' },
         { v: 'Open', k: 'To New Opportunities' }
       ],
       bullets: [
-        'Loves the beach, outdoor trails, and traveling to discover new landscapes and cultures.',
+        'I love the beach, outdoor trails, and traveling to discover new landscapes and cultures.',
         'Currently open to Data Scientist, ML Engineer, and AI Researcher roles.',
         'Let’s connect over coffee, basketball, or machine learning!'
       ],
       jumpSection: '#contact',
-      jumpLabel: 'Get in Touch with Tal'
+      jumpLabel: 'Get in Touch with Me'
     }
   };
 
@@ -198,9 +198,9 @@
   let beaconMat = null;
   let riverMesh = null;
 
-  // Camera default state — zoomed-in isometric perspective filling the screen like acrokat.me
-  const DEFAULT_CAM_POS = { x: 14.8, y: 11.4, z: 17.6 };
-  const DEFAULT_TARGET = { x: 0.3, y: 1.35, z: 0.1 };
+  // Camera default state — a wide isometric view that keeps the full island in frame.
+  const DEFAULT_CAM_POS = { x: 20.6, y: 15.8, z: 24.6 };
+  const DEFAULT_TARGET = { x: 0.9, y: 1.15, z: 0.5 };
   let cameraTargetPos = null;
   let controlsTargetLook = null;
   let isCameraTransitioning = false;
@@ -297,32 +297,42 @@
 
   function createCobbleMaterial(repeatX = 6, repeatY = 2) {
     const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = 512;
+    canvas.height = 512;
     const ctx = canvas.getContext('2d');
 
-    ctx.fillStyle = '#D6D1C7';
-    ctx.fillRect(0, 0, 256, 256);
+    ctx.fillStyle = '#C9C3B7';
+    ctx.fillRect(0, 0, 512, 512);
 
     const stones = [
-      '#E7E2D8', '#DED8CC', '#EBE6DC', '#D5CFC3', '#E2DDD2'
+      '#E7E1D5', '#D8D2C6', '#ECE6DA', '#CFC9BD', '#E0D9CD', '#D5D0C5'
     ];
-    const rows = 8;
-    const cols = 8;
-    const rH = 256 / rows;
-    const cW = 256 / cols;
+    const rows = 9;
+    const cols = 9;
+    const rH = 512 / rows;
+    const cW = 512 / cols;
 
     for (let r = 0; r < rows; r++) {
       const off = (r % 2) * (cW * 0.45);
       for (let c = -1; c <= cols; c++) {
-        ctx.fillStyle = stones[(r * 3 + c * 5 + 16) % stones.length];
-        const x = c * cW + off + 2;
-        const y = r * rH + 2;
-        const w = cW - 4;
-        const h = rH - 4;
+        const seed = Math.abs((r * 17 + c * 29 + 48) % stones.length);
+        const x = c * cW + off + 4 + ((r + c) % 3) * 2;
+        const y = r * rH + 4 + ((r * 2 + c) % 4) * 2;
+        const w = cW - 9 - ((r + c) % 4) * 2;
+        const h = rH - 9 - ((r * 3 + c) % 3) * 2;
+        ctx.fillStyle = stones[seed];
         ctx.beginPath();
-        ctx.roundRect(x, y, w, h, 5);
+        ctx.roundRect(x, y, w, h, 10 + (r + c) % 7);
         ctx.fill();
+        ctx.strokeStyle = 'rgba(116,108,96,0.22)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,255,255,0.28)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x + 8, y + 3);
+        ctx.lineTo(x + w - 10, y + 3);
+        ctx.stroke();
       }
     }
 
@@ -333,7 +343,7 @@
     return new THREE.MeshStandardMaterial({
       map: tex,
       bumpMap: tex,
-      bumpScale: 0.02,
+      bumpScale: 0.028,
       roughness: 0.85,
       metalness: 0.02
     });
@@ -373,6 +383,17 @@
     signGroup.add(face);
 
     return signGroup;
+  }
+
+  function drawGitHubMark(ctx, centerX, centerY, size, color) {
+    const mark = new Path2D('M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z');
+    const scale = size / 24;
+    ctx.save();
+    ctx.translate(centerX - size / 2, centerY - size / 2);
+    ctx.scale(scale, scale);
+    ctx.fillStyle = color;
+    ctx.fill(mark);
+    ctx.restore();
   }
 
   // ─── Architectural Sub-Components (Windows, Planters, Trees, Lamps) ────────
@@ -464,7 +485,7 @@
     for (let i = 0; i < count; i++) {
       const r = 0.16 + (i % 2) * 0.04;
       const bush = new THREE.Mesh(
-        new THREE.DodecahedronGeometry(r, 1),
+        new THREE.SphereGeometry(r, 16, 12),
         new THREE.MeshStandardMaterial({ color: greens[i % greens.length], roughness: 0.78 })
       );
       const t = count === 1 ? 0 : (i / (count - 1) - 0.5) * (length - 0.24);
@@ -545,8 +566,7 @@
       controls.minPolarAngle = Math.PI / 7;
       controls.minDistance = 10;
       controls.maxDistance = 42;
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.32;
+      controls.autoRotate = false;
 
       controls.addEventListener('start', () => {
         isCameraTransitioning = false;
@@ -724,25 +744,6 @@
     grassMesh.receiveShadow = true;
     islandGroup.add(grassMesh);
 
-    // 4. Upper northern terrace for BGU & IDF Outpost
-    const upperTerrace = new THREE.Mesh(
-      new THREE.CylinderGeometry(6.6, 7.0, 0.54, 48),
-      new THREE.MeshStandardMaterial({ map: grassTex, color: 0x4EA363, roughness: 0.85 })
-    );
-    upperTerrace.position.set(-2.0, 0.55, -4.5);
-    upperTerrace.receiveShadow = true;
-    upperTerrace.castShadow = true;
-    islandGroup.add(upperTerrace);
-
-    // Stone retaining wall trim around upper terrace
-    const wallTrim = new THREE.Mesh(
-      new THREE.CylinderGeometry(6.72, 6.92, 0.36, 48),
-      stoneCorniceMat
-    );
-    wallTrim.position.set(-2.0, 0.42, -4.5);
-    wallTrim.receiveShadow = true;
-    islandGroup.add(wallTrim);
-
     // Scattered wildflower patches across the meadow
     const flowerColors = [0xF472B6, 0xFBBF24, 0xA78BFA, 0xF87171, 0x34D399, 0x60A5FA];
     for (let i = 0; i < 48; i++) {
@@ -784,36 +785,78 @@
       roughness: 0.24,
       metalness: 0.08
     });
+    const flowCanvas = document.createElement('canvas');
+    flowCanvas.width = 256;
+    flowCanvas.height = 256;
+    const flowCtx = flowCanvas.getContext('2d');
+    flowCtx.fillStyle = '#FFFFFF';
+    flowCtx.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 150; i++) {
+      const x = Math.random() * 256;
+      const y = Math.random() * 256;
+      flowCtx.beginPath();
+      flowCtx.moveTo(x, y);
+      flowCtx.quadraticCurveTo(x + 5, y - 2 + Math.random() * 4, x + 12 + Math.random() * 24, y);
+      flowCtx.strokeStyle = i % 3 === 0 ? 'rgba(255,255,255,0.8)' : 'rgba(38,126,139,0.22)';
+      flowCtx.lineWidth = 1 + Math.random() * 2;
+      flowCtx.lineCap = 'round';
+      flowCtx.stroke();
+    }
+    const flowTexture = new THREE.CanvasTexture(flowCanvas);
+    flowTexture.wrapS = THREE.RepeatWrapping;
+    flowTexture.wrapT = THREE.RepeatWrapping;
+    waterMat.map = flowTexture;
 
-    // Winding river channel cutting from mid-east to the southeastern coastal bay
+    // One continuous curved watercourse, with a soft stone edge beneath it.
     const riverGroup = new THREE.Group();
-    const segs = [
-      { x: 1.8, z: -0.5, w: 1.4, l: 3.0, rot: -0.35 },
-      { x: 3.2, z: 1.4, w: 1.6, l: 3.1, rot: -0.55 },
-      { x: 4.8, z: 3.1, w: 2.5, l: 3.6, rot: -0.6 },
-      { x: 5.7, z: 4.1, w: 3.6, l: 3.8, rot: -0.4 }
-    ];
-    segs.forEach(s => {
-      // Stone riverbank border
-      const bank = new THREE.Mesh(
-        new THREE.BoxGeometry(s.w + 0.35, 0.12, s.l + 0.2),
-        stoneCorniceMat
-      );
-      bank.position.set(s.x, 0.33, s.z);
-      bank.rotation.y = s.rot;
-      bank.receiveShadow = true;
-      riverGroup.add(bank);
-
-      // Glossy azure water surface
-      const water = new THREE.Mesh(
-        new THREE.BoxGeometry(s.w, 0.14, s.l),
-        waterMat
-      );
-      water.position.set(s.x, 0.35, s.z);
-      water.rotation.y = s.rot;
-      water.receiveShadow = true;
-      riverGroup.add(water);
-    });
+    const riverPath = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(1.6, 0, -2.0),
+      new THREE.Vector3(1.6, 0, -0.4),
+      new THREE.Vector3(2.5, 0, 0.9),
+      new THREE.Vector3(4.1, 0, 2.0),
+      new THREE.Vector3(4.9, 0, 3.2),
+      new THREE.Vector3(5.7, 0, 4.25),
+      new THREE.Vector3(7.4, 0, 5.65)
+    ], false, 'catmullrom', 0.22);
+    function createRiverRibbon(width, y) {
+      const segments = 72;
+      const positions = new Float32Array((segments + 1) * 2 * 3);
+      const uvs = new Float32Array((segments + 1) * 2 * 2);
+      const indices = [];
+      for (let i = 0; i <= segments; i++) {
+        const t = i / segments;
+        const center = riverPath.getPointAt(t);
+        const tangent = riverPath.getTangentAt(t).normalize();
+        const px = -tangent.z, pz = tangent.x;
+        const halfWidth = width * (0.86 + 0.14 * Math.sin(Math.PI * t));
+        const left = i * 6, uv = i * 4;
+        positions[left] = center.x + px * halfWidth / 2;
+        positions[left + 1] = y;
+        positions[left + 2] = center.z + pz * halfWidth / 2;
+        positions[left + 3] = center.x - px * halfWidth / 2;
+        positions[left + 4] = y;
+        positions[left + 5] = center.z - pz * halfWidth / 2;
+        uvs[uv] = t * 8; uvs[uv + 1] = 0;
+        uvs[uv + 2] = t * 8; uvs[uv + 3] = 1;
+        if (i < segments) {
+          const a = i * 2;
+          indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+    const bank = new THREE.Mesh(createRiverRibbon(1.74, 0.385), createCobbleMaterial(3, 2));
+    bank.receiveShadow = true;
+    riverGroup.add(bank);
+    const riverWater = new THREE.Mesh(createRiverRibbon(1.34, 0.405), waterMat);
+    riverWater.userData.isWater = true;
+    riverWater.receiveShadow = true;
+    riverGroup.add(riverWater);
     riverMesh = riverGroup;
     islandGroup.add(riverGroup);
 
@@ -823,8 +866,14 @@
     bridge.rotation.y = 0.98;
 
     const cobbleMat = createCobbleMaterial(2, 1);
-    const deck = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.18, 1.25), cobbleMat);
-    deck.position.y = 0.22;
+    const archShape = new THREE.Shape();
+    archShape.moveTo(-1.15, 0.14);
+    archShape.quadraticCurveTo(0, 0.47, 1.15, 0.14);
+    archShape.lineTo(1.15, 0.02);
+    archShape.quadraticCurveTo(0, 0.3, -1.15, 0.02);
+    archShape.closePath();
+    const deck = new THREE.Mesh(new THREE.ExtrudeGeometry(archShape, { depth: 1.25, bevelEnabled: false, curveSegments: 12 }), cobbleMat);
+    deck.position.set(0, 0, -0.625);
     deck.castShadow = true;
     deck.receiveShadow = true;
     bridge.add(deck);
@@ -860,9 +909,9 @@
 
     const paths = [
       // Avenue from HQ Plaza to BGU Hall & IDF terrace
-      { x: -2.2, y: 0.58, z: -1.8, w: 1.3, l: 5.6, rot: 0.48 },
+      { x: -2.2, y: 0.37, z: -1.8, w: 1.3, l: 5.6, rot: 0.48 },
       // Path extending into BGU Upper Courtyard
-      { x: -3.8, y: 0.82, z: -4.4, w: 1.2, l: 3.4, rot: 0.32 },
+      { x: -3.8, y: 0.37, z: -4.4, w: 1.2, l: 3.4, rot: 0.32 },
       // Avenue from HQ Plaza to Builder's Tech Hub
       { x: -3.8, y: 0.37, z: 0.8, w: 1.2, l: 5.6, rot: 1.42 },
       // Avenue from HQ Plaza to Streetball Court
@@ -895,15 +944,6 @@
       });
     });
 
-    // Stone steps ascending from lower avenue up to BGU terrace level
-    for (let s = 0; s < 3; s++) {
-      const step = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.1, 0.35), stoneCorniceMat);
-      step.position.set(-2.8 + s * 0.15, 0.38 + s * 0.14, -2.6 - s * 0.28);
-      step.rotation.y = 0.48;
-      step.receiveShadow = true;
-      islandGroup.add(step);
-    }
-
     // Stone park benches along the cobblestone avenues
     const benchMat = new THREE.MeshStandardMaterial({ color: 0x78716C, roughness: 0.75 });
     const benchWood = new THREE.MeshStandardMaterial({ color: 0x92400E, roughness: 0.8 });
@@ -911,17 +951,25 @@
       const bench = new THREE.Group();
       bench.position.set(bx, by, bz);
       bench.rotation.y = brot;
-      const seat = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.06, 0.24), benchWood);
-      seat.position.y = 0.22;
-      seat.castShadow = true;
-      bench.add(seat);
-      const backrest = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.28, 0.04), benchWood);
-      backrest.position.set(0, 0.34, -0.1);
-      bench.add(backrest);
-      [[-0.28, 0], [0.28, 0]].forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.24), benchMat);
-        leg.position.set(lx, 0.11, lz);
+      [-0.075, 0, 0.075].forEach(z => {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.045, 0.065), benchWood);
+        slat.position.set(0, 0.25, z);
+        slat.castShadow = true;
+        bench.add(slat);
+      });
+      [-0.28, -0.18, -0.08].forEach(y => {
+        const slat = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.06, 0.045), benchWood);
+        slat.position.set(0, 0.44 + y, -0.105);
+        slat.castShadow = true;
+        bench.add(slat);
+      });
+      [-0.3, 0.3].forEach(x => {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.27, 0.28), benchMat);
+        leg.position.set(x, 0.12, 0);
         bench.add(leg);
+        const backSupport = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.48, 0.04), benchMat);
+        backSupport.position.set(x, 0.36, -0.12);
+        bench.add(backSupport);
       });
       islandGroup.add(bench);
     });
@@ -1102,7 +1150,7 @@
   // ─── 2. Ben-Gurion University Hall (University of Michigan style) ──────────
   function buildBGUHall() {
     const group = new THREE.Group();
-    group.position.set(-4.2, 0.82, -5.4);
+    group.position.set(-4.2, 0.36, -5.4);
     group.rotation.y = 0.32;
 
     const sandstoneBrick = createBrickMaterial('#C89D70', '#EFECE6', 4, 3);
@@ -1180,17 +1228,22 @@
       ctx.fillStyle = '#0F2942';
       ctx.fillRect(10, 10, w - 20, h - 20);
 
-      // Gold Flame/Star emblem
-      ctx.fillStyle = '#F59E0B';
+      // BGU's orange emblem, paired with a small white flame mark.
+      ctx.fillStyle = '#F07832';
       ctx.beginPath();
-      ctx.arc(62, h / 2, 34, 0, Math.PI * 2);
+      ctx.arc(62, h / 2, 39, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.fillStyle = '#0F2942';
-      ctx.font = '900 34px "Plus Jakarta Sans", Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('BGU', 62, h / 2 + 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.moveTo(62, h / 2 + 25);
+      ctx.bezierCurveTo(35, h / 2 + 2, 58, h / 2 - 4, 54, h / 2 - 26);
+      ctx.bezierCurveTo(78, h / 2 - 9, 89, h / 2 + 13, 62, h / 2 + 25);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(61, h / 2 + 13);
+      ctx.bezierCurveTo(52, h / 2 + 2, 62, h / 2 - 3, 65, h / 2 - 14);
+      ctx.bezierCurveTo(77, h / 2 - 1, 72, h / 2 + 10, 61, h / 2 + 13);
+      ctx.fill();
 
       ctx.fillStyle = '#FFFFFF';
       ctx.font = '800 44px "Plus Jakarta Sans", Arial, sans-serif';
@@ -1256,12 +1309,12 @@
 
     // Neutral Tech/Engineering Signboard
     const techSign = createSignBoardMesh(2.05, 0.55, (ctx, w, h) => {
-      // Terminal/Code icon </>
-      ctx.fillStyle = '#0284C7';
-      ctx.font = '900 42px "Courier New", monospace';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('</>', 55, h / 2);
+      // GitHub mark on a quiet rounded tile.
+      ctx.fillStyle = '#F1F5F9';
+      ctx.beginPath();
+      ctx.roundRect(18, h / 2 - 42, 82, 84, 14);
+      ctx.fill();
+      drawGitHubMark(ctx, 59, h / 2, 54, '#172033');
 
       ctx.fillStyle = '#0F172A';
       ctx.font = '800 38px "Plus Jakarta Sans", Arial, sans-serif';
@@ -1285,55 +1338,72 @@
     islandGroup.add(group);
   }
 
-  // ─── 4. The Heritage Dairy Barn (רפת המשפחה — Red Brick/Wood & Silo) ──────
+  // ─── 4. The Heritage Dairy Barn (Timber, Silo & Paddock) ──────────────────
   function buildDairyBarn() {
     const group = new THREE.Group();
     group.position.set(6.6, 0.36, -4.0);
     group.rotation.y = -0.38;
 
-    const redBarnMat = createBrickMaterial('#B91C1C', '#FCA5A5', 4, 3);
+    // Warm timber siding, with individually shaded vertical boards.
+    const woodCanvas = document.createElement('canvas');
+    woodCanvas.width = 512;
+    woodCanvas.height = 512;
+    const woodCtx = woodCanvas.getContext('2d');
+    woodCtx.fillStyle = '#A65F37';
+    woodCtx.fillRect(0, 0, 512, 512);
+    for (let x = 0; x < 512; x += 32) {
+      woodCtx.fillStyle = x % 64 === 0 ? '#B87246' : '#99542F';
+      woodCtx.fillRect(x, 0, 29, 512);
+      woodCtx.fillStyle = 'rgba(244,202,156,0.16)';
+      woodCtx.fillRect(x + 3, 0, 2, 512);
+      woodCtx.fillStyle = 'rgba(58,31,22,0.18)';
+      woodCtx.fillRect(x + 28, 0, 4, 512);
+    }
+    const woodTex = new THREE.CanvasTexture(woodCanvas);
+    woodTex.wrapS = THREE.RepeatWrapping;
+    woodTex.wrapT = THREE.RepeatWrapping;
+    woodTex.repeat.set(2, 1);
+    const redBarnMat = new THREE.MeshStandardMaterial({ map: woodTex, color: 0xE6C0A0, roughness: 0.9, bumpMap: woodTex, bumpScale: 0.025 });
     const roofShingle = createRoofShingleMaterial('#3F3F46', 4, 3);
 
-    // Main Barn Body
-    const barn = new THREE.Mesh(new THREE.BoxGeometry(2.65, 1.65, 2.05), redBarnMat);
-    barn.position.y = 0.825;
+    // A broad, low timber dairy barn with a clear gable roof.
+    const barn = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.8, 2.55), redBarnMat);
+    barn.position.y = 0.9;
     barn.castShadow = true;
     barn.receiveShadow = true;
     group.add(barn);
 
-    // Gambrel-style Pitched Roof
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.95, 1.15, 4), roofShingle);
-    roof.scale.set(1.08, 1, 0.85);
-    roof.position.y = 2.18;
-    roof.rotation.y = Math.PI / 4;
-    roof.castShadow = true;
-    group.add(roof);
+    const roofLeft = new THREE.Mesh(new THREE.BoxGeometry(1.96, 0.14, 2.82), roofShingle);
+    roofLeft.position.set(-0.82, 2.2, 0);
+    roofLeft.rotation.z = 0.38;
+    roofLeft.castShadow = true;
+    group.add(roofLeft);
+    const roofRight = new THREE.Mesh(new THREE.BoxGeometry(1.96, 0.14, 2.82), roofShingle);
+    roofRight.position.set(0.82, 2.2, 0);
+    roofRight.rotation.z = -0.38;
+    roofRight.castShadow = true;
+    group.add(roofRight);
 
-    // White Roof Cupola
-    const cupola = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.42, 0.48), frameMatWhite);
-    cupola.position.y = 2.65;
-    group.add(cupola);
-    const cupolaCap = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.3, 4), roofShingle);
-    cupolaCap.position.y = 2.98;
-    cupolaCap.rotation.y = Math.PI / 4;
-    group.add(cupolaCap);
+    const gableShape = new THREE.Shape();
+    gableShape.moveTo(-1.76, 1.78);
+    gableShape.lineTo(1.76, 1.78);
+    gableShape.lineTo(0, 2.56);
+    gableShape.closePath();
+    const gable = new THREE.Mesh(new THREE.ShapeGeometry(gableShape), new THREE.MeshStandardMaterial({ color: 0xA65F37, roughness: 0.88, side: THREE.DoubleSide }));
+    gable.position.z = 1.286;
+    gable.castShadow = true;
+    group.add(gable);
 
-    // Classic White Cross-Braced Barn Double Doors & Hayloft Window
-    const doorBg = new THREE.Mesh(
-      new THREE.BoxGeometry(1.1, 1.05, 0.08),
-      new THREE.MeshStandardMaterial({ color: 0x7F1D1D, roughness: 0.75 })
-    );
-    doorBg.position.set(0, 0.55, 1.03);
-    group.add(doorBg);
-
-    const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.1, 0.06), frameMatWhite);
-    doorFrame.position.set(0, 0.55, 1.02);
-    group.add(doorFrame);
-
-    // Hayloft lit window
-    const hayWin = createMultiPaneWindow(0.56, 0.52, true, false);
-    hayWin.position.set(0, 1.48, 1.05);
-    group.add(hayWin);
+    // Wide double doors and a small loft window make the barn read at a glance.
+    const door = new THREE.Mesh(new THREE.BoxGeometry(1.14, 1.16, 0.08), new THREE.MeshStandardMaterial({ color: 0x5E3827, roughness: 0.84 }));
+    door.position.set(0, 0.61, 1.33);
+    group.add(door);
+    const doorSeam = new THREE.Mesh(new THREE.BoxGeometry(0.035, 1.08, 0.02), new THREE.MeshStandardMaterial({ color: 0x3D2B24, roughness: 0.86 }));
+    doorSeam.position.set(0, 0.61, 1.38);
+    group.add(doorSeam);
+    const loftWindow = createMultiPaneWindow(0.52, 0.38, false, false);
+    loftWindow.position.set(0, 2.08, 1.31);
+    group.add(loftWindow);
 
     // Side windows
     [-0.55, 0.55].forEach(zOff => {
@@ -1343,95 +1413,149 @@
       group.add(sw);
     });
 
-    // Tall Brushed-Steel Grain Silo with Dome & Ladder
-    const siloMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, roughness: 0.3, metalness: 0.65 });
-    const silo = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 2.85, 24), siloMat);
-    silo.position.set(-1.85, 1.425, -0.35);
+    // Compact corrugated feed silo with a service ladder.
+    const siloMat = new THREE.MeshStandardMaterial({ color: 0xAEB9B7, roughness: 0.52, metalness: 0.34 });
+    const silo = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.5, 2.35, 32, 1), siloMat);
+    silo.position.set(-2.12, 1.18, -0.35);
     silo.castShadow = true;
     group.add(silo);
 
     const siloDome = new THREE.Mesh(
-      new THREE.SphereGeometry(0.62, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2),
-      new THREE.MeshStandardMaterial({ color: 0x94A3B8, roughness: 0.35, metalness: 0.5 })
+      new THREE.SphereGeometry(0.49, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+      new THREE.MeshStandardMaterial({ color: 0x8D9B9A, roughness: 0.46, metalness: 0.3 })
     );
-    siloDome.position.set(-1.85, 2.85, -0.35);
+    siloDome.position.set(-2.12, 2.35, -0.35);
     group.add(siloDome);
 
-    // White Wooden Pasture Fence & Two Detailed Spotted Dairy Cows
-    const fencePosts = [
-      [1.6, 0.25, 0.8], [2.7, 0.25, 0.8], [2.7, 0.25, 2.2], [0.5, 0.25, 2.2], [-0.6, 0.25, 2.2]
-    ];
-    fencePosts.forEach(fp => {
-      const post = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.5, 0.1), frameMatWhite);
-      post.position.set(fp[0], fp[1], fp[2]);
+    const ladderMat = new THREE.MeshStandardMaterial({ color: 0x4B5B5A, roughness: 0.48, metalness: 0.55 });
+    [-2.38, -2.02].forEach(x => {
+      const rail = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 1.9, 8), ladderMat);
+      rail.position.set(x, 1.1, 0.14);
+      group.add(rail);
+    });
+    for (let rung = 0; rung < 8; rung++) {
+      const step = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.36, 8), ladderMat);
+      step.rotation.z = Math.PI / 2;
+      step.position.set(-2.2, 0.28 + rung * 0.23, 0.14);
+      group.add(step);
+    }
+
+    // A roomy timber paddock with a clear gate, rails, and room for the herd.
+    const fenceMat = new THREE.MeshStandardMaterial({ color: 0xE7D8B8, roughness: 0.82 });
+    const fencePostXs = [0.65, 1.55, 2.45, 3.35, 4.25];
+    const fencePostZs = [0.45, 1.3, 2.15, 3.0, 3.75];
+    fencePostXs.forEach(x => [0.45, 3.75].forEach(z => {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.58, 0.11), fenceMat);
+      post.position.set(x, 0.29, z);
       post.castShadow = true;
       group.add(post);
+    }));
+    fencePostZs.forEach(z => [0.65, 4.25].forEach(x => {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.58, 0.11), fenceMat);
+      post.position.set(x, 0.29, z);
+      post.castShadow = true;
+      group.add(post);
+    }));
+    const fenceRailMat = new THREE.MeshStandardMaterial({ color: 0x9A6A43, roughness: 0.88 });
+    [0.2, 0.44].forEach(y => {
+      // Leave the middle of the front rail open as a small gate.
+      [[1.48, 0.45, 1.62], [3.58, 0.45, 1.34], [2.45, 3.75, 3.62]].forEach(([x, z, length]) => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(length, 0.065, 0.055), fenceRailMat);
+        rail.position.set(x, y, z);
+        group.add(rail);
+      });
+      [0.65, 4.25].forEach(x => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.065, 3.3), fenceRailMat);
+        rail.position.set(x, y, 2.1);
+        group.add(rail);
+      });
     });
-    const railFront = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.07, 0.06), frameMatWhite);
-    railFront.position.set(1.05, 0.38, 2.2);
-    group.add(railFront);
-    const railLow = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.07, 0.06), frameMatWhite);
-    railLow.position.set(1.05, 0.2, 2.2);
-    group.add(railLow);
 
-    // Build 2 Spotted Holstein Dairy Cows
+    // Smooth low-poly Holsteins with modeled heads, markings, hooves and ears.
     function makeCow(cx, cz, rotY) {
       const cow = new THREE.Group();
       cow.position.set(cx, 0, cz);
       cow.rotation.y = rotY;
+      const white = new THREE.MeshStandardMaterial({ color: 0xF6F1E7, roughness: 0.86 });
+      const black = new THREE.MeshStandardMaterial({ color: 0x26302F, roughness: 0.9 });
+      const pink = new THREE.MeshStandardMaterial({ color: 0xD9918A, roughness: 0.8 });
+      const hoof = new THREE.MeshStandardMaterial({ color: 0x4A3930, roughness: 0.9 });
+      const body = new THREE.Mesh(new THREE.SphereGeometry(0.43, 18, 12), white);
+      body.scale.set(1.28, 0.82, 0.78);
+      body.position.set(0, 0.52, 0);
+      body.castShadow = true;
+      cow.add(body);
 
-      const whiteMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.7 });
-      const blackMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.8 });
-      const noseMat = new THREE.MeshStandardMaterial({ color: 0xFBCFE8, roughness: 0.6 });
-
-      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.38, 0.36), whiteMat);
-      torso.position.y = 0.34;
-      torso.castShadow = true;
-      cow.add(torso);
-
-      // Black Holstein patches
-      const patch1 = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.26, 0.38), blackMat);
-      patch1.position.set(-0.08, 0.38, 0);
-      cow.add(patch1);
-      const patch2 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.2, 0.38), blackMat);
-      patch2.position.set(0.16, 0.32, 0);
-      cow.add(patch2);
-
-      const head = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.24, 0.26), whiteMat);
-      head.position.set(0.36, 0.46, 0);
-      cow.add(head);
-
-      const snout = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.22), noseMat);
-      snout.position.set(0.48, 0.41, 0);
-      cow.add(snout);
-
-      [[-0.2, -0.11], [-0.2, 0.11], [0.2, -0.11], [0.2, 0.11]].forEach(([lx, lz]) => {
-        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.24, 0.09), whiteMat);
-        leg.position.set(lx, 0.12, lz);
-        cow.add(leg);
+      [[-0.26, 0.58, 0.28, 0.23, 0.23, 0.08], [0.08, 0.65, 0.28, 0.21, 0.14, 0.08], [-0.1, 0.48, -0.28, 0.25, 0.2, 0.07], [0.32, 0.46, -0.27, 0.17, 0.17, 0.07]].forEach(([x, y, z, sx, sy, sz]) => {
+        const patch = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 8), black);
+        patch.scale.set(sx, sy, sz);
+        patch.position.set(x, y, z);
+        cow.add(patch);
       });
 
+      const neck = new THREE.Mesh(new THREE.SphereGeometry(0.26, 14, 10), white);
+      neck.scale.set(0.72, 1.18, 0.78);
+      neck.position.set(0.4, 0.62, 0);
+      neck.rotation.z = -0.32;
+      cow.add(neck);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 12), white);
+      head.scale.set(0.9, 1.0, 0.82);
+      head.position.set(0.63, 0.75, 0);
+      head.castShadow = true;
+      cow.add(head);
+      const muzzle = new THREE.Mesh(new THREE.SphereGeometry(0.14, 14, 10), pink);
+      muzzle.scale.set(1.15, 0.72, 1.0);
+      muzzle.position.set(0.82, 0.62, 0);
+      cow.add(muzzle);
+      [-1, 1].forEach(side => {
+        const ear = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 8), black);
+        ear.scale.set(1.4, 0.55, 0.72);
+        ear.position.set(0.51, 0.9, side * 0.2);
+        ear.rotation.y = side * 0.35;
+        cow.add(ear);
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 6), hoof);
+        eye.position.set(0.73, 0.78, side * 0.19);
+        cow.add(eye);
+      });
+
+      [[-0.34, -0.18], [-0.34, 0.18], [0.32, -0.18], [0.32, 0.18]].forEach(([x, z]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.05, 0.31, 10), white);
+        leg.position.set(x, 0.19, z);
+        leg.castShadow = true;
+        cow.add(leg);
+        const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.058, 0.06, 0.085, 10), hoof);
+        foot.position.set(x, 0.045, z);
+        cow.add(foot);
+      });
+      const udder = new THREE.Mesh(new THREE.SphereGeometry(0.105, 12, 8), pink);
+      udder.scale.set(1.1, 0.55, 0.95);
+      udder.position.set(-0.1, 0.27, 0);
+      cow.add(udder);
+      const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.035, 0.38, 8), white);
+      tail.position.set(-0.54, 0.61, 0);
+      tail.rotation.z = -0.46;
+      cow.add(tail);
+      const tailTip = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 6), black);
+      tailTip.position.set(-0.68, 0.43, 0);
+      cow.add(tailTip);
       return cow;
     }
 
-    const cow1 = makeCow(1.25, 1.55, 0.45);
-    const cow2 = makeCow(2.05, 1.35, -0.8);
-    animCows.push(cow1, cow2);
-    group.add(cow1, cow2);
+    const cows = [makeCow(1.72, 1.25, 0.35), makeCow(3.05, 2.8, -0.65), makeCow(3.55, 1.55, 1.15)];
+    animCows.push(...cows);
+    group.add(...cows);
 
-    // Signboard on Barn
-    const barnSign = createSignBoardMesh(1.65, 0.44, (ctx, w, h) => {
-      ctx.fillStyle = '#991B1B';
-      ctx.font = '800 38px "Plus Jakarta Sans", Arial, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('HERITAGE DAIRY', w / 2, h / 2 - 10);
-      ctx.fillStyle = '#475569';
-      ctx.font = '700 24px "Plus Jakarta Sans", Arial, sans-serif';
-      ctx.fillText('Family Farm · רפת המשפחה', w / 2, h / 2 + 22);
+    // A simple wooden feed rack helps the pasture feel lived in.
+    const rackWood = new THREE.MeshStandardMaterial({ color: 0x795539, roughness: 0.88 });
+    const feedTrough = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.16, 0.24), rackWood);
+    feedTrough.position.set(2.48, 0.34, 0.78);
+    feedTrough.castShadow = true;
+    group.add(feedTrough);
+    [-0.38, 0.38].forEach(x => {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.34, 0.07), rackWood);
+      leg.position.set(2.48 + x, 0.17, 0.78);
+      group.add(leg);
     });
-    barnSign.position.set(0, 1.98, 1.06);
-    group.add(barnSign);
 
     registerInteractive(group, 'dairy_barn');
     islandGroup.add(group);
@@ -1485,7 +1609,15 @@
     plate.position.set(0, 0.88, 0.52);
     group.add(plate);
 
-    // ── Small fenced yard ──
+    // ── Small fenced garden yard ──
+    const yardLawn = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.62, 1.05),
+      new THREE.MeshStandardMaterial({ color: 0x72A861, roughness: 0.98 })
+    );
+    yardLawn.rotation.x = -Math.PI / 2;
+    yardLawn.position.set(0, 0.018, 1.95);
+    yardLawn.receiveShadow = true;
+    group.add(yardLawn);
     const fenceMatW = new THREE.MeshStandardMaterial({ color: 0xF5F5F4, roughness: 0.75 });
     const yardPosts = [
       [-0.82, 1.4], [0.82, 1.4], [-0.82, 2.5], [0.82, 2.5], [0, 2.5]
@@ -1502,11 +1634,11 @@
     const rail2 = new THREE.Mesh(new THREE.BoxGeometry(1.68, 0.06, 0.06), fenceMatW);
     rail2.position.set(0, 0.16, 2.5);
     group.add(rail2);
-    [-0.82, 0.82].forEach(px => {
+    [0.2, 0.35].forEach(y => [-0.82, 0.82].forEach(px => {
       const side = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 1.14), fenceMatW);
-      side.position.set(px, 0.35, 1.95);
+      side.position.set(px, y, 1.95);
       group.add(side);
-    });
+    }));
 
     // Water bowl
     const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.09, 0.08, 10),
@@ -1739,7 +1871,7 @@
   // ─── 7. IDF C4I Tactical Comms Outpost (Radar & Blinking Beacon) ──────────
   function buildIDFOutpost() {
     const group = new THREE.Group();
-    group.position.set(1.4, 0.82, -6.6);
+    group.position.set(1.4, 0.36, -6.6);
     group.rotation.y = -0.15;
 
     const bunkerBrick = createBrickMaterial('#64748B', '#94A3B8', 3, 2);
@@ -1802,48 +1934,77 @@
   // ─── 8. Coastal Pier, Sandy Beach & Sailboat ──────────────────────────────
   function buildCoastalPier() {
     const group = new THREE.Group();
-    group.position.set(6.6, 0.36, 5.2);
-    group.rotation.y = -0.55;
+    group.position.set(4.4, 0.36, 5.7);
+    group.rotation.y = -0.35;
 
-    const woodMat = new THREE.MeshStandardMaterial({ color: 0xA16207, roughness: 0.8 });
-    const deck = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.1, 2.3), woodMat);
-    deck.position.set(0, 0.16, 0.5);
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0x9A6538, roughness: 0.86 });
+    const plankMat = new THREE.MeshStandardMaterial({ color: 0xBB8A55, roughness: 0.88 });
+    const pierLength = 4.8;
+    const pierWidth = 1.28;
+
+    // A continuous timber walkway leaves the shore and reaches into open water.
+    const deck = new THREE.Mesh(new THREE.BoxGeometry(pierWidth, 0.14, pierLength), woodMat);
+    deck.position.set(0, 0.15, pierLength / 2 - 0.12);
     deck.castShadow = true;
+    deck.receiveShadow = true;
     group.add(deck);
 
-    [[-0.45, -0.4], [0.45, -0.4], [-0.45, 0.6], [0.45, 0.6], [-0.45, 1.5], [0.45, 1.5]].forEach(([px, pz]) => {
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.55, 8), woodMat);
-      post.position.set(px, 0.18, pz);
-      group.add(post);
-    });
+    // Individual deck boards make the pier read clearly at the island's scale.
+    for (let z = -0.18; z <= pierLength - 0.12; z += 0.3) {
+      const plank = new THREE.Mesh(new THREE.BoxGeometry(pierWidth - 0.04, 0.035, 0.26), plankMat);
+      plank.position.set(0, 0.239, z);
+      plank.castShadow = true;
+      group.add(plank);
+    }
 
-    // Sailboat floating in the turquoise bay
+    // Heavy piles continue below the deck to the sea surface.
+    [0.05, 1.45, 2.9, 4.25].forEach(z => [-0.52, 0.52].forEach(x => {
+      const pile = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.09, 1.25, 10), woodMat);
+      pile.position.set(x, -0.48, z);
+      pile.castShadow = true;
+      group.add(pile);
+    }));
+
+    // A small moored sailboat floats just off the end of the pier.
     const boat = new THREE.Group();
-    boat.position.set(1.05, 0.12, 1.65);
-    boat.rotation.y = 0.45;
-
-    const hull = new THREE.Mesh(
-      new THREE.ConeGeometry(0.55, 1.35, 4),
-      new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.4 })
-    );
-    hull.rotation.z = Math.PI / 2;
-    hull.rotation.y = Math.PI / 4;
-    hull.scale.set(0.65, 1, 0.45);
+    boat.position.set(1.12, -0.78, 4.35);
+    boat.rotation.y = 0.28;
+    const hullMat = new THREE.MeshStandardMaterial({ color: 0xE9E2D4, roughness: 0.55 });
+    const hull = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 0.9, 4, 12), hullMat);
+    hull.rotation.x = Math.PI / 2;
+    hull.scale.set(1.2, 0.55, 1);
     hull.castShadow = true;
     boat.add(hull);
 
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.03, 1.55, 8), frameMatWhite);
-    mast.position.y = 0.85;
+    const gunwale = new THREE.Mesh(new THREE.CapsuleGeometry(0.31, 0.92, 3, 12), woodMat);
+    gunwale.rotation.x = Math.PI / 2;
+    gunwale.scale.set(1.2, 0.28, 1);
+    gunwale.position.y = 0.09;
+    boat.add(gunwale);
+
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.024, 1.55, 8), woodMat);
+    mast.position.set(0, 0.78, 0);
     boat.add(mast);
 
-    const mainSail = new THREE.Mesh(
-      new THREE.ConeGeometry(0.55, 1.25, 3),
-      new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.3, side: THREE.DoubleSide })
-    );
-    mainSail.scale.set(0.12, 1, 0.85);
-    mainSail.position.set(0, 0.88, 0.18);
+    const sailMat = new THREE.MeshStandardMaterial({ color: 0xFFFDF4, roughness: 0.92, side: THREE.DoubleSide });
+    const mainSailShape = new THREE.Shape();
+    mainSailShape.moveTo(0.04, 0.06);
+    mainSailShape.lineTo(0.68, 0.1);
+    mainSailShape.lineTo(0.06, 1.32);
+    mainSailShape.closePath();
+    const mainSail = new THREE.Mesh(new THREE.ShapeGeometry(mainSailShape), sailMat);
+    mainSail.position.set(0, 0.12, 0.04);
     mainSail.castShadow = true;
     boat.add(mainSail);
+
+    const frontSailShape = new THREE.Shape();
+    frontSailShape.moveTo(0.02, 0.08);
+    frontSailShape.lineTo(0.02, 0.9);
+    frontSailShape.lineTo(-0.45, 0.1);
+    frontSailShape.closePath();
+    const frontSail = new THREE.Mesh(new THREE.ShapeGeometry(frontSailShape), sailMat);
+    frontSail.position.set(0, 0.1, 0.05);
+    boat.add(frontSail);
 
     animBoat = boat;
     group.add(boat);
@@ -1890,7 +2051,7 @@
       ];
       puffs.forEach((p, idx) => {
         const sphere = new THREE.Mesh(
-          new THREE.DodecahedronGeometry(p[3], 1),
+          new THREE.SphereGeometry(p[3], 16, 12),
           new THREE.MeshStandardMaterial({ color: palette[idx % palette.length], roughness: 0.72 })
         );
         sphere.position.set(p[0], p[1], p[2]);
@@ -1943,7 +2104,7 @@
       ];
       puffs.forEach((p, idx) => {
         const sphere = new THREE.Mesh(
-          new THREE.DodecahedronGeometry(p[3], 1),
+          new THREE.SphereGeometry(p[3], 16, 12),
           new THREE.MeshStandardMaterial({ color: appleGreens[idx % appleGreens.length], roughness: 0.75 })
         );
         sphere.position.set(p[0], p[1], p[2]);
@@ -1961,7 +2122,7 @@
         [-0.2, 1.35, -0.18]
       ];
       apples.forEach(([ax, ay, az]) => {
-        const apple = new THREE.Mesh(new THREE.SphereGeometry(0.055, 8, 8), appleMat);
+        const apple = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 10), appleMat);
         apple.position.set(ax, ay, az);
         apple.castShadow = true;
         tree.add(apple);
@@ -1977,10 +2138,10 @@
     addMultiClusterTree(2.8, 0.36, -1.8, 1.22, true);   // Prominent Sakura between HQ & Barn
     addMultiClusterTree(-3.5, 0.36, 2.2, 1.18, true);   // Sakura between HQ, Tech Hub & Court
     addMultiClusterTree(2.2, 0.36, 3.6, 1.1, true);     // Sakura near River Bridge
-    addMultiClusterTree(-6.4, 0.8, -3.8, 1.15, true);   // Sakura beside BGU Hall
+    addMultiClusterTree(-6.4, 0.36, -3.8, 1.15, true);  // Sakura beside BGU Hall
     addMultiClusterTree(8.2, 0.36, -0.8, 1.1, true);    // Sakura east of Puppy Haven
 
-    addMultiClusterTree(-1.0, 0.8, -7.2, 1.2, false);   // Lush green tree north ridge
+    addMultiClusterTree(-1.0, 0.36, -7.2, 1.2, false); // Lush green tree north ridge
     addMultiClusterTree(4.2, 0.36, -5.8, 1.12, false);  // Green tree near Dairy Silo
     addMultiClusterTree(-8.2, 0.36, 1.8, 1.1, false);   // Green tree west ridge
     addMultiClusterTree(-1.8, 0.36, 6.5, 1.08, false);  // Green tree south coast
@@ -2030,32 +2191,40 @@
     const oceanGeo = new THREE.PlaneGeometry(240, 240, 32, 32);
 
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
+    canvas.width = 1024;
+    canvas.height = 1024;
     const ctx = canvas.getContext('2d');
-    const grad = ctx.createLinearGradient(0, 0, 512, 512);
+    const grad = ctx.createLinearGradient(0, 0, 1024, 1024);
     grad.addColorStop(0, '#C3EAEB');
     grad.addColorStop(0.4, '#83CED2');
     grad.addColorStop(0.85, '#65B9C1');
     grad.addColorStop(1, '#A8DDE0');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 512, 512);
+    ctx.fillRect(0, 0, 1024, 1024);
 
-    for (let i = 0; i < 600; i++) {
-      ctx.fillStyle = 'rgba(255, 255, 255, ' + (0.03 + Math.random() * 0.08) + ')';
-      ctx.fillRect(Math.random() * 512, Math.random() * 512, 6 + Math.random() * 14, 2.5);
+    for (let i = 0; i < 1900; i++) {
+      const x = Math.random() * 1024;
+      const y = Math.random() * 1024;
+      const length = 5 + Math.random() * 32;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.quadraticCurveTo(x + length * 0.35, y - 2 + Math.random() * 4, x + length, y);
+      ctx.strokeStyle = i % 4 === 0 ? `rgba(255,255,255,${0.12 + Math.random() * 0.23})` : `rgba(47,133,143,${0.05 + Math.random() * 0.12})`;
+      ctx.lineWidth = 0.6 + Math.random() * 1.8;
+      ctx.lineCap = 'round';
+      ctx.stroke();
     }
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.wrapS = THREE.RepeatWrapping;
     tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(16, 16);
+    tex.repeat.set(5, 5);
 
     const oceanMat = new THREE.MeshStandardMaterial({
       map: tex,
-      color: 0xC5E8E8,
-      roughness: 0.3,
-      metalness: 0.06,
+      color: 0xFFFFFF,
+      roughness: 0.25,
+      metalness: 0.04,
       transparent: true,
       opacity: 0.94
     });
@@ -2068,9 +2237,9 @@
 
     // Shore surf ripple rings around the island base
     const rippleMat = new THREE.MeshBasicMaterial({
-      color: 0xBAE6FD,
+      color: 0xE4FAF8,
       transparent: true,
-      opacity: 0.55,
+      opacity: 0.38,
       side: THREE.DoubleSide
     });
     const shoreRing = new THREE.Mesh(new THREE.RingGeometry(12.4, 14.2, 64), rippleMat);
@@ -2079,7 +2248,8 @@
     scene.add(shoreRing);
     animWaterRipple = shoreRing;
 
-    buildWaterDescent();
+    // The pier above is the single shoreline access point; avoid a second dock
+    // and rowboat overlapping it.
   }
 
   // Descent from island edge down into water + low moored rowboat
@@ -2260,13 +2430,14 @@
 
     window.addEventListener('resize', onWindowResize);
 
-    // Pause / Reset Pill Buttons
+    // Water motion / reset controls
     const pauseBtn = document.getElementById('pauseIslandBtn');
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => {
         isPaused = !isPaused;
-        if (controls) controls.autoRotate = !isPaused;
         pauseBtn.textContent = isPaused ? '▶' : 'Ⅱ';
+        pauseBtn.setAttribute('aria-label', isPaused ? 'Play water and scene motion' : 'Pause water and scene motion');
+        pauseBtn.title = isPaused ? 'Play water and scene motion' : 'Pause water and scene motion';
       });
     }
 
@@ -2305,7 +2476,6 @@
   function checkHover() {
     raycaster.setFromCamera(mouse, camera);
     const hits = raycaster.intersectObjects(interactiveTargets, false);
-    const badge = document.getElementById('islandHoverBadge');
 
     if (hits.length > 0) {
       const id = hits[0].object.userData.landmarkId;
@@ -2322,18 +2492,12 @@
 
       if (id !== hoveredLandmarkId) {
         hoveredLandmarkId = id;
-        // Basketball court: no floating badge, just cursor change
-        if (badge && LANDMARKS[id] && id !== 'basketball_court') {
-          badge.textContent = `${LANDMARKS[id].icon}  ${LANDMARKS[id].title}`;
-          badge.classList.add('visible');
-        }
       }
     } else {
       renderer.domElement.style.cursor = 'grab';
       if (hoveredGroup) { hoveredGroup._targetScale = 1.0; hoveredGroup = null; }
       if (hoveredLandmarkId !== null) {
         hoveredLandmarkId = null;
-        if (badge) badge.classList.remove('visible');
       }
     }
   }
@@ -2419,7 +2583,7 @@
       savedCameraPos = null;
       savedCameraTarget = null;
     }
-    if (controls && !isPaused) controls.autoRotate = true;
+    if (controls) controls.autoRotate = false;
   }
 
   function switchToClassicView(targetSelector) {
@@ -2501,7 +2665,8 @@
         tempV.add(pin.offset);
         tempV.project(camera);
 
-        if (tempV.z > 1.0) {
+        const isHovered = hoveredLandmarkId === pin.id;
+        if (tempV.z > 1.0 || !isHovered) {
           pin.el.style.opacity = '0';
           pin.el.style.pointerEvents = 'none';
         } else {
@@ -2525,7 +2690,7 @@
     if (!isPaused) {
       // Gentle boat bobbing on the water
       if (animBoat) {
-        animBoat.position.y = 0.12 + Math.sin(t * 2.2) * 0.04;
+        animBoat.position.y = -0.78 + Math.sin(t * 2.2) * 0.035;
         animBoat.rotation.z = Math.sin(t * 1.6) * 0.05;
       }
 
@@ -2539,6 +2704,12 @@
       if (animWaterRipple) {
         const rScale = 1.0 + Math.sin(t * 1.5) * 0.022;
         animWaterRipple.scale.set(rScale, rScale, 1);
+      }
+
+      // Slow texture drift gives the bay and river visible water flow.
+      if (oceanMesh && oceanMesh.material.map) {
+        oceanMesh.material.map.offset.x = t * 0.003;
+        oceanMesh.material.map.offset.y = t * 0.0015;
       }
 
       // Guide dog puppy happy bounce
@@ -2571,12 +2742,10 @@
       if (riverMesh) {
         riverMesh.traverse(child => {
           if (child.isMesh && child.material && child.material.color) {
-            const isWater = child.material.roughness < 0.2;
-            if (isWater) {
-              const shimmer = 0.15 + Math.sin(t * 1.8) * 0.04;
-              child.material.roughness = shimmer;
-              child.material.metalness = 0.18 + Math.sin(t * 2.4) * 0.06;
-              child.position.y = child.position.y > 0.3 ? 0.35 + Math.sin(t * 2.0 + child.position.x) * 0.015 : child.position.y;
+            if (child.userData.isWater) {
+              child.material.roughness = 0.2 + Math.sin(t * 1.8) * 0.035;
+              child.material.metalness = 0.06 + Math.sin(t * 2.4) * 0.025;
+              if (child.material.map) child.material.map.offset.x = t * 0.02;
             }
           }
         });
