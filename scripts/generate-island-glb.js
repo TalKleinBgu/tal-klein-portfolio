@@ -55,7 +55,8 @@ for (let r = 0; r <= rings; r++) {
     positions.push(x, 0.38 + rolling + localNoise, z);
     if (r < rings && s < segments) {
       const p = r * (segments + 1) + s, q = p + segments + 1;
-      indices.push(p, q, p + 1, p + 1, q, q + 1);
+      // Counter-clockwise when viewed from above, so computed normals face up.
+      indices.push(p, p + 1, q, p + 1, q + 1, q);
     }
   }
 }
