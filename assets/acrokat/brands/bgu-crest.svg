@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1080" viewBox="0 0 1024 1080">
+  <rect width="1024" height="1080" fill="#00204A"/>
+  <!-- Bold Collegiate Block B (matching the exact Michigan M proportions and #F5C400 gold) -->
+  <g fill="#F5C400">
+    <!-- Top and bottom serifs + vertical spine -->
+    <rect x="170" y="130" width="120" height="95"/>
+    <rect x="170" y="535" width="120" height="95"/>
+    <rect x="215" y="130" width="145" height="500"/>
+    <!-- Upper bowl of B -->
+    <path d="M340 130 H640 C765 130 835 190 835 268 C835 330 785 368 710 378 C798 390 855 435 855 505 C855 585 780 630 645 630 H340 V535 H615 C675 535 708 512 708 480 C708 446 675 424 615 424 H340 V332 H605 C660 332 692 310 692 278 C692 246 660 225 605 225 H340 Z"/>
+  </g>
+  <text x="512" y="795" text-anchor="middle" fill="#FFFFFF" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="700" letter-spacing="4">BEN-GURION</text>
+  <text x="512" y="925" text-anchor="middle" fill="#FFFFFF" font-family="Georgia, 'Times New Roman', serif" font-size="116" font-weight="700" letter-spacing="5">UNIVERSITY</text>
+</svg>

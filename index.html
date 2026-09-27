@@ -81,10 +81,10 @@
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- ==================== 🏝️ 3D CAREER ISLAND (acrokat.me style) ==================== -->
-<div id="islandView" class="island-view" role="region" aria-label="Interactive 3D Career Island">
-  <!-- Left Side: Editorial Typography & Bio -->
-  <section class="island-intro" aria-label="About me">
-    <h1 class="island-hero-name">Tal<br class="hero-break">Klein<span>.</span></h1>
+<div id="islandView" class="island-view" data-scene-status="loading" role="region" aria-label="Interactive 3D Career Island">
+  <!-- Left Side: Editorial Typography & Bio (acrokat.me style) -->
+  <section class="island-intro" aria-label="About Tal Klein">
+    <h1 class="island-hero-name">Tal<br class="hero-break"> Klein<span>.</span></h1>
     <p class="island-hero-role">Data Scientist &amp; ML Engineer</p>
     <nav class="island-social-links" aria-label="Social links">
       <a href="https://github.com/TalKleinBgu" target="_blank" rel="noreferrer" aria-label="My GitHub profile">
@@ -103,26 +103,55 @@
     </button>
   </section>
 
-  <!-- 3D Canvas Container -->
-  <div id="islandCanvasContainer" class="island-canvas-container">
-    <canvas id="islandCanvas"></canvas>
+  <!-- 3D Diorama World Container (acrokat.me engine mounts canvas here) -->
+  <div id="islandWorld" class="island-world" aria-label="Interactive 3D island" aria-busy="true">
+    <button hidden data-bike-bell="true" class="acro-lamp-switch" aria-label="Spin bicycle wheels and ring bell">🔔</button>
+    <button hidden data-lamp-id="0" class="acro-lamp-switch" aria-label="Toggle left lamppost" aria-pressed="true">💡</button>
+    <button hidden data-lamp-id="1" class="acro-lamp-switch" aria-label="Toggle right lamppost" aria-pressed="true">💡</button>
+    <a hidden data-camera-hint="true" class="acro-camera-link" href="https://github.com/TalKleinBgu" target="_blank" rel="noopener noreferrer" aria-label="Explore Tal's GitHub"><span aria-hidden="true">📷</span></a>
+
+    <button type="button" data-location="michigan" class="acro-explore" aria-label="Explore Ben-Gurion University">
+      <span class="acro-point"></span>
+      <span class="acro-hover-label">Ben-Gurion University</span>
+    </button>
+    <button type="button" data-location="microsoft" class="acro-explore" aria-label="Explore Cloud &amp; AI Systems">
+      <span class="acro-point"></span>
+      <span class="acro-hover-label">Cloud &amp; AI Systems</span>
+    </button>
+    <button type="button" data-location="github" class="acro-explore" aria-label="Explore GitHub &amp; Open Source">
+      <span class="acro-point"></span>
+      <span class="acro-hover-label">GitHub &amp; Open Source</span>
+    </button>
+    <button type="button" data-location="blaze" class="acro-explore" aria-label="Explore IDF C4I &amp; Heritage">
+      <span class="acro-point"></span>
+      <span class="acro-hover-label">IDF C4I &amp; Heritage</span>
+    </button>
+    <button type="button" data-location="deepmind" class="acro-explore" aria-label="Explore AI &amp; Legal NLP Research">
+      <span class="acro-point"></span>
+      <span class="acro-hover-label">AI &amp; Legal NLP Research</span>
+    </button>
+
+    <!-- 3D Projected Anchor for Frosted-Glass Summary Card (like Screenshots #3 & #4) -->
+    <div id="islandAnchor" class="acro-anchor"></div>
   </div>
 
-  <!-- Tilt-Shift / Edge Blur Overlay (acrokat style) -->
-  <div id="islandVignette" class="island-vignette" aria-hidden="true"></div>
-
-  <!-- 3D Floating Landmark Pins Layer -->
-  <div id="islandPins" class="island-pins-layer" aria-label="Landmark markers"></div>
+  <!-- Loading Progress Bar -->
+  <div id="islandLoadIndicator" class="acro-load-indicator">
+    <span class="acro-load-caption">Loading map</span>
+    <div class="acro-load-track" role="progressbar" aria-label="Loading map assets" aria-valuemin="0" aria-valuemax="100">
+      <span id="islandLoadFill" class="acro-load-fill" style="width: 15%"></span>
+    </div>
+  </div>
 
   <!-- Bottom Minimal Pill Controls (like Kat's Ⅱ and ↺) -->
   <footer class="island-footer">
     <div class="island-pill-controls">
-      <button type="button" id="pauseIslandBtn" aria-label="Pause water and scene motion" title="Pause water and scene motion">Ⅱ</button>
-      <button type="button" id="resetIslandBtn" aria-label="Reset 3D view" title="Reset Camera View">↺</button>
+      <button type="button" id="pauseIslandBtn" aria-label="Pause motion" title="Pause motion">Ⅱ</button>
+      <button type="button" id="resetIslandBtn" aria-label="Reset 3D view" title="Reset 3D view">↺</button>
     </div>
   </footer>
 
-  <!-- Landmark Drawer / Inspector Card -->
+  <!-- Full Landmark Drawer / Inspector Modal -->
   <div id="landmarkModal" class="landmark-modal" aria-hidden="true">
     <div class="landmark-modal-backdrop" id="landmarkModalClose"></div>
     <div class="landmark-modal-card">
@@ -704,10 +733,9 @@
 <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 </main>
 
-<!-- Local Three.js 3D Engine & Career Island (100% offline, zero CDN dependency) -->
-<script src="./assets/vendor/three.min.js"></script>
-<script src="./assets/vendor/OrbitControls.js"></script>
-<script src="./assets/island.js?v=13" defer></script>
+<!-- Acrokat.me PBR 3D Diorama Engine & Career Island (100% self-hosted) -->
+<script src="./assets/acrokat-diorama.js?v=1" defer></script>
+<script src="./assets/island.js?v=14" defer></script>
 <script src="./assets/main.js?v=10" defer></script>
 </body>
 </html>
