@@ -613,7 +613,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=5', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=6', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
@@ -636,26 +636,48 @@
         return new typed(binary.slice(start, start + info.count * bytesPerElement));
       };
       const terrain = new THREE.Group();
+      let meadowTexture = null;
       for (const primitive of gltf.meshes[0].primitives) {
         const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.BufferAttribute(componentArray(primitive.attributes.POSITION), 3));
+        const vertexPositions = componentArray(primitive.attributes.POSITION);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertexPositions, 3));
         if (primitive.attributes.COLOR_0 !== undefined) geometry.setAttribute('color', new THREE.BufferAttribute(componentArray(primitive.attributes.COLOR_0), 3));
         if (primitive.indices !== undefined) geometry.setIndex(new THREE.BufferAttribute(componentArray(primitive.indices), 1));
-        geometry.computeVertexNormals();
         const isMeadow = primitive.material === 0;
-        const material = new THREE.MeshStandardMaterial({
-          vertexColors: true,
-          roughness: isMeadow ? 0.94 : 1,
-          metalness: 0,
-          emissive: isMeadow ? 0x173318 : 0x000000,
-          emissiveIntensity: isMeadow ? 0.35 : 0,
-          side: THREE.DoubleSide
-        });
+        if (isMeadow) {
+          const uvs = new Float32Array(vertexPositions.length / 3 * 2);
+          for (let i = 0; i < vertexPositions.length / 3; i++) {
+            uvs[i * 2] = vertexPositions[i * 3] / 3 + 0.5;
+            uvs[i * 2 + 1] = vertexPositions[i * 3 + 2] / 3 + 0.5;
+          }
+          geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+          if (!meadowTexture) {
+            const textureCanvas = document.createElement('canvas');
+            textureCanvas.width = textureCanvas.height = 512;
+            const ctx = textureCanvas.getContext('2d');
+            ctx.fillStyle = '#78ad61';
+            ctx.fillRect(0, 0, 512, 512);
+            const fleckColors = ['rgba(37,83,43,0.12)', 'rgba(218,218,139,0.16)', 'rgba(159,197,111,0.22)', 'rgba(54,117,57,0.12)'];
+            for (let i = 0; i < 9000; i++) {
+              const x = Math.random() * 512, y = Math.random() * 512;
+              const radius = 0.6 + Math.random() * 2.6;
+              ctx.fillStyle = fleckColors[i % fleckColors.length];
+              ctx.beginPath();
+              ctx.ellipse(x, y, radius * (1.2 + Math.random()), radius * 0.62, Math.random() * Math.PI, 0, Math.PI * 2);
+              ctx.fill();
+            }
+            meadowTexture = new THREE.CanvasTexture(textureCanvas);
+            meadowTexture.wrapS = meadowTexture.wrapT = THREE.RepeatWrapping;
+            meadowTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+          }
+        }
+        geometry.computeVertexNormals();
+        const material = isMeadow
+          ? new THREE.MeshStandardMaterial({ map: meadowTexture, roughness: 0.98, metalness: 0, side: THREE.DoubleSide })
+          : new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
-        // Keep the proven grass surface underneath until the GLB meadow
-        // material is verified on all production GPUs.
-        mesh.visible = !isMeadow;
+        mesh.visible = true;
         // Broad triangulated meadows can self-shadow across shallow slopes.
         mesh.receiveShadow = !isMeadow;
         mesh.castShadow = !isMeadow;
@@ -664,7 +686,10 @@
       islandGroup.add(terrain);
       if (terrainFallbackGroup) {
         terrainFallbackGroup.children.forEach((object) => {
-          if (object.name === 'Procedural meadow plateau') return;
+          if (object.name === 'Procedural meadow plateau') {
+            object.visible = false;
+            return;
+          }
           object.visible = false;
           if (object.geometry) object.geometry.dispose();
           if (object.material) object.material.dispose();
