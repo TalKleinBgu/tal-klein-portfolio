@@ -753,19 +753,24 @@
     const gCtx = gCanvas.getContext('2d');
     gCtx.fillStyle = '#4D985B';
     gCtx.fillRect(0, 0, 512, 512);
-    for (let i = 0; i < 5200; i++) {
-      const x = (i * 197) % 512, y = (i * 311 + Math.floor(i / 9) * 17) % 512;
-      gCtx.fillStyle = i % 3 === 0 ? 'rgba(139,190,106,0.34)' : i % 3 === 1 ? 'rgba(31,93,50,0.22)' : 'rgba(218,210,128,0.13)';
-      gCtx.save();
-      gCtx.translate(x, y);
-      gCtx.rotate((i % 17) * 0.18);
-      gCtx.fillRect(-1, -4 - (i % 5), 2, 5 + (i % 5));
-      gCtx.restore();
+    let grassSeed = 47291;
+    const grassRandom = () => {
+      grassSeed = (grassSeed * 16807) % 2147483647;
+      return (grassSeed - 1) / 2147483646;
+    };
+    const grassFlecks = ['rgba(139,190,106,0.25)', 'rgba(31,93,50,0.13)', 'rgba(218,210,128,0.12)', 'rgba(230,239,187,0.1)'];
+    for (let i = 0; i < 7600; i++) {
+      const x = grassRandom() * 512, y = grassRandom() * 512;
+      const radius = 0.5 + grassRandom() * 2.1;
+      gCtx.fillStyle = grassFlecks[i % grassFlecks.length];
+      gCtx.beginPath();
+      gCtx.ellipse(x, y, radius * (1.1 + grassRandom()), radius * 0.7, grassRandom() * Math.PI, 0, Math.PI * 2);
+      gCtx.fill();
     }
     const grassTex = new THREE.CanvasTexture(gCanvas);
     grassTex.wrapS = THREE.RepeatWrapping;
     grassTex.wrapT = THREE.RepeatWrapping;
-    grassTex.repeat.set(7, 7);
+    grassTex.repeat.set(2.4, 2.4);
     grassTex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
     // A softly irregular, stratified limestone edge reads as sculpted terrain.
