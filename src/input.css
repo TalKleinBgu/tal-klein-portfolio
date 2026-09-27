@@ -691,6 +691,9 @@
   }
   .hero-role .role-hl { color: var(--accent); }
   .hero-role .amp     { color: var(--ink-faint); font-weight: 600; }
+  .hero-open { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 12px; }
+  .hero-open .sk-open-v { font-size: 14.5px; color: var(--ink-soft); }
+  @media (max-width: 819px) { .hero-open { justify-content: center; } }
   .hero-lead {
     font-size: clamp(16px, 1.9vw, 19px);
     line-height: 1.65;
@@ -1240,25 +1243,8 @@
     .tb-col li { font-size: 13.5px; }
   }
   .sk-rows[hidden] { display: none; }
-  .sk-open { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; padding: 24px 0 0; }
   .sk-open-k { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent); }
   .sk-open-v { font-size: 15.5px; font-weight: 600; color: var(--ink); }
-  .sk-cta {
-    margin-left: auto;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 11px 18px;
-    border-radius: 999px;
-    background: var(--btn-bg);
-    color: var(--btn-fg);
-    font-weight: 700; font-size: 14px;
-    text-decoration: none;
-    transition: box-shadow .2s, transform .2s;
-  }
-  .sk-cta:hover { transform: translateY(-1px); box-shadow: 0 0 0 4px var(--ring); }
-  .sk-cta svg { transition: transform .25s; }
-  .sk-cta:hover svg { transform: translateX(3px); }
-  .sk-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  @media (max-width: 700px) { .sk-cta { margin-left: 0; } }
   /* ── Skills network graph ────────────────────────────────────────────── */
   /* Neural-network skills map drawn directly on the page. It animates into
      view when the section enters the viewport and resets when revisited. */
@@ -1705,6 +1691,7 @@
   .hero-hi.enter    { animation-delay: .05s; }
   .hero-name.enter  { animation-delay: .12s; }
   .hero-role.enter  { animation-delay: .2s; }
+  .hero-open.enter  { animation-delay: .24s; }
   .hero-lead.enter  { animation-delay: .28s; }
   .hero-btns.enter  { animation-delay: .36s; }
   .hero-stats.enter { animation-delay: .46s; }

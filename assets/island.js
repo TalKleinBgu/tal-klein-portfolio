@@ -33,7 +33,7 @@
         'Publication under review (Springer AI & Law, 2026): "Examining Bias in Sentencing Decisions with LLM-Powered Control over the Facts" (Klein, T., et al.).'
       ],
       jumpSection: '#experience',
-      jumpLabel: 'View Research & Career in Classic CV'
+      jumpLabel: 'View Research & Career on the Full Website'
     },
 
     michigan: {
@@ -65,7 +65,7 @@
       id: 'github',
       name: 'GitHub & ML Projects',
       logo: './assets/scene/brands/github.svg',
-      role: '7 Production & Research ML Projects · Open Source',
+      role: '7 Open-Source ML Projects · LLMs, Search, Vision & Audio',
       cardDesc: '6.4M-doc Wikipedia IR Engine (8× speedup), Gemma-3 12B QLoRA Fine-Tuning (0.71 F1), DictaBERT Legal Classifier (91% acc) & Multimodal AI',
       tag: 'Selected Work · github.com/TalKleinBgu',
       title: 'GitHub & Selected ML Engineering Projects',
@@ -109,7 +109,7 @@
         'Developed hands-on production debugging and systems reliability skills across complex enterprise environments.'
       ],
       jumpSection: '#experience',
-      jumpLabel: 'View Matrix Role in Classic CV'
+      jumpLabel: 'View Matrix Role on the Full Website'
     },
 
     microsoft: {
@@ -134,7 +134,7 @@
         'Instilled strong leadership, composure under pressure, and operational ownership.'
       ],
       jumpSection: '#experience',
-      jumpLabel: 'View IDF Service in Classic CV'
+      jumpLabel: 'View IDF Service on the Full Website'
     },
 
     blaze: {
@@ -329,7 +329,7 @@
       });
     }
 
-    // Bind Classic CV <-> 3D Island view toggles
+    // Bind Full Website <-> 3D Island view toggles
     const switchToClassicBtn = document.getElementById('switchToClassicBtn');
     const switchToIslandBtn = document.getElementById('switchToIslandBtn');
     const navIslandBtn = document.getElementById('navIslandBtn');
@@ -394,7 +394,7 @@
     const footer = document.getElementById('modalFooter');
     footer.innerHTML = `
       <button type="button" class="landmark-jump-btn" id="modalJumpBtn">
-        <span>${data.jumpLabel || 'View in Classic Portfolio'}</span>
+        <span>${data.jumpLabel || 'View on the Full Website'}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
       </button>
     `;

@@ -6,7 +6,7 @@ Personal portfolio and interactive 3D Career Island for **Tal Klein** — Data S
 
 ## Highlights
 - **Interactive 3D Career Island** — Explore key milestones across Data Science & NLP research, Ben-Gurion University (M.Sc. & B.Sc.), GitHub ML projects, Matrix IT Support, IDF Operations, and personal life.
-- **Classic CV & Portfolio View** — Full academic, research, and project breakdown with instant toggle.
+- **Full Website View** — Complete academic, research, and project breakdown, one click away from the 3D island.
 
 ## Run Locally
 
