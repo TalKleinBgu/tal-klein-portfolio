@@ -1,1209 +1,1886 @@
 /**
- * 🏝️ Tal Klein's 3D Career Island
- * Inspired by acrokat.me — Handcrafted, minimalist, low-poly interactive world
- * Uses local Three.js (no CDN dependencies)
+ * 🏝️ Tal Klein — High-Precision 3D Career & Life Island (acrokat.me architectural aesthetic)
+ * Built with Three.js + procedural CanvasTextures (brickwork, roof shingles, cobblestones,
+ * multi-pane lit windows, stone cornices, rooftop garden planters, river & stone bridge,
+ * 3D architectural signboards, cherry blossoms, and interactive career landmarks).
  */
 
 (function () {
   'use strict';
 
-  let scene, camera, renderer, controls;
-  let canvas, container;
-  let landmarks = [];
-  let clickableObjects = [];
-  let hoveredLandmark = null;
-  let isOrbiting = true;
-  let oceanMesh;
-  let basketballMesh, basketballBasePos, isShooting = false;
-  let puppyTailMesh, puppyHeadMesh;
-  let cowHeadMesh;
-  let beaconLight, beaconMesh;
-
-  // Landmark Data matching Tal's career and personal journey
   const LANDMARKS = {
-    bgu: {
-      id: 'bgu',
-      title: 'Ben-Gurion University',
-      tag: 'Education · M.Sc & B.Sc',
-      subtitle: 'Data Engineering & NLP (GPA 92, Meitar Excellence)',
+    bgu_campus: {
+      id: 'bgu_campus',
+      tag: 'Academic Excellence · B.Sc. & M.Sc.',
+      title: 'Ben-Gurion University Hall',
+      subtitle: 'Software & Information Systems Engineering · Beer Sheva',
       icon: '🎓',
-      focusPos: { x: -0.5, y: 1.5, z: -1.0 },
-      camPos: { x: 3, y: 8, z: 9 },
-      desc: 'Graduated B.Sc. in Data Engineering and completed M.Sc. in Software & Information Systems Engineering specializing in Data Science & NLP. Honored as a Meitar Excellence Program Fellow with a 92 GPA.',
-      bullets: [
-        'M.Sc. Thesis: LLM-driven structured fact extraction and causal inference in legal judgments',
-        'B.Sc. Data Engineering: Core algorithms, distributed data architectures, and statistical foundations',
-        'Meitar Excellence Program fellow (top-tier graduate research scholarship)'
-      ],
+      desc: 'After completing military service, Tal embarked on a 7-year academic and research journey at Ben-Gurion University of the Negev—completing both his B.Sc. (Cum Laude) and M.Sc. (GPA 92) while teaching hundreds of engineering students.',
       stats: [
         { v: '92', k: 'M.Sc. GPA' },
-        { v: 'BGU', k: 'Alma Mater' },
-        { v: 'מיתר', k: 'Excellence' }
+        { v: '89.4', k: 'B.Sc. Cum Laude' },
+        { v: '2020–26', k: 'Teaching Assistant' }
       ],
-      jumpTarget: '#education'
-    },
-    legalAi: {
-      id: 'legalAi',
-      title: 'Legal AI & Bias Research',
-      tag: 'Research Publication',
-      subtitle: 'Springer · Artificial Intelligence and Law (2026)',
-      icon: '⚖️',
-      focusPos: { x: 7.2, y: 1.5, z: 1.5 },
-      camPos: { x: 12, y: 7, z: 10 },
-      desc: 'Master’s thesis research: "Examining Bias in Sentencing Decisions with LLM-Powered Control over the Facts." Currently under peer review at Springer’s AI and Law journal.',
       bullets: [
-        'End-to-end NLP pipeline parsing 6,000+ unstructured Hebrew court verdicts',
-        'GPT-5-mini batch inference extracting 30+ structured legal attributes with 0.92 F1 score',
-        'Counterfactual causal modeling examining racial and demographic sentencing disparities'
+        'M.Sc. Thesis: "Analyzing Temporal Dynamics in Judicial Ruling Citations: An NLP-Driven Approach to Legal Change".',
+        'Awarded the prestigious Meitar Legal-Tech Center Research Excellence Fellowship.',
+        'Teaching Assistant for "Introduction to Artificial Intelligence" & "Technological Entrepreneurship".'
       ],
-      stats: [
-        { v: '6,000+', k: 'Verdicts' },
-        { v: '0.92', k: 'F1 Score' },
-        { v: 'Springer', k: 'Under Review' }
-      ],
-      jumpTarget: '#education'
+      jumpSection: '#experience',
+      jumpLabel: 'View Academic Journey in Classic CV'
     },
-    codeLab: {
-      id: 'codeLab',
-      title: 'The Builder’s Tech Hub',
-      tag: 'Production ML & Systems',
-      subtitle: 'Search Engines, Multimodal AI & Speech',
+    research_hq: {
+      id: 'research_hq',
+      tag: 'Published AI Research · DeepMind-Style HQ',
+      title: 'AI & Legal NLP Research HQ',
+      subtitle: 'Co-Advisor: Prof. Mark Last · Springer AI & Law',
+      icon: '🏛️',
+      desc: 'The central architectural landmark on the island: where large language models, citation network dynamics, and causal inference converge to uncover hidden temporal shifts in judicial history.',
+      stats: [
+        { v: '86%', k: 'Best F1 Score' },
+        { v: '185K', k: 'Court Rulings' },
+        { v: 'Q1', k: 'Springer Journal' }
+      ],
+      bullets: [
+        'Architected a custom Legal-HeBERT + BiLSTM sequential classifier outperforming standard transformers by +7 F1 points.',
+        'Engineered an end-to-end data pipeline parsing 185,000 raw Hebrew Supreme Court rulings.',
+        'Applied Difference-in-Differences (DiD) causal inference to prove significant doctrine shifts.'
+      ],
+      jumpSection: '#projects',
+      jumpLabel: 'Explore Research & Publications'
+    },
+    tech_hub: {
+      id: 'tech_hub',
+      tag: 'Production Engineering · Deep Learning',
+      title: 'The Builder’s Tech Lab',
+      subtitle: 'Search Engines, Multimodal AI & High-Scale Systems',
       icon: '💻',
-      focusPos: { x: 3.5, y: 1.8, z: 7.5 },
-      camPos: { x: 8, y: 7, z: 16 },
-      desc: 'Full-stack machine learning engineering: scaling search over millions of documents, multimodal audio-text agreement pipelines, and real-time deep learning systems.',
-      bullets: [
-        'Wikipedia-Scale IR Engine: 6.4M pages, BM25, TF-IDF, PageRank on GCP, 8× latency speedup',
-        'Hebrew Dialogue Silence Tagging: AssemblyAI + Gemini pipeline, Cohen’s Kappa 0.69',
-        'Speech Emotion Recognition: Wav2Vec2 & HuBERT fine-tuning, 81.3% test accuracy'
-      ],
+      desc: 'From indexing 6.4 million Wikipedia articles in GCP to building real-time speech diarization and reinforcement learning agents, this modern timber-and-glass studio showcases hands-on systems engineering.',
       stats: [
-        { v: '6.4M', k: 'Pages' },
-        { v: '8×', k: 'Speedup' },
-        { v: '7+', k: 'Projects' }
+        { v: '6.4M+', k: 'Docs Indexed' },
+        { v: '0.67s', k: 'Mean Latency' },
+        { v: '100%', k: 'Recall@10' }
       ],
-      jumpTarget: '#projects'
-    },
-    farm: {
-      id: 'farm',
-      title: 'The Heritage Farm',
-      tag: 'Roots & Heritage',
-      subtitle: 'Family Dairy Farm (רפת)',
-      icon: '🐄',
-      focusPos: { x: 7.5, y: 1.2, z: -6.5 },
-      camPos: { x: 13, y: 6, z: -2 },
-      desc: 'Growing up with a family dairy farm instilled an unshakeable work ethic, early mornings, and a deep appreciation for real-world operations behind the data.',
       bullets: [
-        'Learned that consistency, patience, and meticulous care yield reliable results',
-        'Grounded perspective: keeping high-level AI models tethered to practical realities',
-        'Proud heritage that balances cutting-edge tech with timeless agricultural grit'
+        'Wikipedia IR Engine: Custom inverted indexes, BM25 + PageRank fusion deployed on Google Cloud Platform.',
+        'Who Speaks When: Real-time speaker diarization & Whisper ASR transcription pipeline.',
+        'Multi-Modal Genre Classification (ViT + BERT) & Deep Q-Network (DQN) autonomous agents.'
       ],
-      stats: [
-        { v: '🐄', k: 'Dairy Roots' },
-        { v: '🌾', k: 'Discipline' },
-        { v: '🚜', k: 'Heritage' }
-      ],
-      jumpTarget: '#about'
+      jumpSection: '#projects',
+      jumpLabel: 'See All 6 Engineering Projects'
     },
-    guideDog: {
-      id: 'guideDog',
+    puppy_haven: {
+      id: 'puppy_haven',
+      tag: 'Community & Volunteering · מעבר לקוד',
       title: 'Guide-Dog Puppy Haven',
-      tag: 'Volunteering & Service',
-      subtitle: 'Israel Guide Dog Center for the Blind',
+      subtitle: 'Israel Guide Dog Center · אומנה לכלב נחייה',
       icon: '🦮',
-      focusPos: { x: -6.8, y: 1.2, z: -6.5 },
-      camPos: { x: -11, y: 6, z: -1 },
-      desc: 'Volunteer Puppy Raiser dedicating 16 months (Jan 2025 – May 2026) to socialize and obedience-train a future guide dog for visually impaired individuals.',
-      bullets: [
-        'Daily positive-reinforcement conditioning and public-access exposure training',
-        'High empathy, responsibility, and emotional discipline',
-        'Deep commitment to community and giving back beyond professional work'
-      ],
       image: './assets/guide-dog.webp',
+      desc: 'One of the most meaningful chapters outside of engineering: raising and training a future guide dog puppy from 8 weeks old for over a year—attending university lectures, labs, and daily socialization together.',
       stats: [
-        { v: '16 mo', k: 'Dedication' },
-        { v: '100%', k: 'Commitment' },
-        { v: '🦮', k: 'Guide Dog' }
+        { v: '1+ Yr', k: 'Full-Time Foster' },
+        { v: '24/7', k: 'Training & Care' },
+        { v: '100%', k: 'Heart & Impact' }
       ],
-      jumpTarget: '#experience'
+      bullets: [
+        'Fostered and trained a service puppy in collaboration with the Israel Guide Dog Center for the Blind.',
+        'Taught foundational obedience, calm navigation in crowded university campuses, and obstacle awareness.',
+        'Prepared the puppy for advanced formal guide-dog certification to empower a visually impaired partner.'
+      ],
+      jumpSection: '#about',
+      jumpLabel: 'Read More in About Me'
     },
-    basketball: {
-      id: 'basketball',
-      title: 'Streetball Half-Court',
-      tag: 'Sports & Passion',
-      subtitle: 'NBA, Euroleague & Maccabi Tel Aviv',
+    basketball_court: {
+      id: 'basketball_court',
+      tag: 'Passion & Team Spirit · כדורסל',
+      title: 'Maccabi & NBA Streetball Court',
+      subtitle: 'Yellow-and-Blue Hardwood · Click to Shoot a 3-Pointer!',
       icon: '🏀',
-      focusPos: { x: -7.5, y: 1.0, z: 4.8 },
-      camPos: { x: -12, y: 6, z: 11 },
-      desc: 'Lifelong basketball enthusiast. Whether watching Maccabi in the Euroleague, following the NBA, or playing on the blacktop, the court is where focus, teamwork, and quick decision-making come alive.',
-      bullets: [
-        'Sportsmanship, fast court vision, and rapid tactical pivots under pressure',
-        'Great mental reset that recharges creative engineering stamina',
-        'Click the basketball on the court to launch a swish shot!'
-      ],
+      desc: 'Whether playing pickup games on the court or following the NBA, EuroLeague, and Maccabi Tel Aviv, basketball is where strategy, tempo, and teamwork come alive.',
       stats: [
-        { v: '🏀', k: 'Maccabi/NBA' },
-        { v: '⚡', k: 'Energy' },
-        { v: '🎯', k: 'Swish' }
+        { v: 'NBA', k: '& EuroLeague' },
+        { v: 'MTA', k: 'Yellow & Blue' },
+        { v: '3PT', k: 'Swish Animation' }
       ],
-      jumpTarget: '#about'
-    },
-    idf: {
-      id: 'idf',
-      title: 'IDF Communications Outpost',
-      tag: 'Leadership & Service',
-      subtitle: 'Communications & Operations NCO (2017–2020)',
-      icon: '📻',
-      focusPos: { x: -2.8, y: 1.4, z: -10.5 },
-      camPos: { x: 2, y: 7, z: -4 },
-      desc: 'Communications & Operations NCO in the IDF. Managed high-tempo tactical communications networks, led a small specialist squad, and ensured mission-critical uptime.',
       bullets: [
-        'Maintained reliability across high-priority hardware and encrypted radio channels',
-        'Team leadership, mentorship, and clear communication under intense pressure',
-        'Problem diagnosis, emergency triage, and operational resilience'
+        'Lifelong basketball player and avid follower of NBA and EuroLeague analytics.',
+        'Brings the same court vision, unselfish passing, and clutch execution to engineering teams.',
+        'Interactive Easter Egg: Clicking the court triggers a high-arcing 3-point swish into the net!'
       ],
-      stats: [
-        { v: '3 Yrs', k: 'Service' },
-        { v: '24/7', k: 'Readiness' },
-        { v: '🎖️', k: 'NCO Lead' }
-      ],
-      jumpTarget: '#experience'
+      jumpSection: '#about',
+      jumpLabel: 'Switch to Classic Portfolio'
     },
-    pier: {
-      id: 'pier',
-      title: 'Coastal Pier & Sailboat',
-      tag: 'Nature & Travel',
-      subtitle: 'Beaches, Hiking & Exploration',
+    dairy_barn: {
+      id: 'dairy_barn',
+      tag: 'Family Roots & Work Ethic · רפת המשפחה',
+      title: 'The Heritage Dairy Barn',
+      subtitle: 'Agricultural Roots · Grounded Problem Solving',
+      icon: '🐄',
+      desc: 'Growing up with a family dairy farm (רפת) instilled an unmistakable work ethic early on: waking up before dawn, taking full ownership, and solving real physical problems with zero shortcuts.',
+      stats: [
+        { v: '05:00', k: 'Early Mornings' },
+        { v: '100%', k: 'Grit & Ownership' },
+        { v: 'Roots', k: 'Family Farm' }
+      ],
+      bullets: [
+        'Grew up helping run the family dairy farm—learning responsibility, resilience, and teamwork from childhood.',
+        'Combines grounded, pragmatic agricultural grit with advanced academic research.',
+        'A reminder that behind every complex algorithm is real-world execution.'
+      ],
+      jumpSection: '#about',
+      jumpLabel: 'Learn More About Tal'
+    },
+    idf_outpost: {
+      id: 'idf_outpost',
+      tag: 'Military Service · 2015–2018',
+      title: 'IDF C4I Tactical Comms Outpost',
+      subtitle: 'Combat Communications & Crypto Systems · Full Honors',
+      icon: '📡',
+      desc: 'Where technical leadership under pressure began: serving as a Combat Communications Specialist in the Israel Defense Forces, managing encrypted RF networks and field command infrastructure.',
+      stats: [
+        { v: '3 Yrs', k: 'Full Service' },
+        { v: 'C4I', k: 'Encrypted Comms' },
+        { v: '24/7', k: 'Mission Critical' }
+      ],
+      bullets: [
+        'Maintained and troubleshot mission-critical encrypted communication networks and tactical relays.',
+        'Trained field operators and commanders on high-reliability C4I hardware and protocols.',
+        'Discharged with full honors before beginning engineering studies at Ben-Gurion University.'
+      ],
+      jumpSection: '#experience',
+      jumpLabel: 'View Full Timeline'
+    },
+    coastal_pier: {
+      id: 'coastal_pier',
+      tag: 'Nature, Beaches & Travel · חופים וטיולים',
+      title: 'The Mediterranean Pier & Cove',
+      subtitle: 'Beaches, Trails & Open Horizons',
       icon: '⛵',
-      focusPos: { x: -11.5, y: 0.5, z: -0.5 },
-      camPos: { x: -16, y: 5, z: 6 },
-      desc: 'Love for the sea, Mediterranean coastlines, trekking trails, and backpacking trips. Stepping into the open outdoors clears the mind and sparks fresh architectural thinking.',
-      bullets: [
-        'Hiking trails from northern ridges to southern desert canyons',
-        'Connection to the ocean as the ultimate source of calm and perspective',
-        'Balancing deep technical concentration with outdoor exploration'
-      ],
+      desc: 'Beyond datasets and neural networks, Tal recharges by the sea, hiking nature trails, and exploring new coastlines around the world.',
       stats: [
-        { v: '🌊', k: 'Coast' },
-        { v: '🥾', k: 'Trails' },
-        { v: '☀️', k: 'Outdoors' }
+        { v: 'Sea', k: '& Coastlines' },
+        { v: 'Trails', k: 'Nature & Hiking' },
+        { v: 'Open', k: 'To New Opportunities' }
       ],
-      jumpTarget: '#about'
+      bullets: [
+        'Loves the beach, outdoor trails, and traveling to discover new landscapes and cultures.',
+        'Currently open to Data Scientist, ML Engineer, and AI Researcher roles.',
+        'Let’s connect over coffee, basketball, or machine learning!'
+      ],
+      jumpSection: '#contact',
+      jumpLabel: 'Get in Touch with Tal'
     }
   };
 
-  // --- Initialize Scene ---
-  function init() {
-    container = document.getElementById('islandCanvasContainer');
-    canvas = document.getElementById('islandCanvas');
-    if (!container || !canvas || typeof THREE === 'undefined') {
-      console.warn('Three.js or canvas not ready.');
-      return;
+  let scene, camera, renderer, controls;
+  let islandGroup;
+  let raycaster, mouse;
+  let interactiveTargets = [];
+  let hoveredLandmarkId = null;
+  let isIslandVisible = true;
+  let isPaused = false;
+  let clock;
+
+  // Animated elements
+  let animBasketball = null;
+  let ballShotProgress = -1;
+  let animBoat = null;
+  let animPuppy = null;
+  let animCows = [];
+  let animCar = null;
+  let radarDish = null;
+  let beaconMat = null;
+  let riverMesh = null;
+
+  // Camera default state — zoomed-in isometric perspective filling the screen like acrokat.me
+  const DEFAULT_CAM_POS = { x: 14.8, y: 11.4, z: 17.6 };
+  const DEFAULT_TARGET = { x: 0.3, y: 1.35, z: 0.1 };
+  let cameraTargetPos = null;
+  let controlsTargetLook = null;
+  let isCameraTransitioning = false;
+
+  // ─── Procedural High-Resolution Texture Generators ─────────────────────────
+  function createBrickMaterial(brickHex, mortarHex, repeatX = 4, repeatY = 4) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = mortarHex || '#D6D3D1';
+    ctx.fillRect(0, 0, 512, 512);
+
+    const rows = 16;
+    const cols = 8;
+    const rowH = 512 / rows;
+    const colW = 512 / cols;
+    const mortar = 3;
+
+    const baseColor = new THREE.Color(brickHex);
+
+    for (let r = 0; r < rows; r++) {
+      const offset = (r % 2) * (colW / 2);
+      for (let c = -1; c <= cols; c++) {
+        const variation = (Math.sin(r * 13.7 + c * 7.3) * 0.045);
+        const col = baseColor.clone().offsetHSL(0, variation * 0.5, variation);
+        ctx.fillStyle = '#' + col.getHexString();
+        ctx.fillRect(c * colW + offset + mortar, r * rowH + mortar, colW - mortar * 2, rowH - mortar * 2);
+
+        // Subtle highlight on top edge of brick
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fillRect(c * colW + offset + mortar, r * rowH + mortar, colW - mortar * 2, 2);
+      }
     }
 
-    // 1. Scene with soft minimalist pastel sky (matching acrokat.me)
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatX, repeatY);
+    return new THREE.MeshStandardMaterial({
+      map: tex,
+      bumpMap: tex,
+      bumpScale: 0.03,
+      roughness: 0.82,
+      metalness: 0.04
+    });
+  }
+
+  function createRoofShingleMaterial(baseHex, repeatX = 4, repeatY = 3) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    const baseColor = new THREE.Color(baseHex);
+    ctx.fillStyle = '#' + baseColor.getHexString();
+    ctx.fillRect(0, 0, 256, 256);
+
+    const rows = 12;
+    const cols = 8;
+    const rH = 256 / rows;
+    const cW = 256 / cols;
+
+    for (let r = 0; r < rows; r++) {
+      const off = (r % 2) * (cW / 2);
+      for (let c = -1; c <= cols; c++) {
+        const v = (Math.cos(r * 9.1 + c * 5.7) * 0.04);
+        const col = baseColor.clone().offsetHSL(0, 0, v);
+        ctx.fillStyle = '#' + col.getHexString();
+        ctx.fillRect(c * cW + off + 1, r * rH + 1, cW - 2, rH - 2);
+        ctx.fillStyle = 'rgba(0,0,0,0.22)';
+        ctx.fillRect(c * cW + off, (r + 1) * rH - 2, cW, 2);
+      }
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatX, repeatY);
+    return new THREE.MeshStandardMaterial({
+      map: tex,
+      bumpMap: tex,
+      bumpScale: 0.025,
+      roughness: 0.68,
+      metalness: 0.12
+    });
+  }
+
+  function createCobbleMaterial(repeatX = 6, repeatY = 2) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#D6D1C7';
+    ctx.fillRect(0, 0, 256, 256);
+
+    const stones = [
+      '#E7E2D8', '#DED8CC', '#EBE6DC', '#D5CFC3', '#E2DDD2'
+    ];
+    const rows = 8;
+    const cols = 8;
+    const rH = 256 / rows;
+    const cW = 256 / cols;
+
+    for (let r = 0; r < rows; r++) {
+      const off = (r % 2) * (cW * 0.45);
+      for (let c = -1; c <= cols; c++) {
+        ctx.fillStyle = stones[(r * 3 + c * 5 + 16) % stones.length];
+        const x = c * cW + off + 2;
+        const y = r * rH + 2;
+        const w = cW - 4;
+        const h = rH - 4;
+        ctx.beginPath();
+        ctx.roundRect(x, y, w, h, 5);
+        ctx.fill();
+      }
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeatX, repeatY);
+    return new THREE.MeshStandardMaterial({
+      map: tex,
+      bumpMap: tex,
+      bumpScale: 0.02,
+      roughness: 0.85,
+      metalness: 0.02
+    });
+  }
+
+  function createSignBoardMesh(width, height, drawCallback) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = Math.round(512 * (height / width));
+    const ctx = canvas.getContext('2d');
+
+    // Crisp white enamel background with subtle warm border
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#CBD5E1';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(4, 4, canvas.width - 8, canvas.height - 8);
+
+    drawCallback(ctx, canvas.width, canvas.height);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.anisotropy = 4;
+
+    const signGroup = new THREE.Group();
+    // Dark backing frame
+    const frame = new THREE.Mesh(
+      new THREE.BoxGeometry(width + 0.08, height + 0.08, 0.08),
+      new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 })
+    );
+    signGroup.add(frame);
+
+    const face = new THREE.Mesh(
+      new THREE.PlaneGeometry(width, height),
+      new THREE.MeshStandardMaterial({ map: tex, roughness: 0.3, metalness: 0.05 })
+    );
+    face.position.z = 0.045;
+    signGroup.add(face);
+
+    return signGroup;
+  }
+
+  // ─── Architectural Sub-Components (Windows, Planters, Trees, Lamps) ────────
+  const frameMatWhite = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.5 });
+  const frameMatDark = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.45 });
+  const stoneCorniceMat = new THREE.MeshStandardMaterial({ color: 0xE7E5E4, roughness: 0.7 });
+  const glassWarmLitMat = new THREE.MeshStandardMaterial({
+    color: 0xFEF08A,
+    emissive: 0xFACC15,
+    emissiveIntensity: 0.55,
+    roughness: 0.2
+  });
+  const glassSoftLitMat = new THREE.MeshStandardMaterial({
+    color: 0xFDE68A,
+    emissive: 0xF59E0B,
+    emissiveIntensity: 0.35,
+    roughness: 0.25
+  });
+  const glassSlateMat = new THREE.MeshStandardMaterial({
+    color: 0x475569,
+    roughness: 0.15,
+    metalness: 0.65
+  });
+
+  /**
+   * Builds an acrokat-style multi-pane recessed architectural window with sill,
+   * outer frame, muntin crossbars, and warm lit or reflective glass.
+   */
+  function createMultiPaneWindow(w, h, isLit = true, darkFrame = false) {
+    const win = new THREE.Group();
+    const fMat = darkFrame ? frameMatDark : frameMatWhite;
+
+    // Outer frame box
+    const outer = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.08), fMat);
+    win.add(outer);
+
+    // Glass pane slightly recessed
+    const gMat = isLit ? (Math.random() > 0.35 ? glassWarmLitMat : glassSoftLitMat) : glassSlateMat;
+    const glass = new THREE.Mesh(new THREE.BoxGeometry(w - 0.1, h - 0.1, 0.05), gMat);
+    glass.position.z = 0.025;
+    win.add(glass);
+
+    // Vertical & horizontal muntin bars
+    const vBar = new THREE.Mesh(new THREE.BoxGeometry(0.035, h - 0.08, 0.07), fMat);
+    vBar.position.z = 0.03;
+    win.add(vBar);
+
+    const hBar = new THREE.Mesh(new THREE.BoxGeometry(w - 0.08, 0.035, 0.07), fMat);
+    hBar.position.z = 0.03;
+    win.add(hBar);
+
+    // Protruding stone windowsill at bottom
+    const sill = new THREE.Mesh(new THREE.BoxGeometry(w + 0.08, 0.06, 0.14), stoneCorniceMat);
+    sill.position.set(0, -h / 2 - 0.02, 0.03);
+    win.add(sill);
+
+    // Top lintel
+    const lintel = new THREE.Mesh(new THREE.BoxGeometry(w + 0.06, 0.06, 0.11), stoneCorniceMat);
+    lintel.position.set(0, h / 2 + 0.02, 0.02);
+    win.add(lintel);
+
+    return win;
+  }
+
+  /**
+   * Builds a stone planter box filled with lush green bushes & flower accents
+   * (just like the rooftop and terrace planters in acrokat.me).
+   */
+  function createPlanterBox(length = 1.2, width = 0.45) {
+    const group = new THREE.Group();
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(length, 0.32, width),
+      new THREE.MeshStandardMaterial({ color: 0xD6D3D1, roughness: 0.8 })
+    );
+    box.position.y = 0.16;
+    box.castShadow = true;
+    box.receiveShadow = true;
+    group.add(box);
+
+    const soil = new THREE.Mesh(
+      new THREE.BoxGeometry(length - 0.08, 0.05, width - 0.08),
+      new THREE.MeshStandardMaterial({ color: 0x57534E, roughness: 0.95 })
+    );
+    soil.position.y = 0.31;
+    group.add(soil);
+
+    const greens = [0x4D9B6A, 0x3D8458, 0x62B07E, 0x529E71];
+    const count = Math.max(3, Math.floor(length * 3.5));
+    for (let i = 0; i < count; i++) {
+      const r = 0.16 + (i % 2) * 0.04;
+      const bush = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(r, 1),
+        new THREE.MeshStandardMaterial({ color: greens[i % greens.length], roughness: 0.78 })
+      );
+      const t = count === 1 ? 0 : (i / (count - 1) - 0.5) * (length - 0.24);
+      bush.position.set(t, 0.38 + (i % 2) * 0.04, ((i % 3) - 1) * 0.04);
+      bush.castShadow = true;
+      group.add(bush);
+    }
+    return group;
+  }
+
+  /**
+   * Builds a vintage wrought-iron streetlamp with a glowing warm lantern.
+   */
+  function createStreetLamp(x, y, z) {
+    const lamp = new THREE.Group();
+    lamp.position.set(x, y, z);
+
+    const ironMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.4, metalness: 0.6 });
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.13, 0.25, 8), ironMat);
+    base.position.y = 0.125;
+    lamp.add(base);
+
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 1.45, 8), ironMat);
+    pole.position.y = 0.85;
+    pole.castShadow = true;
+    lamp.add(pole);
+
+    const lantern = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.14, 0.09, 0.28, 6),
+      glassWarmLitMat
+    );
+    lantern.position.y = 1.65;
+    lamp.add(lantern);
+
+    const cap = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.14, 6), ironMat);
+    cap.position.y = 1.84;
+    lamp.add(cap);
+
+    return lamp;
+  }
+
+  // ─── Initialize Three.js Scene ─────────────────────────────────────────────
+  function initIsland() {
+    const canvas = document.getElementById('islandCanvas');
+    if (!canvas || typeof THREE === 'undefined') return;
+
+    clock = new THREE.Clock();
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xEBF4F2); // Soft minty serene pastel
-    scene.fog = new THREE.FogExp2(0xEBF4F2, 0.007);
+    scene.background = new THREE.Color(0xEBF4F2);
+    scene.fog = new THREE.FogExp2(0xEBF4F2, 0.0085);
 
-    // 2. Camera with pleasant angled isometric perspective
-    const aspect = container.clientWidth / container.clientHeight;
-    camera = new THREE.PerspectiveCamera(36, aspect, 0.5, 600);
-    // Framed closer and angled to showcase the buildings and paths
-    camera.position.set(16, 17, 24);
+    const w = window.innerWidth || 1440;
+    const h = window.innerHeight || 900;
 
-    // 3. Renderer
+    // 32° FOV gives an orthographic-like architectural diorama feel with zero fisheye distortion
+    camera = new THREE.PerspectiveCamera(32, w / h, 0.5, 200);
+    camera.position.set(DEFAULT_CAM_POS.x, DEFAULT_CAM_POS.y, DEFAULT_CAM_POS.z);
+
     renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       antialias: true,
-      powerPreference: 'high-performance',
-      alpha: true
+      powerPreference: 'high-performance'
     });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h, true);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.06;
 
-    // 4. OrbitControls
-    if (typeof THREE.OrbitControls !== 'undefined') {
+    if (THREE.OrbitControls) {
       controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.target.set(DEFAULT_TARGET.x, DEFAULT_TARGET.y, DEFAULT_TARGET.z);
       controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
-      controls.target.set(1.0, 1.2, 0);
-      controls.minDistance = 12;
-      controls.maxDistance = 65;
-      controls.maxPolarAngle = Math.PI / 2.15;
+      controls.dampingFactor = 0.06;
+      controls.maxPolarAngle = Math.PI / 2 - 0.05;
+      controls.minPolarAngle = Math.PI / 7;
+      controls.minDistance = 10;
+      controls.maxDistance = 42;
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.5;
-    }
+      controls.autoRotateSpeed = 0.32;
 
-    // 5. Lighting: Warm bright sun + soft fill
-    const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x86EFAC, 0.9);
-    hemiLight.position.set(0, 50, 0);
-    scene.add(hemiLight);
-
-    const sun = new THREE.DirectionalLight(0xFFFAF0, 1.55);
-    sun.position.set(30, 42, 22);
-    sun.castShadow = true;
-    sun.shadow.mapSize.width = 2048;
-    sun.shadow.mapSize.height = 2048;
-    sun.shadow.camera.near = 10;
-    sun.shadow.camera.far = 130;
-    const d = 22;
-    sun.shadow.camera.left = -d;
-    sun.shadow.camera.right = d;
-    sun.shadow.camera.top = d;
-    sun.shadow.camera.bottom = -d;
-    sun.shadow.bias = -0.0004;
-    scene.add(sun);
-
-    const ambient = new THREE.AmbientLight(0xFFFFFF, 0.38);
-    scene.add(ambient);
-
-    // 6. Build the Crafted Island World
-    buildOceanWater();
-    buildIslandGround();
-    buildRoadsAndPaths();
-    buildPerimeterRocks();
-    buildPierAndBoat();
-    buildFloraAndCherryTrees();
-    buildStreetLamps();
-
-    // 7. Build All Landmarks
-    buildBguBuilding();
-    buildLegalAiCourthouse();
-    buildTechLabBuilding();
-    buildHeritageBarnAndCow();
-    buildGuideDogHaven();
-    buildBasketballCourt();
-    buildIdfRadioOutpost();
-
-    // 8. Interaction & Listeners
-    setupInteraction();
-    window.addEventListener('resize', onWindowResize);
-
-    // 9. Start Loop
-    animate(0);
-  }
-
-  // --- Ocean Water Surface: Luminous Turquoise Ring ---
-  function buildOceanWater() {
-    const geo = new THREE.CircleGeometry(26, 48);
-    const mat = new THREE.MeshStandardMaterial({
-      color: 0x38BDF8, // Luminous tropical sea
-      roughness: 0.12,
-      metalness: 0.1,
-      transparent: true,
-      opacity: 0.82,
-      flatShading: true
-    });
-    oceanMesh = new THREE.Mesh(geo, mat);
-    oceanMesh.rotation.x = -Math.PI / 2;
-    oceanMesh.position.y = 0.45;
-    oceanMesh.receiveShadow = true;
-    scene.add(oceanMesh);
-  }
-
-  // --- Island Ground: Organic sculpted plateau with grass and sand ---
-  function buildIslandGround() {
-    const island = new THREE.Group();
-
-    // Sand/Rock base
-    const sandGeo = new THREE.CylinderGeometry(14.5, 17.5, 1.4, 36);
-    const sPos = sandGeo.attributes.position;
-    for (let i = 0; i < sPos.count; i++) {
-      const x = sPos.getX(i);
-      const z = sPos.getZ(i);
-      const dist = Math.sqrt(x * x + z * z);
-      const angle = Math.atan2(z, x);
-      const noise = Math.sin(angle * 4) * 0.7 + Math.cos(angle * 7) * 0.4;
-      if (dist > 5) {
-        sPos.setX(i, x + Math.cos(angle) * noise);
-        sPos.setZ(i, z + Math.sin(angle) * noise);
-      }
-    }
-    sandGeo.computeVertexNormals();
-    const sandMat = new THREE.MeshStandardMaterial({ color: 0xD4B982, roughness: 0.9, flatShading: true });
-    const sandMesh = new THREE.Mesh(sandGeo, sandMat);
-    sandMesh.position.y = 0.2;
-    sandMesh.receiveShadow = true;
-    island.add(sandMesh);
-
-    // Lush Emerald Grass Top
-    const grassGeo = new THREE.CylinderGeometry(13.2, 14.5, 1.2, 36);
-    const gPos = grassGeo.attributes.position;
-    for (let i = 0; i < gPos.count; i++) {
-      const x = gPos.getX(i);
-      const y = gPos.getY(i);
-      const z = gPos.getZ(i);
-      const dist = Math.sqrt(x * x + z * z);
-      const angle = Math.atan2(z, x);
-      const noise = Math.sin(angle * 4) * 0.5 + Math.cos(angle * 6) * 0.3;
-      if (dist > 4) {
-        gPos.setX(i, x + Math.cos(angle) * noise);
-        gPos.setZ(i, z + Math.sin(angle) * noise);
-      }
-      if (y > 0) {
-        const hill = Math.max(0, 1 - (dist / 13)) * 0.7;
-        gPos.setY(i, y + hill);
-      }
-    }
-    grassGeo.computeVertexNormals();
-    const grassMat = new THREE.MeshStandardMaterial({ color: 0x48BB78, roughness: 0.75, flatShading: true });
-    const grassMesh = new THREE.Mesh(grassGeo, grassMat);
-    grassMesh.position.y = 1.05;
-    grassMesh.receiveShadow = true;
-    grassMesh.castShadow = true;
-    island.add(grassMesh);
-
-    scene.add(island);
-  }
-
-  // --- Winding Cobblestone Road Connecting Everything ---
-  function buildRoadsAndPaths() {
-    const roadMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, roughness: 0.95, flatShading: true });
-
-    // Main central courtyard plaza
-    const plaza = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 0.08, 16), roadMat);
-    plaza.position.set(0, 1.85, 0);
-    plaza.receiveShadow = true;
-    scene.add(plaza);
-
-    // Path segments connecting outward
-    const pathSegments = [
-      { x: 3.5, z: 1.2, r: 1.8 },
-      { x: 5.5, z: 2.2, r: 1.6 },
-      { x: 2.5, z: 5.2, r: 1.5 },
-      { x: -3.5, z: 2.2, r: 1.6 },
-      { x: -5.5, z: 3.8, r: 1.5 },
-      { x: 4.8, z: -3.8, r: 1.7 },
-      { x: -4.5, z: -3.8, r: 1.6 },
-      { x: -7.5, z: 0.5, r: 1.5 },
-      { x: -9.5, z: -0.2, r: 1.4 } // Leads to pier
-    ];
-
-    pathSegments.forEach(p => {
-      const tile = new THREE.Mesh(new THREE.CylinderGeometry(p.r, p.r, 0.06, 10), roadMat);
-      tile.position.set(p.x, 1.82, p.z);
-      tile.receiveShadow = true;
-      scene.add(tile);
-    });
-  }
-
-  // --- Perimeter Rocky Cliffs (like Kat's island boulders) ---
-  function buildPerimeterRocks() {
-    const rockMat = new THREE.MeshStandardMaterial({ color: 0xA38870, roughness: 0.9, flatShading: true });
-    const rockData = [
-      { x: -14.5, z: 3.0, s: 1.6 },
-      { x: -14.0, z: -5.0, s: 1.8 },
-      { x: -10.5, z: -12.0, s: 1.7 },
-      { x: 0.5, z: -15.5, s: 2.0 },
-      { x: 10.5, z: -11.5, s: 1.8 },
-      { x: 14.5, z: -3.5, s: 1.9 },
-      { x: 14.0, z: 5.5, s: 1.7 },
-      { x: 8.5, z: 13.0, s: 1.9 },
-      { x: -2.0, z: 14.5, s: 1.8 },
-      { x: -9.5, z: 11.5, s: 1.6 }
-    ];
-
-    rockData.forEach(r => {
-      const geo = new THREE.DodecahedronGeometry(r.s, 0);
-      const mesh = new THREE.Mesh(geo, rockMat);
-      mesh.position.set(r.x, 0.6, r.z);
-      mesh.rotation.set(r.x, r.z, 0.5);
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      scene.add(mesh);
-    });
-  }
-
-  // --- Wooden Pier & Sailboat ---
-  function buildPierAndBoat() {
-    const woodMat = new THREE.MeshStandardMaterial({ color: 0x854D0E, roughness: 0.85, flatShading: true });
-
-    // Wooden deck extending into water
-    const pier = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.18, 1.4), woodMat);
-    pier.position.set(-11.5, 0.35, -0.5);
-    pier.castShadow = true;
-    pier.receiveShadow = true;
-    scene.add(pier);
-
-    // Pilings (posts) in water
-    for (let px of [-13.2, -11.5, -9.8]) {
-      for (let pz of [-1.0, 0.0]) {
-        const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.9, 6), woodMat);
-        post.position.set(px, 0.05, pz);
-        post.castShadow = true;
-        scene.add(post);
-      }
-    }
-
-    // Cute Sailboat docked at pier
-    const boatGroup = new THREE.Group();
-    boatGroup.position.set(-13.8, 0.15, 0.8);
-    boatGroup.rotation.y = 0.35;
-
-    // Hull
-    const hullMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.5 });
-    const hullBottom = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.45, 0.9), hullMat);
-    hullBottom.castShadow = true;
-    boatGroup.add(hullBottom);
-
-    const blueTrim = new THREE.Mesh(new THREE.BoxGeometry(2.05, 0.1, 0.94), new THREE.MeshStandardMaterial({ color: 0x2563EB }));
-    blueTrim.position.y = 0.18;
-    boatGroup.add(blueTrim);
-
-    // Mast
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 2.2, 6), woodMat);
-    mast.position.set(0.1, 1.1, 0);
-    boatGroup.add(mast);
-
-    // Sail
-    const sailGeo = new THREE.ConeGeometry(0.7, 1.6, 3);
-    sailGeo.rotateZ(-Math.PI / 2);
-    const sailMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.4, side: THREE.DoubleSide });
-    const sail = new THREE.Mesh(sailGeo, sailMat);
-    sail.position.set(0.45, 1.2, 0);
-    sail.castShadow = true;
-    boatGroup.add(sail);
-
-    scene.add(boatGroup);
-    registerLandmark(boatGroup, LANDMARKS.pier, 2.2);
-  }
-
-  // --- Flora: Deciduous Trees & Pink Cherry Blossoms (Acrokat style) ---
-  function buildFloraAndCherryTrees() {
-    const trees = [
-      // Cherry Blossom Trees (Pink)
-      { x: -3.5, z: -5.5, type: 'cherry', s: 1.2 },
-      { x: 3.8, z: -7.5, type: 'cherry', s: 1.1 },
-      { x: -8.0, z: -2.5, type: 'cherry', s: 1.15 },
-      { x: 8.5, z: 6.5, type: 'cherry', s: 1.2 },
-      // Green Leafy Trees
-      { x: -2.5, z: 7.5, type: 'green', s: 1.3 },
-      { x: -6.5, z: 8.0, type: 'green', s: 1.1 },
-      { x: 8.5, z: -2.0, type: 'green', s: 1.25 },
-      { x: 2.0, z: -12.5, type: 'green', s: 1.2 },
-      { x: -6.0, z: -11.0, type: 'green', s: 1.05 }
-    ];
-
-    trees.forEach(t => {
-      const tree = createStylizedTree(t.type, t.s);
-      tree.position.set(t.x, 1.8, t.z);
-      scene.add(tree);
-    });
-  }
-
-  function createStylizedTree(type, scale = 1) {
-    const tree = new THREE.Group();
-    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6B4226, roughness: 0.9, flatShading: true });
-    const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.18 * scale, 0.25 * scale, 1.5 * scale, 6), trunkMat);
-    trunk.position.y = 0.75 * scale;
-    trunk.castShadow = true;
-    tree.add(trunk);
-
-    const foliageColor = type === 'cherry' ? 0xF472B6 : 0x48BB78;
-    const foliageMat = new THREE.MeshStandardMaterial({ color: foliageColor, roughness: 0.7, flatShading: true });
-
-    // Multi-puff cloud foliage
-    const puffOffsets = [
-      { x: 0, y: 1.7, z: 0, r: 0.8 },
-      { x: 0.35, y: 1.9, z: 0.2, r: 0.65 },
-      { x: -0.3, y: 1.8, z: -0.25, r: 0.65 },
-      { x: 0, y: 2.2, z: 0, r: 0.6 }
-    ];
-
-    puffOffsets.forEach(p => {
-      const puff = new THREE.Mesh(new THREE.DodecahedronGeometry(p.r * scale, 0), foliageMat);
-      puff.position.set(p.x * scale, p.y * scale, p.z * scale);
-      puff.castShadow = true;
-      tree.add(puff);
-    });
-
-    return tree;
-  }
-
-  // --- Street Lamps Along Pathway ---
-  function buildStreetLamps() {
-    const lampPositions = [
-      { x: -1.8, z: 2.2 },
-      { x: 2.2, z: 2.2 },
-      { x: -4.5, z: 1.5 },
-      { x: 4.8, z: -1.5 }
-    ];
-
-    const poleMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, metalness: 0.8, roughness: 0.3 });
-    const bulbMat = new THREE.MeshBasicMaterial({ color: 0xFEF08A });
-
-    lampPositions.forEach(p => {
-      const lamp = new THREE.Group();
-      lamp.position.set(p.x, 1.8, p.z);
-
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 1.8, 6), poleMat);
-      post.position.y = 0.9;
-      post.castShadow = true;
-      lamp.add(post);
-
-      const head = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.24, 0.24), bulbMat);
-      head.position.y = 1.8;
-      lamp.add(head);
-
-      const cap = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.15, 4), poleMat);
-      cap.rotation.y = Math.PI / 4;
-      cap.position.y = 1.98;
-      lamp.add(cap);
-
-      scene.add(lamp);
-    });
-  }
-
-  // =========================================================================
-  // 🏛️ LANDMARKS: Rich, charming, crafted low-poly buildings
-  // =========================================================================
-
-  // 1. 🎓 Ben-Gurion University Academic Hall
-  function buildBguBuilding() {
-    const data = LANDMARKS.bgu;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-
-    const stoneMat = new THREE.MeshStandardMaterial({ color: 0xE5D0B5, roughness: 0.8, flatShading: true }); // Warm limestone
-    const roofMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.6, flatShading: true });
-    const winMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.2, metalness: 0.5 });
-    const doorMat = new THREE.MeshStandardMaterial({ color: 0x78350F, roughness: 0.7 });
-
-    // Main 2-story building body
-    const body = new THREE.Mesh(new THREE.BoxGeometry(3.8, 2.2, 2.4), stoneMat);
-    body.position.y = 1.1;
-    body.castShadow = true;
-    group.add(body);
-
-    // Sloped Tile Roof
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(2.8, 1.1, 4), roofMat);
-    roof.rotation.y = Math.PI / 4;
-    roof.position.y = 2.75;
-    roof.castShadow = true;
-    group.add(roof);
-
-    // Center Bell / Clock Tower
-    const tower = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.8, 1.2), stoneMat);
-    tower.position.set(0, 2.6, 0.4);
-    tower.castShadow = true;
-    group.add(tower);
-
-    const towerCap = new THREE.Mesh(new THREE.ConeGeometry(0.9, 1.1, 4), roofMat);
-    towerCap.rotation.y = Math.PI / 4;
-    towerCap.position.set(0, 4.0, 0.4);
-    towerCap.castShadow = true;
-    group.add(towerCap);
-
-    // Clock Face
-    const clock = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.05, 12), new THREE.MeshBasicMaterial({ color: 0xFFFFFF }));
-    clock.rotation.x = Math.PI / 2;
-    clock.position.set(0, 3.0, 1.02);
-    group.add(clock);
-
-    // Front Windows Grid
-    for (let wx of [-1.3, -0.6, 0.6, 1.3]) {
-      for (let wy of [0.7, 1.5]) {
-        const win = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.48, 0.05), winMat);
-        win.position.set(wx, wy, 1.22);
-        group.add(win);
-      }
-    }
-
-    // Entrance Arch & Double Doors
-    const door = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.95, 0.08), doorMat);
-    door.position.set(0, 0.48, 1.22);
-    group.add(door);
-
-    // Entrance Steps
-    const steps = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.2, 0.8), stoneMat);
-    steps.position.set(0, 0.1, 1.5);
-    steps.receiveShadow = true;
-    group.add(steps);
-
-    scene.add(group);
-    registerLandmark(group, data, 4.8);
-  }
-
-  // 2. ⚖️ Legal AI Research Courthouse (Springer)
-  function buildLegalAiCourthouse() {
-    const data = LANDMARKS.legalAi;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-    group.rotation.y = -0.3;
-
-    const marbleMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.4, flatShading: true });
-    const blueMat = new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.6 });
-    const goldMat = new THREE.MeshStandardMaterial({ color: 0xF59E0B, metalness: 0.8, roughness: 0.2 });
-
-    // Main courthouse body
-    const body = new THREE.Mesh(new THREE.BoxGeometry(3.4, 2.2, 2.6), blueMat);
-    body.position.y = 1.1;
-    body.castShadow = true;
-    group.add(body);
-
-    // Neoclassical Columns in front
-    for (let cx of [-1.2, -0.4, 0.4, 1.2]) {
-      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 2.1, 8), marbleMat);
-      col.position.set(cx, 1.05, 1.4);
-      col.castShadow = true;
-      group.add(col);
-    }
-
-    // Triangular Pediment Roof
-    const pediment = new THREE.Mesh(new THREE.ConeGeometry(2.4, 0.9, 4), marbleMat);
-    pediment.rotation.y = Math.PI / 4;
-    pediment.position.set(0, 2.5, 0.4);
-    pediment.castShadow = true;
-    group.add(pediment);
-
-    // Gold Scales of Justice Emblem on pediment
-    const scales = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.04, 6, 12), goldMat);
-    scales.position.set(0, 2.4, 1.55);
-    group.add(scales);
-
-    // Front marble steps
-    const steps = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.25, 1.0), marbleMat);
-    steps.position.set(0, 0.12, 1.5);
-    group.add(steps);
-
-    scene.add(group);
-    registerLandmark(group, data, 3.8);
-  }
-
-  // 3. 💻 The Builder's Tech Hub (Production ML)
-  function buildTechLabBuilding() {
-    const data = LANDMARKS.codeLab;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-    group.rotation.y = -0.4;
-
-    const frameMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.3, metalness: 0.6 });
-    const glassMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.1, metalness: 0.8 });
-    const glowMat = new THREE.MeshBasicMaterial({ color: 0x60A5FA });
-
-    // 3-tier stepped modern tech office
-    const tier1 = new THREE.Mesh(new THREE.BoxGeometry(3.2, 1.2, 2.6), frameMat);
-    tier1.position.y = 0.6;
-    tier1.castShadow = true;
-    group.add(tier1);
-
-    const win1 = new THREE.Mesh(new THREE.BoxGeometry(3.25, 0.6, 2.65), glassMat);
-    win1.position.y = 0.65;
-    group.add(win1);
-
-    const tier2 = new THREE.Mesh(new THREE.BoxGeometry(2.6, 1.1, 2.2), frameMat);
-    tier2.position.y = 1.75;
-    tier2.castShadow = true;
-    group.add(tier2);
-
-    const win2 = new THREE.Mesh(new THREE.BoxGeometry(2.65, 0.55, 2.25), glassMat);
-    win2.position.y = 1.75;
-    group.add(win2);
-
-    // Rooftop Server Antenna & Tech Hub Glow Sign
-    const sign = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.3, 0.08), glowMat);
-    sign.position.set(0, 2.45, 1.12);
-    group.add(sign);
-
-    scene.add(group);
-    registerLandmark(group, data, 3.5);
-  }
-
-  // 4. 🐄 The Heritage Farm & Dairy Barn (רפת המשפחה)
-  function buildHeritageBarnAndCow() {
-    const data = LANDMARKS.farm;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-    group.rotation.y = 0.35;
-
-    const barnRed = new THREE.MeshStandardMaterial({ color: 0xB91C1C, roughness: 0.8, flatShading: true });
-    const barnWhite = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.6 });
-    const roofMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 });
-
-    // Traditional Dutch Country Barn
-    const barn = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.8, 2.2), barnRed);
-    barn.position.set(0, 0.9, -0.4);
-    barn.castShadow = true;
-    group.add(barn);
-
-    // Sloped Gambrel Roof
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(2.3, 1.1, 4), roofMat);
-    roof.rotation.y = Math.PI / 4;
-    roof.position.set(0, 2.3, -0.4);
-    roof.castShadow = true;
-    group.add(roof);
-
-    // White Cross-Braces on Barn Door
-    const door = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.2, 0.06), barnWhite);
-    door.position.set(0, 0.6, 0.72);
-    group.add(door);
-
-    // Silo (Metal Grain Tower)
-    const siloMat = new THREE.MeshStandardMaterial({ color: 0x94A3B8, metalness: 0.6, roughness: 0.3 });
-    const silo = new THREE.Mesh(new THREE.CylinderGeometry(0.65, 0.65, 2.6, 12), siloMat);
-    silo.position.set(-1.8, 1.3, -0.4);
-    silo.castShadow = true;
-    group.add(silo);
-    const siloDome = new THREE.Mesh(new THREE.SphereGeometry(0.65, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2), siloMat);
-    siloDome.position.set(-1.8, 2.6, -0.4);
-    group.add(siloDome);
-
-    // Low-Poly Spotted Cow Grazing in Front
-    const cowGroup = new THREE.Group();
-    cowGroup.position.set(0.6, 0.1, 1.1);
-    cowGroup.rotation.y = -Math.PI / 5;
-
-    const cowWhite = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.7, flatShading: true });
-    const cowBlack = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.8 });
-    const cowPink = new THREE.MeshStandardMaterial({ color: 0xF472B6, roughness: 0.6 });
-
-    const cBody = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.55, 1.0), cowWhite);
-    cBody.position.y = 0.45;
-    cBody.castShadow = true;
-    cowGroup.add(cBody);
-
-    const spot = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 0.4), cowBlack);
-    spot.position.set(0.2, 0.5, 0.1);
-    cowGroup.add(spot);
-
-    // Legs
-    for (let lx of [-0.22, 0.22]) {
-      for (let lz of [-0.35, 0.35]) {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.4, 6), cowWhite);
-        leg.position.set(lx, 0.2, lz);
-        leg.castShadow = true;
-        cowGroup.add(leg);
-      }
-    }
-
-    // Head (Animated Grazing)
-    cowHeadMesh = new THREE.Group();
-    cowHeadMesh.position.set(0, 0.65, 0.55);
-    const cHead = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.36, 0.4), cowWhite);
-    cowHeadMesh.add(cHead);
-    const snout = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.18, 0.2), cowPink);
-    snout.position.set(0, -0.09, 0.24);
-    cowHeadMesh.add(snout);
-    cowGroup.add(cowHeadMesh);
-
-    group.add(cowGroup);
-
-    scene.add(group);
-    registerLandmark(group, data, 3.4);
-  }
-
-  // 5. 🦮 Guide-Dog Puppy Haven
-  function buildGuideDogHaven() {
-    const data = LANDMARKS.guideDog;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-    group.rotation.y = 0.4;
-
-    const houseWood = new THREE.MeshStandardMaterial({ color: 0x92400E, roughness: 0.85, flatShading: true });
-    const roofWood = new THREE.MeshStandardMaterial({ color: 0x451A03, roughness: 0.8 });
-
-    // Wooden Cottage / Doghouse
-    const house = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.4, 1.8), houseWood);
-    house.position.set(0, 0.7, -0.5);
-    house.castShadow = true;
-    group.add(house);
-
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.8, 0.9, 4), roofWood);
-    roof.rotation.y = Math.PI / 4;
-    roof.position.set(0, 1.8, -0.5);
-    roof.castShadow = true;
-    group.add(roof);
-
-    // Front arch door
-    const door = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.9, 0.1), new THREE.MeshBasicMaterial({ color: 0x1A120B }));
-    door.position.set(0, 0.45, 0.42);
-    group.add(door);
-
-    // Puppy in Training (with signature blue guide-dog service vest!)
-    const pupGroup = new THREE.Group();
-    pupGroup.position.set(0.7, 0.1, 0.6);
-    pupGroup.rotation.y = -Math.PI / 4;
-
-    const pupGold = new THREE.MeshStandardMaterial({ color: 0xD97706, roughness: 0.8, flatShading: true });
-    const vestBlue = new THREE.MeshStandardMaterial({ color: 0x2563EB, roughness: 0.6, flatShading: true });
-
-    // Body in blue service vest
-    const pBody = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.45, 0.75), vestBlue);
-    pBody.position.y = 0.35;
-    pBody.castShadow = true;
-    pupGroup.add(pBody);
-
-    // Legs
-    for (let lx of [-0.18, 0.18]) {
-      for (let lz of [-0.25, 0.25]) {
-        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.35, 6), pupGold);
-        leg.position.set(lx, 0.17, lz);
-        pupGroup.add(leg);
-      }
-    }
-
-    // Head
-    puppyHeadMesh = new THREE.Group();
-    puppyHeadMesh.position.set(0, 0.58, 0.4);
-    const head = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.32, 0.36), pupGold);
-    head.castShadow = true;
-    puppyHeadMesh.add(head);
-
-    // Floppy ears
-    for (let ex of [-0.2, 0.2]) {
-      const ear = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.24, 0.14), pupGold);
-      ear.position.set(ex, -0.05, 0);
-      puppyHeadMesh.add(ear);
-    }
-    const snout = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.16, 0.18), pupGold);
-    snout.position.set(0, -0.06, 0.24);
-    puppyHeadMesh.add(snout);
-    pupGroup.add(puppyHeadMesh);
-
-    // Tail (Wags in animation loop)
-    puppyTailMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.02, 0.35, 6), pupGold);
-    puppyTailMesh.position.set(0, 0.48, -0.38);
-    puppyTailMesh.rotation.x = -Math.PI / 4;
-    pupGroup.add(puppyTailMesh);
-
-    group.add(pupGroup);
-
-    scene.add(group);
-    registerLandmark(group, data, 2.8);
-  }
-
-  // 6. 🏀 Streetball Half-Court
-  function buildBasketballCourt() {
-    const data = LANDMARKS.basketball;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-    group.rotation.y = 0.25;
-
-    // Court Surface: Maccabi Blue + Gold Key
-    const court = new THREE.Mesh(new THREE.BoxGeometry(4.8, 0.1, 4.2), new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.6 }));
-    court.position.y = 0.05;
-    court.receiveShadow = true;
-    group.add(court);
-
-    const keyMesh = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.12, 2.2), new THREE.MeshStandardMaterial({ color: 0xF59E0B, roughness: 0.6 }));
-    keyMesh.position.set(0, 0.06, -0.9);
-    group.add(keyMesh);
-
-    // Hoop Post & Backboard
-    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 2.8, 8), new THREE.MeshStandardMaterial({ color: 0x0F172A, metalness: 0.7 }));
-    pole.position.set(0, 1.4, -1.9);
-    pole.castShadow = true;
-    group.add(pole);
-
-    const bb = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.95, 0.05), new THREE.MeshStandardMaterial({ color: 0xF8FAFC }));
-    bb.position.set(0, 2.4, -1.8);
-    bb.castShadow = true;
-    group.add(bb);
-
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.025, 8, 16), new THREE.MeshStandardMaterial({ color: 0xEF4444 }));
-    rim.rotation.x = Math.PI / 2;
-    rim.position.set(0, 2.15, -1.5);
-    group.add(rim);
-
-    // Basketball (Clickable Easter Egg)
-    basketballBasePos = new THREE.Vector3(0.9, 0.25, 0.8);
-    basketballMesh = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 14), new THREE.MeshStandardMaterial({ color: 0xEA580C, roughness: 0.5 }));
-    basketballMesh.position.copy(basketballBasePos);
-    basketballMesh.castShadow = true;
-    group.add(basketballMesh);
-
-    scene.add(group);
-    registerLandmark(group, data, 3.2);
-  }
-
-  // 🏀 Shoot Hoop Animation
-  function triggerBasketballShot() {
-    if (isShooting || !basketballMesh) return;
-    isShooting = true;
-    const start = basketballBasePos.clone();
-    const hoop = new THREE.Vector3(0, 2.2, -1.5);
-    const apex = new THREE.Vector3(0.4, 3.8, -0.3);
-    const duration = 1100;
-    const startTime = performance.now();
-
-    function updateShot(now) {
-      const elapsed = now - startTime;
-      const t = Math.min(elapsed / duration, 1);
-      if (t < 0.65) {
-        const subT = t / 0.65;
-        const x = (1 - subT) * (1 - subT) * start.x + 2 * (1 - subT) * subT * apex.x + subT * subT * hoop.x;
-        const y = (1 - subT) * (1 - subT) * start.y + 2 * (1 - subT) * subT * apex.y + subT * subT * hoop.y;
-        const z = (1 - subT) * (1 - subT) * start.z + 2 * (1 - subT) * subT * apex.z + subT * subT * hoop.z;
-        basketballMesh.position.set(x, y, z);
-      } else {
-        const bounceT = (t - 0.65) / 0.35;
-        const dropY = Math.max(0.25, hoop.y - (bounceT * 2.5) + Math.sin(bounceT * Math.PI) * 0.35);
-        basketballMesh.position.set(hoop.x, dropY, hoop.z);
-      }
-      basketballMesh.rotation.x += 0.25;
-
-      if (t < 1) {
-        requestAnimationFrame(updateShot);
-      } else {
-        setTimeout(() => {
-          basketballMesh.position.copy(basketballBasePos);
-          isShooting = false;
-        }, 600);
-      }
-    }
-    requestAnimationFrame(updateShot);
-  }
-
-  // 7. 📻 IDF Radio Outpost
-  function buildIdfRadioOutpost() {
-    const data = LANDMARKS.idf;
-    const group = new THREE.Group();
-    group.position.set(data.focusPos.x, data.focusPos.y, data.focusPos.z);
-
-    // Tactical Olive Tent
-    const tentMat = new THREE.MeshStandardMaterial({ color: 0x4B5320, roughness: 0.9, flatShading: true });
-    const tent = new THREE.Mesh(new THREE.ConeGeometry(1.5, 1.4, 4), tentMat);
-    tent.rotation.y = Math.PI / 4;
-    tent.position.y = 0.7;
-    tent.castShadow = true;
-    group.add(tent);
-
-    // Communications Tower Mast
-    const mastMat = new THREE.MeshStandardMaterial({ color: 0x94A3B8, metalness: 0.7, roughness: 0.3 });
-    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.16, 4.4, 8), mastMat);
-    mast.position.set(1.4, 2.2, -0.6);
-    mast.castShadow = true;
-    group.add(mast);
-
-    // Dish
-    const dish = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 6, 0, Math.PI * 2, 0, Math.PI / 3), mastMat);
-    dish.position.set(1.4, 3.2, -0.6);
-    dish.rotation.x = Math.PI / 3;
-    group.add(dish);
-
-    // Blinking Beacon
-    beaconMesh = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), new THREE.MeshBasicMaterial({ color: 0xEF4444 }));
-    beaconMesh.position.set(1.4, 4.45, -0.6);
-    group.add(beaconMesh);
-
-    beaconLight = new THREE.PointLight(0xEF4444, 1.0, 4);
-    beaconLight.position.set(1.4, 4.5, -0.6);
-    group.add(beaconLight);
-
-    scene.add(group);
-    registerLandmark(group, data, 4.6);
-  }
-
-  // --- Register Landmark with Floating Marker ---
-  function registerLandmark(group, data, heightOffset = 3.5) {
-    // Elegant floating marker capsule
-    const marker = new THREE.Group();
-    marker.position.set(0, heightOffset, 0);
-
-    const pinMat = new THREE.MeshStandardMaterial({
-      color: 0x0F172A, // Sleek dark slate capsule
-      roughness: 0.3,
-      metalness: 0.2
-    });
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.32, 14, 14), pinMat);
-    sphere.castShadow = true;
-    marker.add(sphere);
-
-    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.38, 8), pinMat);
-    cone.position.y = -0.28;
-    cone.rotation.x = Math.PI;
-    marker.add(cone);
-
-    group.add(marker);
-
-    group.userData = {
-      isLandmark: true,
-      data: data,
-      marker: marker,
-      baseY: heightOffset,
-      seed: Math.random() * 10
-    };
-
-    landmarks.push(group);
-
-    // Enable raycasting
-    group.traverse(child => {
-      if (child.isMesh) {
-        child.userData = { parentLandmark: group };
-        clickableObjects.push(child);
-      }
-    });
-  }
-
-  // --- Interaction & Controls ---
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-
-  function setupInteraction() {
-    canvas.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('click', onClick);
-    canvas.addEventListener('touchstart', onTouchStart, { passive: true });
-
-    // Switch to Classic Resume View
-    const classicBtn = document.getElementById('switchToClassicBtn');
-    if (classicBtn) classicBtn.addEventListener('click', () => switchViewMode('classic'));
-
-    // Switch to 3D Island
-    const islandBtn = document.getElementById('switchToIslandBtn');
-    if (islandBtn) islandBtn.addEventListener('click', () => switchViewMode('island'));
-
-    const navIslandBtn = document.getElementById('navIslandBtn');
-    if (navIslandBtn) navIslandBtn.addEventListener('click', () => switchViewMode('island'));
-
-    const mmIslandBtn = document.getElementById('mmIslandBtn');
-    if (mmIslandBtn) {
-      mmIslandBtn.addEventListener('click', () => {
-        const burger = document.getElementById('burger');
-        if (burger && burger.getAttribute('aria-expanded') === 'true') burger.click();
-        switchViewMode('island');
+      controls.addEventListener('start', () => {
+        isCameraTransitioning = false;
       });
     }
 
-    // Acrokat-style Minimal Bottom Pill Controls: [ ⏸ / ▶ ] and [ ↺ ]
+    setupLights();
+
+    islandGroup = new THREE.Group();
+    // Slight shift to the right so the left editorial text ("Tal Klein.") never overlaps buildings
+    islandGroup.position.set(1.6, -0.4, 0);
+    scene.add(islandGroup);
+
+    buildIslandBase();
+    buildRiverAndStoneBridge();
+    buildCobblestoneRoads();
+
+    // Build all 8 high-precision landmarks
+    buildResearchHQ();      // Foreground centerpiece: 3-story brick & stone (DeepMind style)
+    buildBGUHall();         // Back-left academic hall: sandstone brick & BGU crest (Michigan style)
+    buildTechHub();         // Mid-left studio: cedar wood, steel & glass (Microsoft style)
+    buildDairyBarn();       // Back-right heritage barn: red timber/brick, silo & spotted cows
+    buildPuppyHaven();      // Mid-right cottage: shingle roof, garden & guide dog in blue vest
+    buildBasketballCourt(); // Front-left streetball court: blue/gold key, hoop & swish ball
+    buildIDFOutpost();      // Back-center tactical comms outpost & blinking radar tower
+    buildCoastalPier();     // Front-right wooden pier, sandy beach & bobbing sailboat
+
+    buildTreesAndStreetFurniture();
+
+    raycaster = new THREE.Raycaster();
+    mouse = new THREE.Vector2(-999, -999);
+
+    bindEvents();
+    animate();
+  }
+
+  function setupLights() {
+    const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x68B684, 0.72);
+    hemiLight.position.set(0, 35, 0);
+    scene.add(hemiLight);
+
+    // Warm sunlit directional light casting crisp architectural shadows
+    const sunLight = new THREE.DirectionalLight(0xFFFBEB, 1.18);
+    sunLight.position.set(20, 30, 18);
+    sunLight.castShadow = true;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.camera.near = 5;
+    sunLight.shadow.camera.far = 65;
+    const d = 13.5;
+    sunLight.shadow.camera.left = -d;
+    sunLight.shadow.camera.right = d;
+    sunLight.shadow.camera.top = d;
+    sunLight.shadow.camera.bottom = -d;
+    sunLight.shadow.bias = -0.0005;
+    scene.add(sunLight);
+
+    // Soft cool fill from opposite side to illuminate brick details in shadow
+    const fillLight = new THREE.DirectionalLight(0xBAE6FD, 0.42);
+    fillLight.position.set(-18, 12, -14);
+    scene.add(fillLight);
+  }
+
+  // ─── Multi-Tier Sculpted Island Base ───────────────────────────────────────
+  function buildIslandBase() {
+    // Procedural vibrant meadow grass texture
+    const gCanvas = document.createElement('canvas');
+    gCanvas.width = 256;
+    gCanvas.height = 256;
+    const gCtx = gCanvas.getContext('2d');
+    gCtx.fillStyle = '#4EA866';
+    gCtx.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 600; i++) {
+      gCtx.fillStyle = i % 2 === 0 ? 'rgba(62, 145, 84, 0.35)' : 'rgba(102, 190, 122, 0.35)';
+      gCtx.fillRect((i * 37) % 256, (i * 73) % 256, 6, 6);
+    }
+    const grassTex = new THREE.CanvasTexture(gCanvas);
+    grassTex.wrapS = THREE.RepeatWrapping;
+    grassTex.wrapT = THREE.RepeatWrapping;
+    grassTex.repeat.set(6, 6);
+
+    // 1. Bottom dark slate-earth bevel (thick floating island base like acrokat.me)
+    const rockGeo = new THREE.CylinderGeometry(9.7, 7.2, 2.1, 64);
+    const rockMat = new THREE.MeshStandardMaterial({ color: 0x4A5D66, roughness: 0.88 });
+    const rockMesh = new THREE.Mesh(rockGeo, rockMat);
+    rockMesh.position.y = -1.35;
+    rockMesh.receiveShadow = true;
+    islandGroup.add(rockMesh);
+
+    // 2. Crisp light sage/limestone bevel rim around the island
+    const sandGeo = new THREE.CylinderGeometry(9.95, 9.65, 0.42, 64);
+    const sandMat = new THREE.MeshStandardMaterial({ color: 0xA7D7B8, roughness: 0.82 });
+    const sandMesh = new THREE.Mesh(sandGeo, sandMat);
+    sandMesh.position.y = -0.18;
+    sandMesh.receiveShadow = true;
+    islandGroup.add(sandMesh);
+
+    // 3. Main vibrant spring-meadow grass plateau
+    const grassGeo = new THREE.CylinderGeometry(9.6, 9.8, 0.48, 64);
+    const grassMat = new THREE.MeshStandardMaterial({
+      map: grassTex,
+      color: 0x58B36E,
+      roughness: 0.85
+    });
+    const grassMesh = new THREE.Mesh(grassGeo, grassMat);
+    grassMesh.position.y = 0.12;
+    grassMesh.receiveShadow = true;
+    islandGroup.add(grassMesh);
+
+    // 4. Upper northern terrace for BGU & IDF Outpost
+    const upperTerrace = new THREE.Mesh(
+      new THREE.CylinderGeometry(5.6, 5.9, 0.5, 48),
+      new THREE.MeshStandardMaterial({ map: grassTex, color: 0x4EA363, roughness: 0.85 })
+    );
+    upperTerrace.position.set(-1.5, 0.55, -3.6);
+    upperTerrace.receiveShadow = true;
+    upperTerrace.castShadow = true;
+    islandGroup.add(upperTerrace);
+
+    // Stone retaining wall trim around upper terrace
+    const wallTrim = new THREE.Mesh(
+      new THREE.CylinderGeometry(5.72, 5.82, 0.35, 48),
+      stoneCorniceMat
+    );
+    wallTrim.position.set(-1.5, 0.42, -3.6);
+    wallTrim.receiveShadow = true;
+    islandGroup.add(wallTrim);
+  }
+
+  // ─── Winding River, Coastal Bay & Arched Stone Bridge (like acrokat.me) ────
+  function buildRiverAndStoneBridge() {
+    const waterMat = new THREE.MeshStandardMaterial({
+      color: 0x38BDF8,
+      roughness: 0.15,
+      metalness: 0.18
+    });
+
+    // Winding river channel cutting from mid-east to the southeastern coastal bay
+    const riverGroup = new THREE.Group();
+    const segs = [
+      { x: 1.8, z: -0.5, w: 1.4, l: 3.0, rot: -0.35 },
+      { x: 3.2, z: 1.4, w: 1.6, l: 3.1, rot: -0.55 },
+      { x: 4.8, z: 3.1, w: 2.5, l: 3.6, rot: -0.6 },
+      { x: 5.7, z: 4.1, w: 3.6, l: 3.8, rot: -0.4 }
+    ];
+    segs.forEach(s => {
+      // Stone riverbank border
+      const bank = new THREE.Mesh(
+        new THREE.BoxGeometry(s.w + 0.35, 0.12, s.l + 0.2),
+        stoneCorniceMat
+      );
+      bank.position.set(s.x, 0.33, s.z);
+      bank.rotation.y = s.rot;
+      bank.receiveShadow = true;
+      riverGroup.add(bank);
+
+      // Glossy azure water surface
+      const water = new THREE.Mesh(
+        new THREE.BoxGeometry(s.w, 0.14, s.l),
+        waterMat
+      );
+      water.position.set(s.x, 0.35, s.z);
+      water.rotation.y = s.rot;
+      water.receiveShadow = true;
+      riverGroup.add(water);
+    });
+    riverMesh = riverGroup;
+    islandGroup.add(riverGroup);
+
+    // Arched Stone Footbridge crossing the river at (3.1, 0.38, 1.1)
+    const bridge = new THREE.Group();
+    bridge.position.set(3.1, 0.38, 1.1);
+    bridge.rotation.y = 0.98;
+
+    const cobbleMat = createCobbleMaterial(2, 1);
+    const deck = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.18, 1.25), cobbleMat);
+    deck.position.y = 0.22;
+    deck.castShadow = true;
+    deck.receiveShadow = true;
+    bridge.add(deck);
+
+    // Side stone parapets with posts
+    [-0.56, 0.56].forEach(zOff => {
+      const parapet = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.36, 0.12), stoneCorniceMat);
+      parapet.position.set(0, 0.44, zOff);
+      parapet.castShadow = true;
+      bridge.add(parapet);
+
+      [-1.08, 0, 1.08].forEach(xOff => {
+        const pillar = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.48, 0.2), stoneCorniceMat);
+        pillar.position.set(xOff, 0.48, zOff);
+        pillar.castShadow = true;
+        bridge.add(pillar);
+      });
+    });
+
+    islandGroup.add(bridge);
+  }
+
+  // ─── Cobblestone Roads & Plazas ────────────────────────────────────────────
+  function buildCobblestoneRoads() {
+    const cobbleMat = createCobbleMaterial(8, 2);
+    const plazaMat = createCobbleMaterial(4, 4);
+
+    // Central plaza in front of AI & Legal NLP HQ
+    const mainPlaza = new THREE.Mesh(new THREE.CylinderGeometry(2.8, 2.85, 0.06, 32), plazaMat);
+    mainPlaza.position.set(-0.2, 0.37, 1.4);
+    mainPlaza.receiveShadow = true;
+    islandGroup.add(mainPlaza);
+
+    const paths = [
+      // Avenue from HQ Plaza to BGU Hall
+      { x: -1.9, y: 0.58, z: -1.4, w: 1.25, l: 4.4, rot: 0.48 },
+      // Avenue from HQ Plaza to Builder's Tech Hub
+      { x: -3.2, y: 0.37, z: 0.6, w: 1.2, l: 4.8, rot: 1.35 },
+      // Avenue from HQ Plaza to Streetball Court
+      { x: -2.5, y: 0.37, z: 3.5, w: 1.15, l: 4.2, rot: 0.78 },
+      // Avenue across Stone Bridge to Puppy Haven & Dairy Barn
+      { x: 2.8, y: 0.37, z: 0.8, w: 1.15, l: 5.6, rot: -1.2 },
+      // Path from Bridge to Dairy Barn
+      { x: 4.8, y: 0.37, z: -1.6, w: 1.1, l: 4.4, rot: -0.25 }
+    ];
+
+    paths.forEach(p => {
+      const road = new THREE.Mesh(new THREE.BoxGeometry(p.w, 0.06, p.l), cobbleMat);
+      road.position.set(p.x, p.y, p.z);
+      road.rotation.y = p.rot;
+      road.receiveShadow = true;
+      islandGroup.add(road);
+
+      // Stone curb edges
+      [-p.w / 2 - 0.05, p.w / 2 + 0.05].forEach(cOff => {
+        const curb = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, p.l), stoneCorniceMat);
+        curb.position.set(
+          p.x + Math.cos(p.rot) * cOff,
+          p.y + 0.01,
+          p.z - Math.sin(p.rot) * cOff
+        );
+        curb.rotation.y = p.rot;
+        islandGroup.add(curb);
+      });
+    });
+  }
+
+  function registerInteractive(group, landmarkId) {
+    group.userData.landmarkId = landmarkId;
+    group.traverse(child => {
+      if (child.isMesh) {
+        child.userData.landmarkId = landmarkId;
+        interactiveTargets.push(child);
+      }
+    });
+  }
+
+  // ─── 1. Foreground Centerpiece: AI & Legal NLP HQ (Google DeepMind style) ──
+  function buildResearchHQ() {
+    const group = new THREE.Group();
+    group.position.set(-0.4, 0.36, 0.6);
+    group.rotation.y = 0.18;
+
+    const brickMat = createBrickMaterial('#8C4A32', '#E2DDD5', 4, 3);
+    const roofMat = createRoofShingleMaterial('#334155', 4, 4);
+
+    // Stone foundation plinth
+    const plinth = new THREE.Mesh(new THREE.BoxGeometry(3.7, 0.32, 2.7), stoneCorniceMat);
+    plinth.position.y = 0.16;
+    plinth.castShadow = true;
+    plinth.receiveShadow = true;
+    group.add(plinth);
+
+    // 3-story main brick facade block
+    const bodyW = 3.5;
+    const bodyH = 2.85;
+    const bodyD = 2.5;
+    const body = new THREE.Mesh(new THREE.BoxGeometry(bodyW, bodyH, bodyD), brickMat);
+    body.position.y = 0.32 + bodyH / 2;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    // Stone cornices separating Floor 1, Floor 2, Floor 3, and Roof Crown
+    [1.18, 2.08, 3.18].forEach((yPos, idx) => {
+      const overhang = idx === 2 ? 0.22 : 0.12;
+      const cornice = new THREE.Mesh(
+        new THREE.BoxGeometry(bodyW + overhang, idx === 2 ? 0.16 : 0.1, bodyD + overhang),
+        stoneCorniceMat
+      );
+      cornice.position.y = yPos;
+      cornice.castShadow = true;
+      group.add(cornice);
+    });
+
+    // Flat roof terrace with dark slate deck & parapet wall
+    const roofDeck = new THREE.Mesh(new THREE.BoxGeometry(bodyW - 0.1, 0.1, bodyD - 0.1), roofMat);
+    roofDeck.position.y = 3.25;
+    group.add(roofDeck);
+
+    // Rooftop garden planters (like the greenery on top of the DeepMind building in acrokat!)
+    const p1 = createPlanterBox(1.3, 0.42);
+    p1.position.set(-0.9, 3.28, 0.85);
+    group.add(p1);
+
+    const p2 = createPlanterBox(1.3, 0.42);
+    p2.position.set(0.9, 3.28, 0.85);
+    group.add(p2);
+
+    const p3 = createPlanterBox(1.2, 0.42);
+    p3.position.set(-0.9, 3.28, -0.85);
+    group.add(p3);
+
+    // Glass AI skylight atrium on roof
+    const skylight = new THREE.Mesh(
+      new THREE.BoxGeometry(1.3, 0.45, 0.95),
+      glassWarmLitMat
+    );
+    skylight.position.set(0.6, 3.5, -0.2);
+    group.add(skylight);
+
+    // Multi-pane windows across all 3 floors (Front, Back, Left, Right)
+    const floorYs = [0.76, 1.64, 2.58];
+    const colXs = [-1.2, -0.4, 0.4, 1.2];
+    floorYs.forEach((fy, fIdx) => {
+      colXs.forEach((cx, cIdx) => {
+        // Skip ground floor center for grand entrance doors
+        if (fIdx === 0 && (cIdx === 1 || cIdx === 2)) return;
+        const isLit = (fIdx + cIdx) % 2 === 0 || (fIdx === 1 && cIdx === 2);
+        const winFront = createMultiPaneWindow(0.54, 0.64, isLit, false);
+        winFront.position.set(cx, fy, bodyD / 2 + 0.03);
+        group.add(winFront);
+
+        const winBack = createMultiPaneWindow(0.54, 0.64, !isLit, false);
+        winBack.position.set(cx, fy, -bodyD / 2 - 0.03);
+        winBack.rotation.y = Math.PI;
+        group.add(winBack);
+      });
+
+      // Side facade windows
+      [-0.65, 0.65].forEach((cz, sIdx) => {
+        const winLeft = createMultiPaneWindow(0.54, 0.64, (fIdx + sIdx) % 2 === 0, false);
+        winLeft.position.set(-bodyW / 2 - 0.03, fy, cz);
+        winLeft.rotation.y = -Math.PI / 2;
+        group.add(winLeft);
+
+        const winRight = createMultiPaneWindow(0.54, 0.64, (fIdx + sIdx) % 2 === 1, false);
+        winRight.position.set(bodyW / 2 + 0.03, fy, cz);
+        winRight.rotation.y = Math.PI / 2;
+        group.add(winRight);
+      });
+    });
+
+    // Grand Entrance Portico & Double Glass Doors
+    const portico = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.95, 0.28), stoneCorniceMat);
+    portico.position.set(0, 0.75, bodyD / 2 + 0.12);
+    group.add(portico);
+
+    const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.78, 0.32), frameMatDark);
+    doorFrame.position.set(0, 0.68, bodyD / 2 + 0.13);
+    group.add(doorFrame);
+
+    const doorGlass = new THREE.Mesh(new THREE.BoxGeometry(0.96, 0.7, 0.34), glassWarmLitMat);
+    doorGlass.position.set(0, 0.68, bodyD / 2 + 0.14);
+    group.add(doorGlass);
+
+    // Crisp 3D Signboard above the ground floor portico (like "Google DeepMind" in acrokat.me!)
+    const hqSign = createSignBoardMesh(2.25, 0.52, (ctx, w, h) => {
+      // Blue & Gold AI Sparkle Icon on left
+      ctx.fillStyle = '#1D4ED8';
+      ctx.beginPath();
+      ctx.roundRect(24, 22, 74, h - 44, 14);
+      ctx.fill();
+
+      ctx.fillStyle = '#FACC15';
+      ctx.font = 'bold 46px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✦', 61, h / 2);
+
+      // Crisp Editorial Title
+      ctx.fillStyle = '#0F172A';
+      ctx.font = 'bold 40px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('AI & Legal NLP', 116, h / 2 - 12);
+
+      ctx.fillStyle = '#2563EB';
+      ctx.font = '700 24px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.fillText('Springer · AI & Law Lab', 116, h / 2 + 24);
+    });
+    hqSign.position.set(0, 1.24, bodyD / 2 + 0.24);
+    group.add(hqSign);
+
+    // Front entrance planters
+    const epL = createPlanterBox(0.75, 0.38);
+    epL.position.set(-1.15, 0.32, bodyD / 2 + 0.28);
+    group.add(epL);
+
+    const epR = createPlanterBox(0.75, 0.38);
+    epR.position.set(1.15, 0.32, bodyD / 2 + 0.28);
+    group.add(epR);
+
+    registerInteractive(group, 'research_hq');
+    islandGroup.add(group);
+  }
+
+  // ─── 2. Ben-Gurion University Hall (University of Michigan style) ──────────
+  function buildBGUHall() {
+    const group = new THREE.Group();
+    group.position.set(-3.1, 0.8, -4.1);
+    group.rotation.y = 0.32;
+
+    const sandstoneBrick = createBrickMaterial('#C89D70', '#EFECE6', 4, 3);
+    const slateRoofMat = createRoofShingleMaterial('#293548', 5, 3);
+
+    // Stone steps & foundation
+    const base = new THREE.Mesh(new THREE.BoxGeometry(4.0, 0.3, 2.5), stoneCorniceMat);
+    base.position.y = 0.15;
+    base.castShadow = true;
+    base.receiveShadow = true;
+    group.add(base);
+
+    // Main 2.5-story Academic Hall
+    const hallW = 3.7;
+    const hallH = 2.15;
+    const hallD = 2.2;
+    const hall = new THREE.Mesh(new THREE.BoxGeometry(hallW, hallH, hallD), sandstoneBrick);
+    hall.position.y = 0.3 + hallH / 2;
+    hall.castShadow = true;
+    hall.receiveShadow = true;
+    group.add(hall);
+
+    // Stone belt courses
+    [1.25, 2.42].forEach(y => {
+      const belt = new THREE.Mesh(new THREE.BoxGeometry(hallW + 0.16, 0.11, hallD + 0.16), stoneCorniceMat);
+      belt.position.y = y;
+      group.add(belt);
+    });
+
+    // Twin corner collegiate towers (like Michigan hall in acrokat.me)
+    [-1.48, 1.48].forEach(tx => {
+      const tower = new THREE.Mesh(new THREE.BoxGeometry(0.88, 2.65, 2.38), sandstoneBrick);
+      tower.position.set(tx, 0.3 + 2.65 / 2, 0);
+      tower.castShadow = true;
+      group.add(tower);
+
+      const spire = new THREE.Mesh(new THREE.ConeGeometry(0.68, 1.05, 4), slateRoofMat);
+      spire.position.set(tx, 0.3 + 2.65 + 0.52, 0);
+      spire.rotation.y = Math.PI / 4;
+      spire.castShadow = true;
+      group.add(spire);
+    });
+
+    // Pitched Gable Roof over the main hall
+    const roofPrism = new THREE.Mesh(new THREE.ConeGeometry(2.15, 1.1, 4), slateRoofMat);
+    roofPrism.scale.set(1.35, 1, 0.85);
+    roofPrism.rotation.y = Math.PI / 4;
+    roofPrism.position.y = 2.98;
+    roofPrism.castShadow = true;
+    group.add(roofPrism);
+
+    // Multi-pane windows across BGU Hall
+    [0.82, 1.78].forEach((wy, fIdx) => {
+      [-1.48, -0.62, 0.62, 1.48].forEach((wx, cIdx) => {
+        const win = createMultiPaneWindow(0.48, 0.62, (fIdx + cIdx) % 2 === 0, false);
+        win.position.set(wx, wy, hallD / 2 + 0.12);
+        group.add(win);
+      });
+    });
+
+    // Grand Double Wooden Doors with stone archway
+    const arch = new THREE.Mesh(new THREE.BoxGeometry(0.95, 1.05, 0.25), stoneCorniceMat);
+    arch.position.set(0, 0.8, hallD / 2 + 0.08);
+    group.add(arch);
+
+    const woodDoor = new THREE.Mesh(
+      new THREE.BoxGeometry(0.72, 0.86, 0.28),
+      new THREE.MeshStandardMaterial({ color: 0x5C3A21, roughness: 0.7 })
+    );
+    woodDoor.position.set(0, 0.74, hallD / 2 + 0.1);
+    group.add(woodDoor);
+
+    // Prominent Rooftop 3D Crest Signboard ("BGU · M.Sc. 92" like the blue/yellow "M" on Michigan!)
+    const bguSign = createSignBoardMesh(1.9, 0.62, (ctx, w, h) => {
+      ctx.fillStyle = '#0F2942';
+      ctx.fillRect(10, 10, w - 20, h - 20);
+
+      // Gold Flame/Star emblem
+      ctx.fillStyle = '#F59E0B';
+      ctx.beginPath();
+      ctx.arc(62, h / 2, 34, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#0F2942';
+      ctx.font = '900 34px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('BGU', 62, h / 2 + 2);
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 44px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('BEN-GURION', 114, h / 2 - 16);
+
+      ctx.fillStyle = '#FCD34D';
+      ctx.font = '700 25px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.fillText('B.Sc. & M.Sc. (GPA 92)', 114, h / 2 + 24);
+    });
+    bguSign.position.set(0, 2.85, hallD / 2 + 0.18);
+    group.add(bguSign);
+
+    registerInteractive(group, 'bgu_campus');
+    islandGroup.add(group);
+  }
+
+  // ─── 3. The Builder's Tech Lab (Microsoft Wood & Steel Pavilion style) ─────
+  function buildTechHub() {
+    const group = new THREE.Group();
+    group.position.set(-5.8, 0.36, -0.2);
+    group.rotation.y = 0.65;
+
+    const cedarBrick = createBrickMaterial('#B46535', '#78350F', 3, 3);
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.35, metalness: 0.6 });
+
+    // Lower modern architectural wing
+    const wing1 = new THREE.Mesh(new THREE.BoxGeometry(2.8, 1.65, 2.1), cedarBrick);
+    wing1.position.set(0, 0.825, 0);
+    wing1.castShadow = true;
+    wing1.receiveShadow = true;
+    group.add(wing1);
+
+    // Upper cantilevered glass & steel studio box
+    const wing2 = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.15, 1.85), steelMat);
+    wing2.position.set(-0.25, 2.15, -0.05);
+    wing2.castShadow = true;
+    group.add(wing2);
+
+    // Overhanging flat architectural roof slabs
+    const roof1 = new THREE.Mesh(new THREE.BoxGeometry(3.1, 0.14, 2.35), stoneCorniceMat);
+    roof1.position.set(0, 1.68, 0);
+    roof1.castShadow = true;
+    group.add(roof1);
+
+    const roof2 = new THREE.Mesh(new THREE.BoxGeometry(2.35, 0.14, 2.1), stoneCorniceMat);
+    roof2.position.set(-0.25, 2.75, -0.05);
+    roof2.castShadow = true;
+    group.add(roof2);
+
+    // Large floor-to-ceiling curtain wall windows
+    [-0.8, 0, 0.8].forEach((wx, idx) => {
+      const w1 = createMultiPaneWindow(0.66, 0.95, idx !== 1, true);
+      w1.position.set(wx, 0.88, 1.07);
+      group.add(w1);
+    });
+
+    [-0.65, 0.15].forEach((wx, idx) => {
+      const w2 = createMultiPaneWindow(0.68, 0.72, true, true);
+      w2.position.set(wx, 2.18, 0.9);
+      group.add(w2);
+    });
+
+    // 4-Square Colorful Tech Logo Signboard (like the Microsoft 4-color logo in acrokat.me!)
+    const techSign = createSignBoardMesh(2.05, 0.55, (ctx, w, h) => {
+      // 4-color window squares
+      const s = 26;
+      const gx = 28, gy = h / 2 - s - 3;
+      ctx.fillStyle = '#F25022'; ctx.fillRect(gx, gy, s, s);
+      ctx.fillStyle = '#7FBA00'; ctx.fillRect(gx + s + 6, gy, s, s);
+      ctx.fillStyle = '#00A4EF'; ctx.fillRect(gx, gy + s + 6, s, s);
+      ctx.fillStyle = '#FFB900'; ctx.fillRect(gx + s + 6, gy + s + 6, s, s);
+
+      ctx.fillStyle = '#0F172A';
+      ctx.font = '800 38px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Builder’s Lab', 105, h / 2 - 12);
+
+      ctx.fillStyle = '#0284C7';
+      ctx.font = '700 23px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.fillText('6.4M Docs · Speech & RL', 105, h / 2 + 22);
+    });
+    techSign.position.set(0.15, 1.98, 1.08);
+    group.add(techSign);
+
+    // Rooftop terrace planter
+    const tp = createPlanterBox(0.9, 0.4);
+    tp.position.set(0.95, 1.75, 0.5);
+    group.add(tp);
+
+    registerInteractive(group, 'tech_hub');
+    islandGroup.add(group);
+  }
+
+  // ─── 4. The Heritage Dairy Barn (רפת המשפחה — Red Brick/Wood & Silo) ──────
+  function buildDairyBarn() {
+    const group = new THREE.Group();
+    group.position.set(5.4, 0.36, -3.2);
+    group.rotation.y = -0.38;
+
+    const redBarnMat = createBrickMaterial('#B91C1C', '#FCA5A5', 4, 3);
+    const roofShingle = createRoofShingleMaterial('#3F3F46', 4, 3);
+
+    // Main Barn Body
+    const barn = new THREE.Mesh(new THREE.BoxGeometry(2.65, 1.65, 2.05), redBarnMat);
+    barn.position.y = 0.825;
+    barn.castShadow = true;
+    barn.receiveShadow = true;
+    group.add(barn);
+
+    // Gambrel-style Pitched Roof
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.95, 1.15, 4), roofShingle);
+    roof.scale.set(1.08, 1, 0.85);
+    roof.position.y = 2.18;
+    roof.rotation.y = Math.PI / 4;
+    roof.castShadow = true;
+    group.add(roof);
+
+    // White Roof Cupola
+    const cupola = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.42, 0.48), frameMatWhite);
+    cupola.position.y = 2.65;
+    group.add(cupola);
+    const cupolaCap = new THREE.Mesh(new THREE.ConeGeometry(0.38, 0.3, 4), roofShingle);
+    cupolaCap.position.y = 2.98;
+    cupolaCap.rotation.y = Math.PI / 4;
+    group.add(cupolaCap);
+
+    // Classic White Cross-Braced Barn Double Doors & Hayloft Window
+    const doorBg = new THREE.Mesh(
+      new THREE.BoxGeometry(1.1, 1.05, 0.08),
+      new THREE.MeshStandardMaterial({ color: 0x7F1D1D, roughness: 0.75 })
+    );
+    doorBg.position.set(0, 0.55, 1.03);
+    group.add(doorBg);
+
+    const doorFrame = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.1, 0.06), frameMatWhite);
+    doorFrame.position.set(0, 0.55, 1.02);
+    group.add(doorFrame);
+
+    // Hayloft lit window
+    const hayWin = createMultiPaneWindow(0.56, 0.52, true, false);
+    hayWin.position.set(0, 1.48, 1.05);
+    group.add(hayWin);
+
+    // Side windows
+    [-0.55, 0.55].forEach(zOff => {
+      const sw = createMultiPaneWindow(0.46, 0.48, true, false);
+      sw.position.set(-1.34, 0.95, zOff);
+      sw.rotation.y = -Math.PI / 2;
+      group.add(sw);
+    });
+
+    // Tall Brushed-Steel Grain Silo with Dome & Ladder
+    const siloMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, roughness: 0.3, metalness: 0.65 });
+    const silo = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 2.85, 24), siloMat);
+    silo.position.set(-1.85, 1.425, -0.35);
+    silo.castShadow = true;
+    group.add(silo);
+
+    const siloDome = new THREE.Mesh(
+      new THREE.SphereGeometry(0.62, 24, 16, 0, Math.PI * 2, 0, Math.PI / 2),
+      new THREE.MeshStandardMaterial({ color: 0x94A3B8, roughness: 0.35, metalness: 0.5 })
+    );
+    siloDome.position.set(-1.85, 2.85, -0.35);
+    group.add(siloDome);
+
+    // White Wooden Pasture Fence & Two Detailed Spotted Dairy Cows
+    const fencePosts = [
+      [1.6, 0.25, 0.8], [2.7, 0.25, 0.8], [2.7, 0.25, 2.2], [0.5, 0.25, 2.2], [-0.6, 0.25, 2.2]
+    ];
+    fencePosts.forEach(fp => {
+      const post = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.5, 0.1), frameMatWhite);
+      post.position.set(fp[0], fp[1], fp[2]);
+      post.castShadow = true;
+      group.add(post);
+    });
+    const railFront = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.07, 0.06), frameMatWhite);
+    railFront.position.set(1.05, 0.38, 2.2);
+    group.add(railFront);
+    const railLow = new THREE.Mesh(new THREE.BoxGeometry(3.3, 0.07, 0.06), frameMatWhite);
+    railLow.position.set(1.05, 0.2, 2.2);
+    group.add(railLow);
+
+    // Build 2 Spotted Holstein Dairy Cows
+    function makeCow(cx, cz, rotY) {
+      const cow = new THREE.Group();
+      cow.position.set(cx, 0, cz);
+      cow.rotation.y = rotY;
+
+      const whiteMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.7 });
+      const blackMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.8 });
+      const noseMat = new THREE.MeshStandardMaterial({ color: 0xFBCFE8, roughness: 0.6 });
+
+      const torso = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.38, 0.36), whiteMat);
+      torso.position.y = 0.34;
+      torso.castShadow = true;
+      cow.add(torso);
+
+      // Black Holstein patches
+      const patch1 = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.26, 0.38), blackMat);
+      patch1.position.set(-0.08, 0.38, 0);
+      cow.add(patch1);
+      const patch2 = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.2, 0.38), blackMat);
+      patch2.position.set(0.16, 0.32, 0);
+      cow.add(patch2);
+
+      const head = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.24, 0.26), whiteMat);
+      head.position.set(0.36, 0.46, 0);
+      cow.add(head);
+
+      const snout = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.22), noseMat);
+      snout.position.set(0.48, 0.41, 0);
+      cow.add(snout);
+
+      [[-0.2, -0.11], [-0.2, 0.11], [0.2, -0.11], [0.2, 0.11]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.24, 0.09), whiteMat);
+        leg.position.set(lx, 0.12, lz);
+        cow.add(leg);
+      });
+
+      return cow;
+    }
+
+    const cow1 = makeCow(1.25, 1.55, 0.45);
+    const cow2 = makeCow(2.05, 1.35, -0.8);
+    animCows.push(cow1, cow2);
+    group.add(cow1, cow2);
+
+    // Signboard on Barn
+    const barnSign = createSignBoardMesh(1.65, 0.44, (ctx, w, h) => {
+      ctx.fillStyle = '#991B1B';
+      ctx.font = '800 38px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('HERITAGE DAIRY', w / 2, h / 2 - 10);
+      ctx.fillStyle = '#475569';
+      ctx.font = '700 24px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.fillText('Family Farm · רפת המשפחה', w / 2, h / 2 + 22);
+    });
+    barnSign.position.set(0, 1.98, 1.06);
+    group.add(barnSign);
+
+    registerInteractive(group, 'dairy_barn');
+    islandGroup.add(group);
+  }
+
+  // ─── 5. Guide-Dog Puppy Haven (Cozy Cottage & Golden Retriever in Vest) ───
+  function buildPuppyHaven() {
+    const group = new THREE.Group();
+    group.position.set(5.6, 0.36, 0.9);
+    group.rotation.y = -0.55;
+
+    const stuccoBrick = createBrickMaterial('#F5EFE6', '#D6CFC2', 3, 2);
+    const terracottaRoof = createRoofShingleMaterial('#C2410C', 4, 3);
+
+    // Cozy Cottage House
+    const house = new THREE.Mesh(new THREE.BoxGeometry(2.05, 1.35, 1.75), stuccoBrick);
+    house.position.y = 0.675;
+    house.castShadow = true;
+    house.receiveShadow = true;
+    group.add(house);
+
+    // Pitched Shingle Roof & Chimney
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(1.68, 0.95, 4), terracottaRoof);
+    roof.position.y = 1.82;
+    roof.rotation.y = Math.PI / 4;
+    roof.castShadow = true;
+    group.add(roof);
+
+    const chimney = new THREE.Mesh(
+      new THREE.BoxGeometry(0.32, 0.75, 0.32),
+      createBrickMaterial('#9A3412', '#E5E7EB', 1, 1)
+    );
+    chimney.position.set(0.55, 1.95, -0.35);
+    chimney.castShadow = true;
+    group.add(chimney);
+
+    // Warm Windows & Blue Cottage Door
+    [-0.58, 0.58].forEach(wx => {
+      const win = createMultiPaneWindow(0.46, 0.5, true, false);
+      win.position.set(wx, 0.76, 0.89);
+      group.add(win);
+    });
+
+    const door = new THREE.Mesh(
+      new THREE.BoxGeometry(0.44, 0.82, 0.1),
+      new THREE.MeshStandardMaterial({ color: 0x2563EB, roughness: 0.5 })
+    );
+    door.position.set(0, 0.42, 0.89);
+    group.add(door);
+
+    // Signboard
+    const dogSign = createSignBoardMesh(1.75, 0.45, (ctx, w, h) => {
+      ctx.fillStyle = '#1D4ED8';
+      ctx.font = '800 36px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🦮 GUIDE DOG HAVEN', w / 2, h / 2 - 10);
+      ctx.fillStyle = '#334155';
+      ctx.font = '700 23px "Plus Jakarta Sans", Arial, sans-serif';
+      ctx.fillText('Foster & Training · אומנה', w / 2, h / 2 + 22);
+    });
+    dogSign.position.set(0, 1.38, 0.92);
+    group.add(dogSign);
+
+    // Blue Agility Training Tunnel on the Lawn
+    const tunnel = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.32, 0.32, 0.95, 20, 1, true),
+      new THREE.MeshStandardMaterial({ color: 0x0284C7, roughness: 0.5, side: THREE.DoubleSide })
+    );
+    tunnel.rotation.z = Math.PI / 2;
+    tunnel.position.set(-1.1, 0.32, 1.45);
+    tunnel.castShadow = true;
+    group.add(tunnel);
+
+    // Detailed Golden Retriever Puppy in Official Blue Guide-Dog Training Vest
+    const puppy = new THREE.Group();
+    puppy.position.set(0.35, 0, 1.55);
+    puppy.rotation.y = -0.4;
+
+    const goldenMat = new THREE.MeshStandardMaterial({ color: 0xEAB308, roughness: 0.65 });
+    const vestMat = new THREE.MeshStandardMaterial({ color: 0x1D4ED8, roughness: 0.45 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: 0x1E293B });
+
+    const pBody = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.28, 0.26), goldenMat);
+    pBody.position.y = 0.28;
+    pBody.castShadow = true;
+    puppy.add(pBody);
+
+    // Blue Training Cape/Vest with white cross emblem
+    const vest = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.3, 0.29), vestMat);
+    vest.position.set(0.02, 0.29, 0);
+    puppy.add(vest);
+
+    // Guide Harness Handle
+    const handle = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.12, 0.16), frameMatWhite);
+    handle.position.set(0.08, 0.46, 0);
+    puppy.add(handle);
+
+    const pHead = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.22, 0.24), goldenMat);
+    pHead.position.set(0.28, 0.42, 0);
+    puppy.add(pHead);
+
+    const snout = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.11, 0.14), goldenMat);
+    snout.position.set(0.4, 0.38, 0);
+    puppy.add(snout);
+
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.035, 8, 8), darkMat);
+    nose.position.set(0.48, 0.4, 0);
+    puppy.add(nose);
+
+    // Floppy Golden Ears
+    [-0.13, 0.13].forEach(ez => {
+      const ear = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.15, 0.05), goldenMat);
+      ear.position.set(0.25, 0.39, ez);
+      puppy.add(ear);
+    });
+
+    // Tail
+    const tail = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.045, 0.24, 8), goldenMat);
+    tail.position.set(-0.28, 0.38, 0);
+    tail.rotation.z = 0.65;
+    puppy.add(tail);
+
+    // 4 Legs
+    [[-0.16, -0.08], [-0.16, 0.08], [0.16, -0.08], [0.16, 0.08]].forEach(([lx, lz]) => {
+      const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.2, 0.08), goldenMat);
+      leg.position.set(lx, 0.1, lz);
+      puppy.add(leg);
+    });
+
+    animPuppy = puppy;
+    group.add(puppy);
+
+    registerInteractive(group, 'puppy_haven');
+    islandGroup.add(group);
+  }
+
+  // ─── 6. Streetball Half-Court (Maccabi / NBA Hardwood, Hoop & Swish Ball) ─
+  function buildBasketballCourt() {
+    const group = new THREE.Group();
+    group.position.set(-4.3, 0.37, 4.3);
+    group.rotation.y = 0.42;
+
+    // Court Canvas Texture with crisp painted 3-point arc, free-throw key & center lines
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    // Warm maple hardwood / pro court surface with Royal Blue outer apron
+    ctx.fillStyle = '#1E3A8A';
+    ctx.fillRect(0, 0, 512, 512);
+
+    ctx.fillStyle = '#EAB308';
+    ctx.fillRect(24, 24, 464, 464);
+
+    ctx.fillStyle = '#D97706';
+    ctx.fillRect(34, 34, 444, 444);
+
+    // Subtle hardwood plank lines
+    ctx.strokeStyle = 'rgba(120, 53, 15, 0.18)';
+    ctx.lineWidth = 2;
+    for (let x = 34; x < 478; x += 18) {
+      ctx.beginPath(); ctx.moveTo(x, 34); ctx.lineTo(x, 478); ctx.stroke();
+    }
+
+    // Royal Blue Painted Key (Maccabi / NBA style)
+    ctx.fillStyle = '#1D4ED8';
+    ctx.fillRect(176, 34, 160, 190);
+
+    // White Court Lines
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(34, 34, 444, 444);
+    ctx.strokeRect(176, 34, 160, 190);
+
+    // Free-throw circle
+    ctx.beginPath();
+    ctx.arc(256, 224, 68, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 3-Point Arc
+    ctx.beginPath();
+    ctx.arc(256, 85, 205, 0.15 * Math.PI, 0.85 * Math.PI);
+    ctx.stroke();
+
+    const courtTex = new THREE.CanvasTexture(canvas);
+    courtTex.anisotropy = 4;
+
+    const slab = new THREE.Mesh(
+      new THREE.BoxGeometry(3.5, 0.1, 3.1),
+      new THREE.MeshStandardMaterial({ map: courtTex, roughness: 0.45 })
+    );
+    slab.position.y = 0.05;
+    slab.receiveShadow = true;
+    slab.castShadow = true;
+    group.add(slab);
+
+    // Pro Stanchion Pole, Tempered Glass Backboard, Breakaway Rim & Net
+    const poleMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, metalness: 0.7, roughness: 0.3 });
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 1.95, 12), poleMat);
+    pole.position.set(0, 0.98, -1.42);
+    pole.castShadow = true;
+    group.add(pole);
+
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.08, 0.42), poleMat);
+    arm.position.set(0, 1.82, -1.22);
+    group.add(arm);
+
+    // Backboard with white frame and red shooter's square
+    const board = new THREE.Mesh(
+      new THREE.BoxGeometry(1.12, 0.74, 0.05),
+      new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.15 })
+    );
+    board.position.set(0, 1.85, -1.0);
+    board.castShadow = true;
+    group.add(board);
+
+    const shooterSq = new THREE.Mesh(
+      new THREE.BoxGeometry(0.38, 0.28, 0.06),
+      new THREE.MeshStandardMaterial({ color: 0xEF4444 })
+    );
+    shooterSq.position.set(0, 1.76, -0.99);
+    group.add(shooterSq);
+
+    // Orange Rim & White Net
+    const rim = new THREE.Mesh(
+      new THREE.TorusGeometry(0.19, 0.025, 12, 24),
+      new THREE.MeshStandardMaterial({ color: 0xEA580C, metalness: 0.4 })
+    );
+    rim.rotation.x = Math.PI / 2;
+    rim.position.set(0, 1.62, -0.78);
+    group.add(rim);
+
+    const net = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.18, 0.11, 0.28, 14, 2, true),
+      new THREE.MeshStandardMaterial({ color: 0xF8FAFC, wireframe: true })
+    );
+    net.position.set(0, 1.48, -0.78);
+    group.add(net);
+
+    // Orange Basketball (animates into the hoop!)
+    const ball = new THREE.Mesh(
+      new THREE.SphereGeometry(0.15, 20, 20),
+      new THREE.MeshStandardMaterial({ color: 0xEA580C, roughness: 0.45 })
+    );
+    ball.position.set(0.45, 0.26, 0.65);
+    ball.castShadow = true;
+    animBasketball = ball;
+    group.add(ball);
+
+    registerInteractive(group, 'basketball_court');
+    islandGroup.add(group);
+  }
+
+  // ─── 7. IDF C4I Tactical Comms Outpost (Radar & Blinking Beacon) ──────────
+  function buildIDFOutpost() {
+    const group = new THREE.Group();
+    group.position.set(0.85, 0.8, -5.2);
+    group.rotation.y = -0.15;
+
+    const bunkerBrick = createBrickMaterial('#64748B', '#94A3B8', 3, 2);
+    const bunker = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.05, 1.5), bunkerBrick);
+    bunker.position.y = 0.525;
+    bunker.castShadow = true;
+    bunker.receiveShadow = true;
+    group.add(bunker);
+
+    const bunkerRoof = new THREE.Mesh(new THREE.BoxGeometry(2.05, 0.12, 1.65), stoneCorniceMat);
+    bunkerRoof.position.y = 1.08;
+    group.add(bunkerRoof);
+
+    // Lit Tactical Command Windows
+    [-0.45, 0.45].forEach(wx => {
+      const win = createMultiPaneWindow(0.48, 0.36, true, true);
+      win.position.set(wx, 0.65, 0.76);
+      group.add(win);
+    });
+
+    // Tall Steel Lattice Radio & Radar Tower
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.65, roughness: 0.35 });
+    const tower = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.12, 0.42, 2.85, 4, 4, true),
+      new THREE.MeshStandardMaterial({ color: 0x475569, wireframe: true })
+    );
+    tower.position.set(0, 2.45, -0.1);
+    group.add(tower);
+
+    const coreMast = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 3.0, 8), steelMat);
+    coreMast.position.set(0, 2.5, -0.1);
+    group.add(coreMast);
+
+    // Rotating Parabolic Radar Dish
+    const dishGroup = new THREE.Group();
+    dishGroup.position.set(0, 3.35, -0.1);
+    const dish = new THREE.Mesh(
+      new THREE.SphereGeometry(0.38, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.45),
+      frameMatWhite
+    );
+    dish.rotation.x = Math.PI * 0.35;
+    dishGroup.add(dish);
+    radarDish = dishGroup;
+    group.add(dishGroup);
+
+    // Red Aviation Beacon at tip
+    beaconMat = new THREE.MeshStandardMaterial({
+      color: 0xEF4444,
+      emissive: 0xEF4444,
+      emissiveIntensity: 1.0
+    });
+    const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), beaconMat);
+    beacon.position.set(0, 4.05, -0.1);
+    group.add(beacon);
+
+    registerInteractive(group, 'idf_outpost');
+    islandGroup.add(group);
+  }
+
+  // ─── 8. Coastal Pier, Sandy Beach & Sailboat ──────────────────────────────
+  function buildCoastalPier() {
+    const group = new THREE.Group();
+    group.position.set(4.9, 0.36, 3.6);
+    group.rotation.y = -0.55;
+
+    const woodMat = new THREE.MeshStandardMaterial({ color: 0xA16207, roughness: 0.8 });
+    const deck = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.1, 2.3), woodMat);
+    deck.position.set(0, 0.16, 0.5);
+    deck.castShadow = true;
+    group.add(deck);
+
+    [[-0.45, -0.4], [0.45, -0.4], [-0.45, 0.6], [0.45, 0.6], [-0.45, 1.5], [0.45, 1.5]].forEach(([px, pz]) => {
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.55, 8), woodMat);
+      post.position.set(px, 0.18, pz);
+      group.add(post);
+    });
+
+    // Sailboat floating in the turquoise bay
+    const boat = new THREE.Group();
+    boat.position.set(1.05, 0.12, 1.65);
+    boat.rotation.y = 0.45;
+
+    const hull = new THREE.Mesh(
+      new THREE.ConeGeometry(0.55, 1.35, 4),
+      new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.4 })
+    );
+    hull.rotation.z = Math.PI / 2;
+    hull.rotation.y = Math.PI / 4;
+    hull.scale.set(0.65, 1, 0.45);
+    hull.castShadow = true;
+    boat.add(hull);
+
+    const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.03, 1.55, 8), frameMatWhite);
+    mast.position.y = 0.85;
+    boat.add(mast);
+
+    const mainSail = new THREE.Mesh(
+      new THREE.ConeGeometry(0.55, 1.25, 3),
+      new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.3, side: THREE.DoubleSide })
+    );
+    mainSail.scale.set(0.12, 1, 0.85);
+    mainSail.position.set(0, 0.88, 0.18);
+    mainSail.castShadow = true;
+    boat.add(mainSail);
+
+    animBoat = boat;
+    group.add(boat);
+
+    registerInteractive(group, 'coastal_pier');
+    islandGroup.add(group);
+  }
+
+  // ─── Lush Cherry Blossom Trees, Cypress Trees, Lamps & Yellow Car ─────────
+  function buildTreesAndStreetFurniture() {
+    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5C4033, roughness: 0.9 });
+    const sakuraColors = [0xF9A8D4, 0xF472B6, 0xFBCFE8, 0xFCE7F3];
+    const greenColors = [0x3D8458, 0x4D9B6A, 0x62B07E, 0x2D6A4F];
+
+    function addMultiClusterTree(x, y, z, scale, isSakura) {
+      const tree = new THREE.Group();
+      tree.position.set(x, y, z);
+      tree.scale.setScalar(scale);
+
+      const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.18, 1.15, 8), trunkMat);
+      trunk.position.y = 0.55;
+      trunk.castShadow = true;
+      tree.add(trunk);
+
+      // Branching limbs
+      [[-0.2, 0.95, 0.1, 0.4], [0.22, 0.98, -0.1, -0.4], [0, 1.05, 0.2, 0.35]].forEach(([bx, by, bz, rz]) => {
+        const branch = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.08, 0.55, 6), trunkMat);
+        branch.position.set(bx, by, bz);
+        branch.rotation.z = rz;
+        tree.add(branch);
+      });
+
+      const palette = isSakura ? sakuraColors : greenColors;
+      const puffs = [
+        [0, 1.52, 0, 0.58],
+        [-0.38, 1.32, 0.22, 0.46],
+        [0.4, 1.34, -0.18, 0.48],
+        [0.18, 1.38, 0.36, 0.44],
+        [-0.24, 1.42, -0.34, 0.45],
+        [-0.45, 1.18, -0.12, 0.38],
+        [0.44, 1.2, 0.24, 0.38],
+        [0, 1.28, -0.42, 0.36],
+        [0, 1.72, 0.08, 0.42]
+      ];
+      puffs.forEach((p, idx) => {
+        const sphere = new THREE.Mesh(
+          new THREE.DodecahedronGeometry(p[3], 1),
+          new THREE.MeshStandardMaterial({ color: palette[idx % palette.length], roughness: 0.72 })
+        );
+        sphere.position.set(p[0], p[1], p[2]);
+        sphere.castShadow = true;
+        sphere.receiveShadow = true;
+        tree.add(sphere);
+      });
+
+      // Fallen pink blossom petals on the lawn under Sakura trees
+      if (isSakura) {
+        for (let i = 0; i < 6; i++) {
+          const ang = (i / 6) * Math.PI * 2 + x;
+          const dist = 0.4 + (i % 3) * 0.22;
+          const petal = new THREE.Mesh(
+            new THREE.CircleGeometry(0.08, 6),
+            new THREE.MeshStandardMaterial({ color: 0xF9A8D4, roughness: 0.6 })
+          );
+          petal.rotation.x = -Math.PI / 2;
+          petal.position.set(Math.cos(ang) * dist, 0.02, Math.sin(ang) * dist);
+          tree.add(petal);
+        }
+      }
+
+      islandGroup.add(tree);
+    }
+
+    // Place dense Cherry Blossom & Evergreen Trees around the island (matching acrokat.me composition)
+    addMultiClusterTree(2.3, 0.36, -1.6, 1.18, true);   // Prominent Sakura between HQ & Barn
+    addMultiClusterTree(-3.3, 0.36, 2.0, 1.14, true);   // Sakura between HQ, Tech Hub & Court
+    addMultiClusterTree(1.8, 0.36, 3.2, 1.08, true);    // Sakura near River Bridge
+    addMultiClusterTree(-5.8, 0.8, -3.4, 1.1, true);    // Sakura beside BGU Hall
+    addMultiClusterTree(7.6, 0.36, -0.6, 1.05, true);   // Sakura east of Puppy Haven
+
+    addMultiClusterTree(-0.8, 0.8, -6.0, 1.15, false);  // Lush green tree north ridge
+    addMultiClusterTree(3.2, 0.36, -5.0, 1.05, false);  // Green tree near Dairy Silo
+    addMultiClusterTree(-7.2, 0.36, 1.7, 1.04, false);  // Green tree west ridge
+    addMultiClusterTree(-1.2, 0.36, 5.8, 1.02, false);  // Green tree south coast
+
+    // Vintage Streetlamps along the Cobblestone Avenues
+    const lamps = [
+      [-1.5, 0.36, 2.2],
+      [1.3, 0.36, 1.8],
+      [-2.4, 0.58, -1.6],
+      [2.2, 0.36, 0.2],
+      [4.1, 0.36, 1.7]
+    ];
+    lamps.forEach(([lx, ly, lz]) => {
+      islandGroup.add(createStreetLamp(lx, ly, lz));
+    });
+
+    // Cute Yellow Miniature Car on the Cobblestone Avenue (just like the yellow car in acrokat.me!)
+    const car = new THREE.Group();
+    car.position.set(-2.3, 0.4, 1.15);
+    car.rotation.y = 0.55;
+
+    const carYellow = new THREE.MeshStandardMaterial({ color: 0xFACC15, roughness: 0.3, metalness: 0.2 });
+    const chassis = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.24, 0.42), carYellow);
+    chassis.position.y = 0.18;
+    chassis.castShadow = true;
+    car.add(chassis);
+
+    const cabin = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.2, 0.36), frameMatWhite);
+    cabin.position.set(-0.04, 0.36, 0);
+    cabin.castShadow = true;
+    car.add(cabin);
+
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.8 });
+    [[-0.22, -0.21], [-0.22, 0.21], [0.22, -0.21], [0.22, 0.21]].forEach(([wx, wz]) => {
+      const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.06, 12), wheelMat);
+      wheel.rotation.x = Math.PI / 2;
+      wheel.position.set(wx, 0.09, wz);
+      car.add(wheel);
+    });
+    animCar = car;
+    islandGroup.add(car);
+  }
+
+  // ─── Events, Raycasting & View Switching ───────────────────────────────────
+  function bindEvents() {
+    const canvas = renderer.domElement;
+    let pointerDownPos = { x: 0, y: 0 };
+
+    canvas.addEventListener('pointerdown', e => {
+      pointerDownPos.x = e.clientX;
+      pointerDownPos.y = e.clientY;
+    });
+
+    canvas.addEventListener('pointermove', e => {
+      if (!isIslandVisible) return;
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      checkHover();
+    });
+
+    canvas.addEventListener('pointerup', e => {
+      if (!isIslandVisible) return;
+      const dx = e.clientX - pointerDownPos.x;
+      const dy = e.clientY - pointerDownPos.y;
+      if (Math.hypot(dx, dy) > 6) return;
+
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects(interactiveTargets, false);
+      if (hits.length > 0) {
+        const landmarkId = hits[0].object.userData.landmarkId;
+        if (landmarkId && LANDMARKS[landmarkId]) {
+          if (landmarkId === 'basketball_court') {
+            ballShotProgress = 0;
+          }
+          focusCameraOnLandmark(hits[0].object);
+          openLandmarkModal(LANDMARKS[landmarkId]);
+        }
+      }
+    });
+
+    window.addEventListener('resize', onWindowResize);
+
+    // Pause / Reset Pill Buttons
     const pauseBtn = document.getElementById('pauseIslandBtn');
     if (pauseBtn) {
       pauseBtn.addEventListener('click', () => {
-        isOrbiting = !isOrbiting;
-        if (controls) controls.autoRotate = isOrbiting;
-        pauseBtn.textContent = isOrbiting ? 'Ⅱ' : '▶';
-        pauseBtn.setAttribute('aria-label', isOrbiting ? 'Pause motion' : 'Play motion');
+        isPaused = !isPaused;
+        if (controls) controls.autoRotate = !isPaused;
+        pauseBtn.textContent = isPaused ? '▶' : 'Ⅱ';
       });
     }
 
     const resetBtn = document.getElementById('resetIslandBtn');
-    if (resetBtn) resetBtn.addEventListener('click', resetCamera);
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        closeLandmarkModal();
+        cameraTargetPos = new THREE.Vector3(DEFAULT_CAM_POS.x, DEFAULT_CAM_POS.y, DEFAULT_CAM_POS.z);
+        controlsTargetLook = new THREE.Vector3(DEFAULT_TARGET.x, DEFAULT_TARGET.y, DEFAULT_TARGET.z);
+        isCameraTransitioning = true;
+      });
+    }
+
+    // View Toggles (3D Island <-> Classic CV View)
+    const switchToClassicBtn = document.getElementById('switchToClassicBtn');
+    const switchToIslandBtn = document.getElementById('switchToIslandBtn');
+    const navIslandBtn = document.getElementById('navIslandBtn');
+    const mmIslandBtn = document.getElementById('mmIslandBtn');
+
+    if (switchToClassicBtn) switchToClassicBtn.addEventListener('click', () => switchToClassicView());
+    if (switchToIslandBtn) switchToIslandBtn.addEventListener('click', () => switchToIslandView());
+    if (navIslandBtn) navIslandBtn.addEventListener('click', () => switchToIslandView());
+    if (mmIslandBtn) mmIslandBtn.addEventListener('click', () => switchToIslandView());
 
     // Modal Close
     const closeBtn = document.getElementById('landmarkCloseBtn');
-    const modalBackdrop = document.getElementById('landmarkModalClose');
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    const closeBackdrop = document.getElementById('landmarkModalClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeLandmarkModal);
+    if (closeBackdrop) closeBackdrop.addEventListener('click', closeLandmarkModal);
 
-    // Esc closes modal or switches view
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('landmarkModal');
-        if (modal && modal.classList.contains('active')) {
-          closeModal();
-        } else {
-          switchViewMode('classic');
-        }
-      }
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLandmarkModal();
     });
   }
 
-  function onMouseMove(event) {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
+  function checkHover() {
     raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(clickableObjects, false);
+    const hits = raycaster.intersectObjects(interactiveTargets, false);
+    const badge = document.getElementById('islandHoverBadge');
 
-    if (intersects.length > 0) {
-      const hit = intersects[0].object;
-      const landmark = hit.userData.parentLandmark;
-      if (landmark) {
-        canvas.style.cursor = 'pointer';
-        if (hoveredLandmark !== landmark) {
-          if (hoveredLandmark && hoveredLandmark.userData.marker) hoveredLandmark.userData.marker.scale.set(1, 1, 1);
-          hoveredLandmark = landmark;
-          if (landmark.userData.marker) landmark.userData.marker.scale.set(1.35, 1.35, 1.35);
+    if (hits.length > 0) {
+      const id = hits[0].object.userData.landmarkId;
+      renderer.domElement.style.cursor = 'pointer';
+      if (id !== hoveredLandmarkId) {
+        hoveredLandmarkId = id;
+        if (badge && LANDMARKS[id]) {
+          badge.textContent = `${LANDMARKS[id].icon}  ${LANDMARKS[id].title} — Click to inspect`;
+          badge.classList.add('visible');
         }
-        return;
       }
-    }
-
-    canvas.style.cursor = 'default';
-    if (hoveredLandmark) {
-      if (hoveredLandmark.userData.marker) hoveredLandmark.userData.marker.scale.set(1, 1, 1);
-      hoveredLandmark = null;
-    }
-  }
-
-  function onClick(event) {
-    const rect = canvas.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(clickableObjects, false);
-
-    if (intersects.length > 0) {
-      const hit = intersects[0].object;
-      const landmark = hit.userData.parentLandmark;
-      if (landmark) selectLandmark(landmark);
-    }
-  }
-
-  function onTouchStart(e) {
-    if (e.touches.length === 1) {
-      const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(clickableObjects, false);
-      if (intersects.length > 0) {
-        const hit = intersects[0].object;
-        const landmark = hit.userData.parentLandmark;
-        if (landmark) selectLandmark(landmark);
+    } else {
+      renderer.domElement.style.cursor = 'grab';
+      if (hoveredLandmarkId !== null) {
+        hoveredLandmarkId = null;
+        if (badge) badge.classList.remove('visible');
       }
     }
   }
 
-  // --- Select Landmark & Open Details Drawer ---
-  function selectLandmark(landmark) {
-    const data = landmark.userData.data;
-    if (!data) return;
+  function focusCameraOnLandmark(mesh) {
+    const worldPos = new THREE.Vector3();
+    mesh.getWorldPosition(worldPos);
 
-    if (data.id === 'basketball') triggerBasketballShot();
-
-    // Smooth camera framing
-    focusCamera(data.focusPos, data.camPos);
-
-    // Open Modal
-    openModal(data);
+    controlsTargetLook = worldPos.clone().add(new THREE.Vector3(0, 0.6, 0));
+    const offset = new THREE.Vector3(9.5, 7.5, 11.5);
+    cameraTargetPos = worldPos.clone().add(offset);
+    isCameraTransitioning = true;
+    if (controls) controls.autoRotate = false;
   }
 
-  function focusCamera(targetPos, offsetPos) {
-    if (!controls) return;
-    const startTarget = controls.target.clone();
-    const endTarget = new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z);
-    const startPos = camera.position.clone();
-    const endPos = new THREE.Vector3(targetPos.x + offsetPos.x, targetPos.y + offsetPos.y, targetPos.z + offsetPos.z);
-
-    const duration = 650;
-    const startTime = performance.now();
-
-    function lerp(now) {
-      const t = Math.min((now - startTime) / duration, 1);
-      const ease = 0.5 - Math.cos(t * Math.PI) / 2;
-      controls.target.lerpVectors(startTarget, endTarget, ease);
-      camera.position.lerpVectors(startPos, endPos, ease);
-      if (t < 1) requestAnimationFrame(lerp);
-    }
-    requestAnimationFrame(lerp);
-  }
-
-  function resetCamera() {
-    if (!controls) return;
-    focusCamera({ x: 0.5, y: 1.5, z: 0 }, { x: 21.5, y: 26.5, z: 30 });
-  }
-
-  // --- Modal Drawer Logic ---
-  function openModal(data) {
+  function openLandmarkModal(data) {
     const modal = document.getElementById('landmarkModal');
     if (!modal) return;
 
@@ -1212,47 +1889,43 @@
     document.getElementById('modalTitle').textContent = data.title;
     document.getElementById('modalSubtitle').textContent = data.subtitle;
 
-    let body = `<p class="landmark-modal-desc">${data.desc}</p>`;
-
+    let html = '';
     if (data.image) {
-      body += `<div class="landmark-modal-img"><img src="${data.image}" alt="${data.title}" /></div>`;
+      html += `<div class="landmark-modal-img"><img src="${data.image}" alt="${data.title}" loading="lazy"></div>`;
+    }
+    html += `<p class="landmark-modal-desc">${data.desc}</p>`;
+
+    if (data.stats && data.stats.length) {
+      html += `<div class="landmark-modal-stats">`;
+      data.stats.forEach(s => {
+        html += `<div class="stat-pill"><span class="v">${s.v}</span><span class="k">${s.k}</span></div>`;
+      });
+      html += `</div>`;
     }
 
     if (data.bullets && data.bullets.length) {
-      body += `<ul class="landmark-modal-bullets">`;
-      data.bullets.forEach(b => { body += `<li>${b}</li>`; });
-      body += `</ul>`;
-    }
-
-    if (data.stats && data.stats.length) {
-      body += `<div class="landmark-modal-stats">`;
-      data.stats.forEach(s => {
-        body += `<div class="stat-pill"><span class="v">${s.v}</span><span class="k">${s.k}</span></div>`;
+      html += `<ul class="landmark-modal-bullets">`;
+      data.bullets.forEach(b => {
+        html += `<li>${b}</li>`;
       });
-      body += `</div>`;
+      html += `</ul>`;
     }
 
-    document.getElementById('modalContent').innerHTML = body;
+    document.getElementById('modalContent').innerHTML = html;
 
-    let footer = ``;
-    if (data.jumpTarget) {
-      footer += `<button type="button" class="landmark-jump-btn" data-jump="${data.jumpTarget}">
-        <span>Open in Full Resume</span>
+    const footer = document.getElementById('modalFooter');
+    footer.innerHTML = `
+      <button type="button" class="landmark-jump-btn" id="modalJumpBtn">
+        <span>${data.jumpLabel || 'View in Classic Portfolio'}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
-      </button>`;
-    }
-    document.getElementById('modalFooter').innerHTML = footer;
+      </button>
+    `;
 
-    const jumpBtn = modal.querySelector('.landmark-jump-btn');
+    const jumpBtn = document.getElementById('modalJumpBtn');
     if (jumpBtn) {
       jumpBtn.addEventListener('click', () => {
-        const target = jumpBtn.getAttribute('data-jump');
-        closeModal();
-        switchViewMode('classic');
-        setTimeout(() => {
-          const el = document.querySelector(target);
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 350);
+        closeLandmarkModal();
+        switchToClassicView(data.jumpSection);
       });
     }
 
@@ -1260,121 +1933,132 @@
     modal.setAttribute('aria-hidden', 'false');
   }
 
-  function closeModal() {
+  function closeLandmarkModal() {
     const modal = document.getElementById('landmarkModal');
-    if (modal) {
-      modal.classList.remove('active');
-      modal.setAttribute('aria-hidden', 'true');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    if (controls && !isPaused) controls.autoRotate = true;
+  }
+
+  function switchToClassicView(targetSelector) {
+    const islandView = document.getElementById('islandView');
+    if (islandView) islandView.classList.add('hidden-view');
+    isIslandVisible = false;
+    document.body.style.overflow = '';
+
+    if (targetSelector) {
+      setTimeout(() => {
+        const el = document.querySelector(targetSelector);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 220);
     }
   }
 
-  // --- Dual Mode Switcher ---
-  function switchViewMode(mode) {
+  function switchToIslandView() {
     const islandView = document.getElementById('islandView');
-    const floatingIslandBtn = document.getElementById('switchToIslandBtn');
-
-    if (mode === 'classic') {
-      if (islandView) {
-        islandView.classList.add('hidden-view');
-        islandView.setAttribute('aria-hidden', 'true');
-      }
-      if (floatingIslandBtn) floatingIslandBtn.style.display = 'flex';
-      try { localStorage.setItem('portfolio-view-mode', 'classic'); } catch (_) {}
-      document.body.style.overflow = 'auto';
-    } else {
-      if (islandView) {
-        islandView.classList.remove('hidden-view');
-        islandView.setAttribute('aria-hidden', 'false');
-      }
-      if (floatingIslandBtn) floatingIslandBtn.style.display = 'none';
-      try { localStorage.setItem('portfolio-view-mode', 'island'); } catch (_) {}
-      document.body.style.overflow = 'hidden';
-      onWindowResize();
-    }
+    if (islandView) islandView.classList.remove('hidden-view');
+    isIslandVisible = true;
+    document.body.style.overflow = 'hidden';
+    onWindowResize();
   }
 
   function onWindowResize() {
-    if (!container || !renderer || !camera) return;
-    const w = container.clientWidth;
-    const h = container.clientHeight;
+    if (!camera || !renderer) return;
+    const w = window.innerWidth || 1440;
+    const h = window.innerHeight || 900;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h, true);
   }
 
-  // --- Animation Loop ---
-  function animate(time) {
+  // ─── Main Animation Loop ──────────────────────────────────────────────────
+  function animate() {
     requestAnimationFrame(animate);
+    if (!isIslandVisible || !renderer) return;
 
-    const sec = time * 0.001;
-
-    // Orbit
-    if (controls) controls.update();
-
-    // Floating Markers Bobbing
-    landmarks.forEach(lm => {
-      const marker = lm.userData.marker;
-      if (marker) {
-        marker.position.y = lm.userData.baseY + Math.sin(sec * 2.5 + lm.userData.seed) * 0.16;
-        marker.rotation.y = sec * 0.8 + lm.userData.seed;
-      }
-    });
-
-    // Ocean Waves
-    if (oceanMesh) {
-      const pos = oceanMesh.geometry.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        const u = pos.getX(i);
-        const v = pos.getY(i);
-        const z = Math.sin(u * 0.3 + sec * 1.4) * 0.08 + Math.cos(v * 0.3 + sec * 1.1) * 0.08;
-        pos.setZ(i, z);
-      }
-      oceanMesh.geometry.computeVertexNormals();
-      oceanMesh.geometry.attributes.position.needsUpdate = true;
+    // Safeguard: ensure canvas always matches full viewport dimensions
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const canvas = renderer.domElement;
+    if (w > 0 && h > 0 && (Math.abs(canvas.clientWidth - w) > 2 || Math.abs(canvas.clientHeight - h) > 2)) {
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, true);
     }
 
-    // Puppy Tail Wag
-    if (puppyTailMesh) puppyTailMesh.rotation.z = Math.sin(sec * 10) * 0.35;
+    const t = clock ? clock.getElapsedTime() : performance.now() * 0.001;
 
-    // Cow Grazing
-    if (cowHeadMesh) cowHeadMesh.rotation.x = Math.sin(sec * 1.8) * 0.12;
+    if (isCameraTransitioning && cameraTargetPos && controlsTargetLook && controls) {
+      camera.position.lerp(cameraTargetPos, 0.06);
+      controls.target.lerp(controlsTargetLook, 0.06);
+      if (camera.position.distanceTo(cameraTargetPos) < 0.15) {
+        isCameraTransitioning = false;
+      }
+    }
 
-    // Beacon Pulse
-    if (beaconLight && beaconMesh) {
-      const p = (Math.sin(sec * 5) + 1) / 2;
-      beaconLight.intensity = p > 0.6 ? 1.5 : 0.2;
-      beaconMesh.material.color.setHex(p > 0.6 ? 0xEF4444 : 0x7F1D1D);
+    if (controls) controls.update();
+
+    if (!isPaused) {
+      // Gentle boat bobbing on the water
+      if (animBoat) {
+        animBoat.position.y = 0.12 + Math.sin(t * 2.2) * 0.04;
+        animBoat.rotation.z = Math.sin(t * 1.6) * 0.05;
+      }
+
+      // Guide dog puppy happy bounce
+      if (animPuppy) {
+        animPuppy.position.y = Math.abs(Math.sin(t * 3.5)) * 0.05;
+        animPuppy.rotation.y = -0.4 + Math.sin(t * 2.0) * 0.12;
+      }
+
+      // Dairy cows subtle grazing motion
+      animCows.forEach((cow, idx) => {
+        cow.rotation.z = Math.sin(t * 1.4 + idx * 2) * 0.025;
+      });
+
+      // Radar dish rotation & blinking aviation beacon
+      if (radarDish) {
+        radarDish.rotation.y = t * 0.85;
+      }
+      if (beaconMat) {
+        beaconMat.emissiveIntensity = 0.4 + Math.abs(Math.sin(t * 4.0)) * 0.9;
+      }
+
+      // Basketball 3-Point Swish Shot or Idle Dribble
+      if (animBasketball) {
+        if (ballShotProgress >= 0) {
+          ballShotProgress += 0.022;
+          const p = ballShotProgress;
+          if (p <= 1.0) {
+            // Parabolic arc from 3-point line (0.45, 0.26, 0.65) to rim (0, 1.62, -0.78)
+            animBasketball.position.x = 0.45 * (1 - p);
+            animBasketball.position.z = 0.65 * (1 - p) + (-0.78) * p;
+            animBasketball.position.y = 0.26 * (1 - p) + 1.62 * p + Math.sin(p * Math.PI) * 1.65;
+            animBasketball.rotation.x -= 0.18;
+          } else if (p <= 1.45) {
+            // Drop cleanly through the net
+            const dp = (p - 1.0) / 0.45;
+            animBasketball.position.set(0, 1.62 - dp * 1.36, -0.78);
+          } else {
+            ballShotProgress = -1;
+          }
+        } else {
+          animBasketball.position.set(0.45, 0.22 + Math.abs(Math.sin(t * 4.2)) * 0.26, 0.65);
+        }
+      }
     }
 
     renderer.render(scene, camera);
   }
 
-  // Launch when DOM is ready
-  function start() {
-    const savedMode = (function () {
-      try {
-        if (window.location.hash === '#classic') return 'classic';
-        if (window.location.hash === '#island') return 'island';
-        return localStorage.getItem('portfolio-view-mode') || 'island';
-      } catch (_) {
-        return 'island';
-      }
-    })();
-
-    init();
-
-    if (savedMode === 'classic') {
-      switchViewMode('classic');
-    } else {
-      switchViewMode('island');
-    }
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.style.overflow = 'hidden';
+      initIsland();
+    });
   } else {
-    start();
+    document.body.style.overflow = 'hidden';
+    initIsland();
   }
-
 })();
