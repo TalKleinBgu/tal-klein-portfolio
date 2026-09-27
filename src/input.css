@@ -5,28 +5,28 @@
 /* ─── Design tokens ──────────────────────────────────────────────────────── */
 @layer base {
   :root, [data-theme="light"] {
-    --bg-top: #F7F6F2;
-    --bg-bottom: #EFEDE7;
-    --bg-grid: rgba(14,26,51,0.075);
-    --scroll-tint-color: #2a1d0c;
+    --bg-top: #FFFFFF;
+    --bg-bottom: #F8FAFC;
+    --bg-grid: rgba(15,23,42,0.045);
+    --scroll-tint-color: #0f172a;
     --card: #FFFFFF;
-    --card-2: #F1EFEA;
-    --ink: #0E1A33;
-    --ink-soft: #465069;
-    --ink-faint: #646C7E;
-    --accent: #2447D6;
-    --accent-bright: #3B63F0;
-    --border: rgba(14,26,51,0.10);
-    --border-soft: rgba(14,26,51,0.065);
-    --cell-bg: #F4F2ED;
-    --cell-border: rgba(14,26,51,0.08);
-    --shadow: rgba(70,52,24,.10);
-    --btn-bg: #0E1A33;
+    --card-2: #F1F5F9;
+    --ink: #0F172A;
+    --ink-soft: #334155;
+    --ink-faint: #64748B;
+    --accent: #2563EB;
+    --accent-bright: #3B82F6;
+    --border: rgba(15,23,42,0.08);
+    --border-soft: rgba(15,23,42,0.045);
+    --cell-bg: #F8FAFC;
+    --cell-border: rgba(15,23,42,0.06);
+    --shadow: rgba(15,23,42,0.07);
+    --btn-bg: #0F172A;
     --btn-fg: #FFFFFF;
-    --sheen: rgba(255,255,255,.22);
-    --card-shadow: 0 1px 2px rgba(28,43,74,0.05), 0 8px 24px -6px rgba(28,43,74,0.12), 0 24px 48px -24px rgba(70,52,24,0.18);
-    --glow-a: transparent;
-    --glow-b: transparent;
+    --sheen: rgba(255,255,255,.25);
+    --card-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 8px 24px -4px rgba(15,23,42,0.06), 0 20px 48px -12px rgba(15,23,42,0.08);
+    --glow-a: rgba(37,99,235,0.07);
+    --glow-b: rgba(99,102,241,0.05);
     --grain-opacity: 0;
     --ring: color-mix(in srgb, var(--accent) 22%, transparent);
   }
@@ -34,85 +34,85 @@
   /* Dark theme — triggered by system preference when no explicit override is set */
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg-top: #0B1220;
-      --bg-bottom: #080D18;
-      --bg-grid: rgba(255,255,255,0.045);
-      --scroll-tint-color: #05080f;
-      --card: #111A2E;
-      --card-2: #172238;
-      --ink: #EEF2F9;
-      --ink-soft: #A9B3C8;
-      --ink-faint: #8791A8;
-      --accent: #7B9CFF;
-      --accent-bright: #9DB5FF;
-      --border: rgba(255,255,255,0.11);
-      --border-soft: rgba(255,255,255,0.07);
-      --cell-bg: #0E1628;
-      --cell-border: rgba(255,255,255,0.09);
-      --shadow: rgba(0,0,0,.4);
-      --btn-bg: #EEF2F9;
-      --btn-fg: #0B1220;
-      --sheen: rgba(91,120,255,.22);
-      --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -8px rgba(0,0,0,0.55);
-      --glow-a: rgba(91,140,255,.16);
-      --glow-b: rgba(124,92,255,.11);
-      --grain-opacity: .07;
+      --bg-top: #0A0F1D;
+      --bg-bottom: #060913;
+      --bg-grid: rgba(255,255,255,0.035);
+      --scroll-tint-color: #060913;
+      --card: #10172A;
+      --card-2: #162036;
+      --ink: #F8FAFC;
+      --ink-soft: #94A3B8;
+      --ink-faint: #64748B;
+      --accent: #60A5FA;
+      --accent-bright: #93C5FD;
+      --border: rgba(255,255,255,0.09);
+      --border-soft: rgba(255,255,255,0.055);
+      --cell-bg: #0C1222;
+      --cell-border: rgba(255,255,255,0.07);
+      --shadow: rgba(0,0,0,.55);
+      --btn-bg: #F8FAFC;
+      --btn-fg: #0A0F1D;
+      --sheen: rgba(96,165,250,.25);
+      --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 36px -8px rgba(0,0,0,0.65);
+      --glow-a: rgba(96,165,250,.16);
+      --glow-b: rgba(129,140,248,.12);
+      --grain-opacity: .05;
       --ring: color-mix(in srgb, var(--accent) 30%, transparent);
     }
   }
 
   /* Dark theme — explicit user override (higher specificity, wins over @media) */
   [data-theme="dark"] {
-    --bg-top: #0B1220;
-    --bg-bottom: #080D18;
-    --bg-grid: rgba(255,255,255,0.045);
-    --scroll-tint-color: #05080f;
-    --card: #111A2E;
-    --card-2: #172238;
-    --ink: #EEF2F9;
-    --ink-soft: #A9B3C8;
-    --ink-faint: #8791A8;
-    --accent: #7B9CFF;
-    --accent-bright: #9DB5FF;
-    --border: rgba(255,255,255,0.11);
-    --border-soft: rgba(255,255,255,0.07);
-    --cell-bg: #0E1628;
-    --cell-border: rgba(255,255,255,0.09);
-    --shadow: rgba(0,0,0,.4);
-    --btn-bg: #EEF2F9;
-    --btn-fg: #0B1220;
-    --sheen: rgba(91,120,255,.22);
-    --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -8px rgba(0,0,0,0.55);
-    --glow-a: rgba(91,140,255,.16);
-    --glow-b: rgba(124,92,255,.11);
-    --grain-opacity: .07;
+    --bg-top: #0A0F1D;
+    --bg-bottom: #060913;
+    --bg-grid: rgba(255,255,255,0.035);
+    --scroll-tint-color: #060913;
+    --card: #10172A;
+    --card-2: #162036;
+    --ink: #F8FAFC;
+    --ink-soft: #94A3B8;
+    --ink-faint: #64748B;
+    --accent: #60A5FA;
+    --accent-bright: #93C5FD;
+    --border: rgba(255,255,255,0.09);
+    --border-soft: rgba(255,255,255,0.055);
+    --cell-bg: #0C1222;
+    --cell-border: rgba(255,255,255,0.07);
+    --shadow: rgba(0,0,0,.55);
+    --btn-bg: #F8FAFC;
+    --btn-fg: #0A0F1D;
+    --sheen: rgba(96,165,250,.25);
+    --card-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 36px -8px rgba(0,0,0,0.65);
+    --glow-a: rgba(96,165,250,.16);
+    --glow-b: rgba(129,140,248,.12);
+    --grain-opacity: .05;
     --ring: color-mix(in srgb, var(--accent) 30%, transparent);
   }
 
   /* Light theme explicit override (overrides the @media dark preference) */
   [data-theme="light"] {
-    --bg-top: #F7F6F2;
-    --bg-bottom: #EFEDE7;
-    --bg-grid: rgba(14,26,51,0.075);
-    --scroll-tint-color: #2a1d0c;
+    --bg-top: #FFFFFF;
+    --bg-bottom: #F8FAFC;
+    --bg-grid: rgba(15,23,42,0.045);
+    --scroll-tint-color: #0f172a;
     --card: #FFFFFF;
-    --card-2: #F1EFEA;
-    --ink: #0E1A33;
-    --ink-soft: #465069;
-    --ink-faint: #646C7E;
-    --accent: #2447D6;
-    --accent-bright: #3B63F0;
-    --border: rgba(14,26,51,0.10);
-    --border-soft: rgba(14,26,51,0.065);
-    --cell-bg: #F4F2ED;
-    --cell-border: rgba(14,26,51,0.08);
-    --shadow: rgba(70,52,24,.10);
-    --btn-bg: #0E1A33;
+    --card-2: #F1F5F9;
+    --ink: #0F172A;
+    --ink-soft: #334155;
+    --ink-faint: #64748B;
+    --accent: #2563EB;
+    --accent-bright: #3B82F6;
+    --border: rgba(15,23,42,0.08);
+    --border-soft: rgba(15,23,42,0.045);
+    --cell-bg: #F8FAFC;
+    --cell-border: rgba(15,23,42,0.06);
+    --shadow: rgba(15,23,42,0.07);
+    --btn-bg: #0F172A;
     --btn-fg: #FFFFFF;
-    --sheen: rgba(255,255,255,.22);
-    --card-shadow: 0 1px 2px rgba(28,43,74,0.05), 0 8px 24px -6px rgba(28,43,74,0.12), 0 24px 48px -24px rgba(70,52,24,0.18);
-    --glow-a: transparent;
-    --glow-b: transparent;
+    --sheen: rgba(255,255,255,.25);
+    --card-shadow: 0 1px 3px rgba(15,23,42,0.04), 0 8px 24px -4px rgba(15,23,42,0.06), 0 20px 48px -12px rgba(15,23,42,0.08);
+    --glow-a: rgba(37,99,235,0.07);
+    --glow-b: rgba(99,102,241,0.05);
     --grain-opacity: 0;
     --ring: color-mix(in srgb, var(--accent) 22%, transparent);
   }
@@ -1439,30 +1439,34 @@
   .je-col .display { font-size: clamp(20px, 2vw, 24px); margin-bottom: 2px; letter-spacing: -.5px; }
   .je-col .col-sub { color: var(--ink-faint); font-size: 13px; font-weight: 600; margin-bottom: 2px; }
   .je-col .timeline { margin-top: 20px; }
-  /* No card chrome - the timeline sits straight on the page background. */
+  /* Clean elevated cards for career & education entries */
   .je-grid .timeline .card {
-    background: transparent;
-    border: 1px solid transparent;
-    box-shadow: none;
-    padding: 18px 18px 16px;
-    margin-left: -18px;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+    padding: 18px 20px 16px;
+    margin-left: 0;
     border-radius: 16px;
-    transition: background .25s, border-color .25s, box-shadow .25s;
+    transition: background .25s, border-color .25s, box-shadow .25s, transform .2s ease;
   }
-  .je-grid .timeline .card + .card { margin-top: 10px; }
-  .je-grid .timeline .card::after { left: -14px; top: 24px; }
-  @media (max-width: 600px) { .je-grid .timeline .card::after { left: -6px; } }
+  .je-grid .timeline .card + .card { margin-top: 14px; }
+  .je-grid .timeline .card::after { left: -32px; top: 24px; }
+  @media (max-width: 600px) {
+    .je-grid .timeline .card { padding: 16px; }
+    .je-grid .timeline .card::after { left: -24px; }
+  }
   .je-grid .exp.open,
   .je-grid .exp:focus-within {
-    background: color-mix(in srgb, var(--card) 70%, transparent);
-    border-color: var(--border-soft);
-    box-shadow: var(--card-shadow);
+    background: var(--card);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border-soft));
+    box-shadow: var(--card-shadow), 0 0 16px var(--glow-a);
   }
   @media (hover: hover) {
     .je-grid .exp:hover {
-      background: color-mix(in srgb, var(--card) 70%, transparent);
-      border-color: var(--border-soft);
-      box-shadow: var(--card-shadow);
+      background: var(--card);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border-soft));
+      box-shadow: var(--card-shadow), 0 0 16px var(--glow-a);
+      transform: translateY(-2px);
     }
   }
 

@@ -706,10 +706,17 @@ if(window.matchMedia('(hover: hover)').matches){
   if (listBtn) listBtn.addEventListener('click', () => setView(false));
   if (gridBtn) gridBtn.addEventListener('click', () => setView(true));
 
-  // Restore saved view preference if any
+  // Restore saved view preference if any, otherwise default to grid
   try {
-    if (localStorage.getItem('proj-view') === 'grid') setView(true);
-  } catch (_) {}
+    const savedView = localStorage.getItem('proj-view');
+    if (savedView === 'list') {
+      setView(false);
+    } else {
+      setView(true);
+    }
+  } catch (_) {
+    setView(true);
+  }
 
   // Expand / Collapse all toggle
   const expandToggle = document.getElementById('projExpandToggle');
