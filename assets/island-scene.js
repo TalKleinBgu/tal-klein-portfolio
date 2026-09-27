@@ -4578,7 +4578,7 @@ function Ld(e,t,n,r){
     };
 
   function b(e,t,n,i,a,s,c){
-    let brandFile=t==="michigan"?"/brands/bgu-icon.svg":t==="microsoft"?"/brands/idf.svg":t==="blaze"?"/brands/dairy-icon.svg":t==="helpdesk"?"/brands/matrix-logo.svg":"/brands/"+t+".svg";
+    let brandFile=t==="michigan"?"/brands/bgu-icon.svg":t==="microsoft"?"/brands/idf.svg":t==="blaze"?"/brands/dairy-icon.svg":t==="helpdesk"?"/brands/matrix-logo.png":"/brands/"+t+".svg";
     let l=new zo(r).load(brandFile);
     l.colorSpace=Pe,l.anisotropy=8,o.add(l);
     let u=new Vr({map:l,transparent:!0,toneMapped:!1,side:2});
@@ -4762,11 +4762,11 @@ function Ld(e,t,n,r){
   }
   v(H,1.76,.09,1.52,n.slate,0,3.5,-.04);
   v(H,1.14,.18,.98,blueAccent,0,3.62,-.04);
-  v(H,1.46,.54,.09,d,0,1.16,.75);
-  b(H,"helpdesk",1.38,.5,0,1.16,.805);
+  v(H,1.24,.6,.09,d,0,1.18,.75);
+  b(H,"helpdesk",1.14,.543,0,1.18,.805);
   // Matrix logo on the tower crown, readable from across the island
-  v(H,1.3,.46,.05,d,0,3.24,.66);
-  b(H,"helpdesk",1.24,.45,0,3.24,.69);
+  v(H,1.18,.56,.05,d,0,3.24,.66);
+  b(H,"helpdesk",1.1,.524,0,3.24,.69);
   let hdTop=new Cn;
   hdTop.position.set(0,3.76,-.04);
   H.add(hdTop);

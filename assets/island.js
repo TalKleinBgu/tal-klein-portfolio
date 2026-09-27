@@ -90,7 +90,7 @@
     helpdesk: {
       id: 'helpdesk',
       name: 'Matrix · IT Support & Help Desk',
-      logo: './assets/scene/brands/helpdesk-icon.svg',
+      logo: './assets/scene/brands/matrix-icon.png',
       role: 'IT Support & Help Desk · Matrix Israel (2020 – 2021)',
       cardDesc: 'Technical support and troubleshooting for enterprise clients across hardware, software, and network issues with rapid diagnosis',
       tag: 'Career Experience · Matrix Israel (2020 – 2021)',
