@@ -552,7 +552,9 @@
       powerPreference: 'high-performance'
     });
     renderer.setSize(w, h, true);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // The full-screen scene is expensive on high-DPI displays. Capping its
+    // render scale keeps orbiting and hover feedback responsive.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -717,8 +719,8 @@
     const sunLight = new THREE.DirectionalLight(0xFFF6D9, 1.45);
     sunLight.position.set(22, 34, 16);
     sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 4096;
-    sunLight.shadow.mapSize.height = 4096;
+    sunLight.shadow.mapSize.width = 2048;
+    sunLight.shadow.mapSize.height = 2048;
     sunLight.shadow.camera.near = 5;
     sunLight.shadow.camera.far = 70;
     const d = 15;
@@ -1100,24 +1102,27 @@
   // landmark dialogs while the visible architecture comes from the Blender GLB.
   function registerBlenderLandmarkHotspots() {
     const spots = [
-      ['research_hq', -0.2, 1.2, 3.8, 3.8, 3.2],
-      ['bgu_campus', -4.2, -5.4, 4.0, 4.0, 3.8],
-      ['tech_hub', -7.4, -0.4, 3.4, 3.3, 3.0],
-      ['dairy_barn', 6.6, -4.0, 3.8, 2.7, 3.2],
-      ['puppy_haven', 6.5, 1.2, 3.0, 2.2, 3.0],
-      ['idf_outpost', 1.4, -6.6, 2.8, 5.3, 2.8],
-      ['coastal_pier', 4.4, 5.7, 1.9, 2.0, 2.4],
-      ['basketball_court', -5.6, 5.4, 3.8, 1.4, 2.8]
+      ['research_hq', -0.2, 1.2, 4.1, 4.6, 3.3, 4.8],
+      ['bgu_campus', -4.2, -5.4, 4.3, 4.8, 3.0, 4.4],
+      ['tech_hub', -7.4, -0.4, 3.5, 4.0, 3.0, 3.8],
+      ['dairy_barn', 6.4, -2.7, 4.8, 3.2, 4.3, 2.8],
+      ['puppy_haven', 6.2, 2.3, 4.6, 3.8, 4.6, 2.6],
+      ['idf_outpost', 1.4, -6.6, 2.5, 5.6, 2.5, 5.5],
+      ['coastal_pier', 4.4, 9.0, 2.1, 3.0, 5.4, 2.7],
+      ['basketball_court', -5.6, 5.4, 3.8, 1.4, 2.8, 1.5]
     ];
     const invisible = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
-    spots.forEach(([id, x, z, width, height, depth]) => {
+    spots.forEach(([id, x, z, width, height, depth, labelHeight]) => {
       const group = new THREE.Group();
       group.position.set(x, 0.36, z);
       const proxy = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), invisible);
       proxy.position.y = height / 2;
+      proxy.castShadow = false;
+      proxy.receiveShadow = false;
       group.add(proxy);
       islandGroup.add(group);
       registerInteractive(group, id);
+      group.userData.labelOffset = new THREE.Vector3(0, labelHeight, 0);
     });
   }
 
@@ -2494,13 +2499,13 @@
     landmarkPins = [];
 
     const pinDefs = [
-      { id: 'bgu_campus', label: 'Ben-Gurion', offset: new THREE.Vector3(0, 3.6, 0) },
-      { id: 'research_hq', label: 'AI Research', offset: new THREE.Vector3(0, 3.6, 0) },
-      { id: 'tech_hub', label: "Builder's Lab", offset: new THREE.Vector3(0, 3.2, 0) },
-      { id: 'dairy_barn', label: 'Dairy Farm', offset: new THREE.Vector3(0, 3.2, 0) },
-      { id: 'puppy_haven', label: 'Guide Dog', offset: new THREE.Vector3(0, 2.0, 0) },
-      { id: 'idf_outpost', label: 'IDF Comms', offset: new THREE.Vector3(0, 4.4, 0) },
-      { id: 'coastal_pier', label: 'The Pier', offset: new THREE.Vector3(0, 2.2, 0) }
+      { id: 'bgu_campus', label: 'Ben-Gurion' },
+      { id: 'research_hq', label: 'AI Research' },
+      { id: 'tech_hub', label: "Builder's Lab" },
+      { id: 'dairy_barn', label: 'Dairy Farm' },
+      { id: 'puppy_haven', label: 'Guide Dog' },
+      { id: 'idf_outpost', label: 'IDF Comms' },
+      { id: 'coastal_pier', label: 'The Pier' }
       // Basketball court is omitted intentionally per user request!
     ];
 
@@ -2529,7 +2534,7 @@
       });
 
       container.appendChild(pinEl);
-      landmarkPins.push({ id: p.id, el: pinEl, offset: p.offset });
+      landmarkPins.push({ id: p.id, el: pinEl });
     });
   }
 
@@ -2801,7 +2806,8 @@
       const isHovered = (grp.userData.landmarkId === hoveredLandmarkId);
       const targetScale = isHovered ? 1.055 : 1.0;
       const targetY = (grp.userData.baseY !== undefined ? grp.userData.baseY : 0.36) + (isHovered ? 0.12 : 0);
-      grp.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
+      const scale = grp.scale.x + (targetScale - grp.scale.x) * 0.14;
+      grp.scale.set(scale, scale, scale);
       grp.position.y += (targetY - grp.position.y) * 0.14;
     });
 
@@ -2814,7 +2820,7 @@
         const grp = landmarkGroups[pin.id];
         if (!grp) return;
         grp.getWorldPosition(tempV);
-        tempV.add(pin.offset);
+        tempV.add(grp.userData.labelOffset);
         tempV.project(camera);
 
         const isHovered = hoveredLandmarkId === pin.id;
