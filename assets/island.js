@@ -174,6 +174,7 @@
 
   let scene, camera, renderer, controls;
   let islandGroup;
+  let terrainFallbackGroup;
   let raycaster, mouse;
   let interactiveTargets = [];
   let landmarkGroups = {};
@@ -581,6 +582,7 @@
     scene.add(islandGroup);
 
     buildIslandBase();
+    loadIslandTerrainGlb();
     buildRiverAndStoneBridge();
     buildCobblestoneRoads();
 
@@ -604,6 +606,69 @@
 
     bindEvents();
     animate();
+  }
+
+  // Load the authored island terrain as a compact binary glTF. The procedural
+  // base stays visible until the asset is ready, so slow or offline requests
+  // never leave a hole under the buildings.
+  async function loadIslandTerrainGlb() {
+    try {
+      const response = await fetch('./assets/island-terrain.glb?v=1', { cache: 'force-cache' });
+      if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
+      const buffer = await response.arrayBuffer();
+      const view = new DataView(buffer);
+      if (view.getUint32(0, true) !== 0x46546c67 || view.getUint32(4, true) !== 2) throw new Error('Invalid GLB header');
+      let offset = 12, gltf = null, binary = null;
+      while (offset < buffer.byteLength) {
+        const length = view.getUint32(offset, true), type = view.getUint32(offset + 4, true);
+        offset += 8;
+        if (type === 0x4e4f534a) gltf = JSON.parse(new TextDecoder().decode(new Uint8Array(buffer, offset, length)).trim());
+        if (type === 0x004e4942) binary = buffer.slice(offset, offset + length);
+        offset += length;
+      }
+      if (!gltf || !binary) throw new Error('GLB data chunks are missing');
+      const componentArray = (accessor) => {
+        const info = gltf.accessors[accessor];
+        const bufferViewInfo = gltf.bufferViews[info.bufferView];
+        const bytesPerElement = info.componentType === 5125 ? 4 : 4;
+        const start = (bufferViewInfo.byteOffset || 0) + (info.byteOffset || 0);
+        const typed = info.componentType === 5125 ? Uint32Array : Float32Array;
+        return new typed(binary.slice(start, start + info.count * bytesPerElement));
+      };
+      const terrain = new THREE.Group();
+      for (const primitive of gltf.meshes[0].primitives) {
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(componentArray(primitive.attributes.POSITION), 3));
+        if (primitive.attributes.COLOR_0 !== undefined) geometry.setAttribute('color', new THREE.BufferAttribute(componentArray(primitive.attributes.COLOR_0), 3));
+        if (primitive.indices !== undefined) geometry.setIndex(new THREE.BufferAttribute(componentArray(primitive.indices), 1));
+        geometry.computeVertexNormals();
+        const isMeadow = primitive.material === 0;
+        const material = new THREE.MeshStandardMaterial({
+          vertexColors: true,
+          roughness: isMeadow ? 0.94 : 1,
+          metalness: 0,
+          side: THREE.DoubleSide
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
+        mesh.receiveShadow = true;
+        mesh.castShadow = !isMeadow;
+        terrain.add(mesh);
+      }
+      islandGroup.add(terrain);
+      if (terrainFallbackGroup) {
+        islandGroup.remove(terrainFallbackGroup);
+        terrainFallbackGroup.traverse((object) => {
+          if (object.geometry) object.geometry.dispose();
+          if (object.material) {
+            const materials = Array.isArray(object.material) ? object.material : [object.material];
+            materials.forEach((material) => material.dispose());
+          }
+        });
+      }
+    } catch (error) {
+      console.warn('Using procedural island terrain fallback:', error);
+    }
   }
 
   function setupLights() {
@@ -649,6 +714,9 @@
 
   // ─── Multi-Tier Sculpted Island Base ───────────────────────────────────────
   function buildIslandBase() {
+    terrainFallbackGroup = new THREE.Group();
+    terrainFallbackGroup.name = 'Procedural terrain fallback';
+    islandGroup.add(terrainFallbackGroup);
     // Procedural vibrant meadow grass texture
     const gCanvas = document.createElement('canvas');
     gCanvas.width = 512;
@@ -707,7 +775,7 @@
     const rockMesh = new THREE.Mesh(rockGeo, rockMat);
     rockMesh.position.y = -1.35;
     rockMesh.receiveShadow = true;
-    islandGroup.add(rockMesh);
+    terrainFallbackGroup.add(rockMesh);
 
     // Individual shoreline stones break up the straight-sided island silhouette.
     const shoreStoneGeo = new THREE.IcosahedronGeometry(0.95, 1);
@@ -721,7 +789,7 @@
       stone.rotation.set(Math.sin(i * 1.6) * 0.22, angle, Math.cos(i * 2.3) * 0.18);
       stone.castShadow = true;
       stone.receiveShadow = true;
-      islandGroup.add(stone);
+      terrainFallbackGroup.add(stone);
     }
 
     // 2. Warm limestone bevel beneath the grass edge
@@ -730,7 +798,7 @@
     const sandMesh = new THREE.Mesh(sandGeo, sandMat);
     sandMesh.position.y = -0.18;
     sandMesh.receiveShadow = true;
-    islandGroup.add(sandMesh);
+    terrainFallbackGroup.add(sandMesh);
 
     // 3. Main vibrant spring-meadow grass plateau
     const grassGeo = new THREE.CylinderGeometry(11.9, 12.2, 0.52, 64);
@@ -742,7 +810,7 @@
     const grassMesh = new THREE.Mesh(grassGeo, grassMat);
     grassMesh.position.y = 0.12;
     grassMesh.receiveShadow = true;
-    islandGroup.add(grassMesh);
+    terrainFallbackGroup.add(grassMesh);
 
     // Scattered wildflower patches across the meadow
     const flowerColors = [0xF472B6, 0xFBBF24, 0xA78BFA, 0xF87171, 0x34D399, 0x60A5FA];
