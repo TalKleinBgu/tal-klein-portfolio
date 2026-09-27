@@ -655,13 +655,19 @@
         const vertexPositions = componentArray(primitive.attributes.POSITION);
         geometry.setAttribute('position', new THREE.BufferAttribute(vertexPositions, 3));
         if (primitive.attributes.COLOR_0 !== undefined) {
+          const colorAccessor = gltf.accessors[primitive.attributes.COLOR_0];
           const rawColors = componentArray(primitive.attributes.COLOR_0);
           const colorStride = rawColors.length / (vertexPositions.length / 3);
           const colors = new Float32Array(vertexPositions.length);
           for (let i = 0; i < colors.length / 3; i++) {
-            colors[i * 3] = rawColors[i * colorStride];
-            colors[i * 3 + 1] = rawColors[i * colorStride + 1];
-            colors[i * 3 + 2] = rawColors[i * colorStride + 2];
+            // Blender exports vertex colors as normalized UNSIGNED_SHORT. The
+            // stored integers must be divided by their component range before
+            // Three.js uses them as linear color multipliers; otherwise the
+            // whole terrain clips to white.
+            const scale = colorAccessor.normalized && colorAccessor.componentType === 5123 ? 1 / 65535 : 1;
+            colors[i * 3] = rawColors[i * colorStride] * scale;
+            colors[i * 3 + 1] = rawColors[i * colorStride + 1] * scale;
+            colors[i * 3 + 2] = rawColors[i * colorStride + 2] * scale;
           }
           geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
         }
