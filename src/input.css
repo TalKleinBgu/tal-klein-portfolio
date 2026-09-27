@@ -1369,16 +1369,7 @@
     background: var(--border);
   }
   .timeline::after {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 24px;
-    bottom: 24px;
-    width: 2px;
-    background: linear-gradient(var(--accent), var(--accent-bright));
-    transform: scaleY(var(--fill, 0));
-    transform-origin: 50% 0;
-    transition: transform .15s linear;
+    display: none;
   }
   .timeline .card            { position: relative; margin-top: 26px; }
   .timeline .card:first-child { margin-top: 0; }
@@ -2105,9 +2096,6 @@
   }
 
   /* ── Springer Publication Highlight ─────────────────────────────────── */
-  .pub-card-accent {
-    border-left: 3px solid var(--accent) !important;
-  }
   .pub-badge-springer {
     display: inline-flex;
     align-items: center;
