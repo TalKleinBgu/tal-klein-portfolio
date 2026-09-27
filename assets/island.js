@@ -188,6 +188,7 @@
   let animPuppy = null;
   let animCows = [];
   let animCar = null;
+  let animTreeGroups = [];
   let radarDish = null;
   let beaconMat = null;
   let riverMesh = null;
@@ -502,8 +503,8 @@
 
     clock = new THREE.Clock();
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xEBF4F2);
-    scene.fog = new THREE.FogExp2(0xEBF4F2, 0.0085);
+    scene.background = new THREE.Color(0xF0F4F1);
+    scene.fog = new THREE.FogExp2(0xF0F4F1, 0.011);
 
     const w = window.innerWidth || 1440;
     const h = window.innerHeight || 900;
@@ -522,7 +523,7 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.06;
+    renderer.toneMappingExposure = 1.12;
 
     if (THREE.OrbitControls) {
       controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -555,7 +556,7 @@
     // Build all 8 high-precision landmarks
     buildResearchHQ();      // Foreground centerpiece: 3-story brick & stone (DeepMind style)
     buildBGUHall();         // Back-left academic hall: sandstone brick & BGU crest (Michigan style)
-    buildTechHub();         // Mid-left studio: cedar wood, steel & glass (Microsoft style)
+    buildTechHub();         // Mid-left studio: cedar wood, steel & glass modern pavilion
     buildDairyBarn();       // Back-right heritage barn: red timber/brick, silo & spotted cows
     buildPuppyHaven();      // Mid-right cottage: shingle roof, garden & guide dog in blue vest
     buildBasketballCourt(); // Front-left streetball court: blue/gold key, hoop & swish ball
@@ -572,30 +573,44 @@
   }
 
   function setupLights() {
-    const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x68B684, 0.72);
+    const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x8C7C6D, 0.65);
     hemiLight.position.set(0, 35, 0);
     scene.add(hemiLight);
 
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.45);
+    scene.add(ambientLight);
+
     // Warm sunlit directional light casting crisp architectural shadows
-    const sunLight = new THREE.DirectionalLight(0xFFFBEB, 1.18);
-    sunLight.position.set(20, 30, 18);
+    const sunLight = new THREE.DirectionalLight(0xFFF6D9, 1.45);
+    sunLight.position.set(22, 34, 16);
     sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 2048;
-    sunLight.shadow.mapSize.height = 2048;
+    sunLight.shadow.mapSize.width = 4096;
+    sunLight.shadow.mapSize.height = 4096;
     sunLight.shadow.camera.near = 5;
-    sunLight.shadow.camera.far = 65;
-    const d = 13.5;
+    sunLight.shadow.camera.far = 70;
+    const d = 15;
     sunLight.shadow.camera.left = -d;
     sunLight.shadow.camera.right = d;
     sunLight.shadow.camera.top = d;
     sunLight.shadow.camera.bottom = -d;
     sunLight.shadow.bias = -0.0005;
+    sunLight.shadow.radius = 2.5;
     scene.add(sunLight);
 
     // Soft cool fill from opposite side to illuminate brick details in shadow
-    const fillLight = new THREE.DirectionalLight(0xBAE6FD, 0.42);
-    fillLight.position.set(-18, 12, -14);
+    const fillLight = new THREE.DirectionalLight(0xBAE6FD, 0.55);
+    fillLight.position.set(-20, 15, -16);
     scene.add(fillLight);
+
+    // Subtle rim light from behind for depth
+    const rimLight = new THREE.DirectionalLight(0xFFEDD5, 0.45);
+    rimLight.position.set(5, 10, -25);
+    scene.add(rimLight);
+
+    // Warm-toned bounce light from below
+    const bounceLight = new THREE.PointLight(0xFCD34D, 0.35, 30);
+    bounceLight.position.set(0, 0.5, 0);
+    scene.add(bounceLight);
   }
 
   // ─── Multi-Tier Sculpted Island Base ───────────────────────────────────────
@@ -662,6 +677,40 @@
     wallTrim.position.set(-1.5, 0.42, -3.6);
     wallTrim.receiveShadow = true;
     islandGroup.add(wallTrim);
+
+    // Scattered wildflower patches across the meadow
+    const flowerColors = [0xF472B6, 0xFBBF24, 0xA78BFA, 0xF87171, 0x34D399, 0x60A5FA];
+    for (let i = 0; i < 35; i++) {
+      const angle = (i / 35) * Math.PI * 2 + i * 0.618;
+      const dist = 3.2 + (i % 5) * 1.2 + Math.sin(i * 3.7) * 0.8;
+      const fx = Math.cos(angle) * dist;
+      const fz = Math.sin(angle) * dist;
+      // Skip flowers where buildings stand
+      if (Math.abs(fx) < 2.5 && Math.abs(fz) < 2.5) continue;
+      const flower = new THREE.Mesh(
+        new THREE.SphereGeometry(0.06 + (i % 3) * 0.02, 6, 6),
+        new THREE.MeshStandardMaterial({ color: flowerColors[i % flowerColors.length], roughness: 0.6 })
+      );
+      flower.position.set(fx, 0.38, fz);
+      islandGroup.add(flower);
+    }
+
+    // Low ground-cover bushes scattered around
+    const bushGreen = [0x3D8458, 0x4D9B6A, 0x2D6A4F];
+    for (let i = 0; i < 18; i++) {
+      const angle = (i / 18) * Math.PI * 2 + 0.3;
+      const dist = 4.5 + (i % 4) * 1.1;
+      const bx = Math.cos(angle) * dist;
+      const bz = Math.sin(angle) * dist;
+      if (Math.abs(bx) < 3 && Math.abs(bz) < 3) continue;
+      const bush = new THREE.Mesh(
+        new THREE.DodecahedronGeometry(0.18 + (i % 3) * 0.06, 1),
+        new THREE.MeshStandardMaterial({ color: bushGreen[i % bushGreen.length], roughness: 0.8 })
+      );
+      bush.position.set(bx, 0.42, bz);
+      bush.castShadow = true;
+      islandGroup.add(bush);
+    }
   }
 
   // ─── Winding River, Coastal Bay & Arched Stone Bridge (like acrokat.me) ────
@@ -776,6 +825,28 @@
         curb.rotation.y = p.rot;
         islandGroup.add(curb);
       });
+    });
+
+    // Stone park benches along the cobblestone avenues
+    const benchMat = new THREE.MeshStandardMaterial({ color: 0x78716C, roughness: 0.75 });
+    const benchWood = new THREE.MeshStandardMaterial({ color: 0x92400E, roughness: 0.8 });
+    [[-1.8, 0.37, 2.6, 0.48], [1.0, 0.37, 2.4, -0.3]].forEach(([bx, by, bz, brot]) => {
+      const bench = new THREE.Group();
+      bench.position.set(bx, by, bz);
+      bench.rotation.y = brot;
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.06, 0.24), benchWood);
+      seat.position.y = 0.22;
+      seat.castShadow = true;
+      bench.add(seat);
+      const backrest = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.28, 0.04), benchWood);
+      backrest.position.set(0, 0.34, -0.1);
+      bench.add(backrest);
+      [[-0.28, 0], [0.28, 0]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.24), benchMat);
+        leg.position.set(lx, 0.11, lz);
+        bench.add(leg);
+      });
+      islandGroup.add(bench);
     });
   }
 
@@ -925,6 +996,16 @@
     hqSign.position.set(0, 1.24, bodyD / 2 + 0.24);
     group.add(hqSign);
 
+    // Fabric canopy awnings over ground-floor windows
+    const awningMat = new THREE.MeshStandardMaterial({ color: 0x1E3A8A, roughness: 0.6, side: THREE.DoubleSide });
+    [-1.2, 1.2].forEach(ax => {
+      const awning = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.04, 0.32), awningMat);
+      awning.position.set(ax, 1.12, bodyD / 2 + 0.18);
+      awning.rotation.x = -0.15;
+      awning.castShadow = true;
+      group.add(awning);
+    });
+
     // Front entrance planters
     const epL = createPlanterBox(0.75, 0.38);
     epL.position.set(-1.15, 0.32, bodyD / 2 + 0.28);
@@ -1047,7 +1128,7 @@
     islandGroup.add(group);
   }
 
-  // ─── 3. The Builder's Tech Lab (Microsoft Wood & Steel Pavilion style) ─────
+  // ─── 3. The Builder's Tech Lab (Modern Wood & Steel Pavilion) ─────
   function buildTechHub() {
     const group = new THREE.Group();
     group.position.set(-5.8, 0.36, -0.2);
@@ -1093,15 +1174,14 @@
       group.add(w2);
     });
 
-    // 4-Square Colorful Tech Logo Signboard (like the Microsoft 4-color logo in acrokat.me!)
+    // Neutral Tech/Engineering Signboard
     const techSign = createSignBoardMesh(2.05, 0.55, (ctx, w, h) => {
-      // 4-color window squares
-      const s = 26;
-      const gx = 28, gy = h / 2 - s - 3;
-      ctx.fillStyle = '#F25022'; ctx.fillRect(gx, gy, s, s);
-      ctx.fillStyle = '#7FBA00'; ctx.fillRect(gx + s + 6, gy, s, s);
-      ctx.fillStyle = '#00A4EF'; ctx.fillRect(gx, gy + s + 6, s, s);
-      ctx.fillStyle = '#FFB900'; ctx.fillRect(gx + s + 6, gy + s + 6, s, s);
+      // Terminal/Code icon </>
+      ctx.fillStyle = '#0284C7';
+      ctx.font = '900 42px "Courier New", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('</>', 55, h / 2);
 
       ctx.fillStyle = '#0F172A';
       ctx.font = '800 38px "Plus Jakarta Sans", Arial, sans-serif';
@@ -1705,6 +1785,7 @@
         }
       }
 
+      animTreeGroups.push(tree);
       islandGroup.add(tree);
     }
 
@@ -2023,6 +2104,28 @@
       }
       if (beaconMat) {
         beaconMat.emissiveIntensity = 0.4 + Math.abs(Math.sin(t * 4.0)) * 0.9;
+      }
+
+      // Gentle wind sway on tree canopies
+      animTreeGroups.forEach((tree, idx) => {
+        const phase = idx * 1.7;
+        tree.rotation.z = Math.sin(t * 0.8 + phase) * 0.018;
+        tree.rotation.x = Math.cos(t * 0.6 + phase * 0.7) * 0.012;
+      });
+
+      // Animated water shimmer on the river
+      if (riverMesh) {
+        riverMesh.traverse(child => {
+          if (child.isMesh && child.material && child.material.color) {
+            const isWater = child.material.roughness < 0.2;
+            if (isWater) {
+              const shimmer = 0.15 + Math.sin(t * 1.8) * 0.04;
+              child.material.roughness = shimmer;
+              child.material.metalness = 0.18 + Math.sin(t * 2.4) * 0.06;
+              child.position.y = child.position.y > 0.3 ? 0.35 + Math.sin(t * 2.0 + child.position.x) * 0.015 : child.position.y;
+            }
+          }
+        });
       }
 
       // Basketball 3-Point Swish Shot or Idle Dribble
