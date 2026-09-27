@@ -613,7 +613,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=2', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=3', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
@@ -647,11 +647,14 @@
           vertexColors: true,
           roughness: isMeadow ? 0.94 : 1,
           metalness: 0,
+          emissive: isMeadow ? 0x173318 : 0x000000,
+          emissiveIntensity: isMeadow ? 0.35 : 0,
           side: THREE.DoubleSide
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
-        mesh.receiveShadow = true;
+        // Broad triangulated meadows can self-shadow across shallow slopes.
+        mesh.receiveShadow = !isMeadow;
         mesh.castShadow = !isMeadow;
         terrain.add(mesh);
       }
