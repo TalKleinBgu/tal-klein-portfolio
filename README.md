@@ -13,6 +13,13 @@ npm run build
 
 Then open `index.html` (or `npx serve .`). Use `npm run watch` to rebuild on changes.
 
+## Rebuild the 3D island
+
+The complete island scene is authored in Blender. Open `assets/portfolio-island.blend`
+to edit it. With Blender 5.2 installed, run `node scripts/generate-island-glb.js`
+to regenerate the editable `.blend` source and the website's `assets/island-terrain.glb`.
+The site keeps its interactive landmark labels and animated water around the exported scene.
+
 ## Deploy
 
 Hosted on Vercel — every push to `main` redeploys automatically.

@@ -584,19 +584,10 @@
     buildIslandBase();
     loadIslandTerrainGlb();
     buildRiverAndStoneBridge();
-    buildCobblestoneRoads();
+    registerBlenderLandmarkHotspots();
 
-    // Build all 8 high-precision landmarks
-    buildResearchHQ();      // Foreground centerpiece: 3-story brick & stone (DeepMind style)
-    buildBGUHall();         // Back-left academic hall: sandstone brick & BGU crest (Michigan style)
-    buildTechHub();         // Mid-left studio: cedar wood, steel & glass modern pavilion
-    buildDairyBarn();       // Back-right heritage barn: red timber/brick, silo & spotted cows
-    buildPuppyHaven();      // Mid-right cottage: shingle roof, garden & guide dog in blue vest
-    buildBasketballCourt(); // Front-left streetball court: blue/gold key, hoop & swish ball
-    buildIDFOutpost();      // Back-center tactical comms outpost & blinking radar tower
-    buildCoastalPier();     // Front-right wooden pier, sandy beach & bobbing sailboat
-
-    buildTreesAndStreetFurniture();
+    // The complete landscape, landmark architecture, farm, pet yard, roads,
+    // trees, street furniture, court, and pier are authored in Blender.
     buildOcean();
     buildFloatingLabels();
     buildVignetteOverlay();
@@ -613,7 +604,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=7', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=8', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
@@ -630,65 +621,74 @@
       const componentArray = (accessor) => {
         const info = gltf.accessors[accessor];
         const bufferViewInfo = gltf.bufferViews[info.bufferView];
-        const bytesPerElement = info.componentType === 5125 ? 4 : 4;
+        const bytesPerElement = info.componentType === 5125 || info.componentType === 5126 ? 4 : 2;
         const start = (bufferViewInfo.byteOffset || 0) + (info.byteOffset || 0);
-        const typed = info.componentType === 5125 ? Uint32Array : Float32Array;
-        return new typed(binary.slice(start, start + info.count * bytesPerElement));
+        const typed = info.componentType === 5125 ? Uint32Array : info.componentType === 5126 ? Float32Array : Uint16Array;
+        const componentCount = { SCALAR: 1, VEC2: 2, VEC3: 3, VEC4: 4 }[info.type];
+        return new typed(binary.slice(start, start + info.count * componentCount * bytesPerElement));
       };
       const terrain = new THREE.Group();
       let meadowTexture = null;
+      const grassCanvas = document.createElement('canvas');
+      grassCanvas.width = grassCanvas.height = 512;
+      const grassCtx = grassCanvas.getContext('2d');
+      grassCtx.fillStyle = '#F4F8E9';
+      grassCtx.fillRect(0, 0, 512, 512);
+      let seed = 93821;
+      const random = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+      const grassMarks = ['rgba(49,91,43,0.23)','rgba(105,139,65,0.20)','rgba(226,218,160,0.24)','rgba(67,112,52,0.16)'];
+      for (let i = 0; i < 9000; i++) {
+        const x = random() * 512, y = random() * 512;
+        const radius = 0.55 + random() * 2.2;
+        grassCtx.fillStyle = grassMarks[i % grassMarks.length];
+        grassCtx.beginPath();
+        grassCtx.ellipse(x, y, radius * (1.1 + random()), radius * 0.58, random() * Math.PI, 0, Math.PI * 2);
+        grassCtx.fill();
+      }
+      meadowTexture = new THREE.CanvasTexture(grassCanvas);
+      meadowTexture.wrapS = meadowTexture.wrapT = THREE.RepeatWrapping;
+      meadowTexture.repeat.set(1.5, 1.5);
+      meadowTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
       for (const primitive of gltf.meshes[0].primitives) {
         const geometry = new THREE.BufferGeometry();
+        // Blender's glTF exporter writes the scene in glTF's Y-up coordinate system.
         const vertexPositions = componentArray(primitive.attributes.POSITION);
         geometry.setAttribute('position', new THREE.BufferAttribute(vertexPositions, 3));
-        if (primitive.attributes.COLOR_0 !== undefined) geometry.setAttribute('color', new THREE.BufferAttribute(componentArray(primitive.attributes.COLOR_0), 3));
+        if (primitive.attributes.COLOR_0 !== undefined) {
+          const rawColors = componentArray(primitive.attributes.COLOR_0);
+          const colorStride = rawColors.length / (vertexPositions.length / 3);
+          const colors = new Float32Array(vertexPositions.length);
+          for (let i = 0; i < colors.length / 3; i++) {
+            colors[i * 3] = rawColors[i * colorStride];
+            colors[i * 3 + 1] = rawColors[i * colorStride + 1];
+            colors[i * 3 + 2] = rawColors[i * colorStride + 2];
+          }
+          geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        }
         if (primitive.indices !== undefined) geometry.setIndex(new THREE.BufferAttribute(componentArray(primitive.indices), 1));
         const isMeadow = primitive.material === 0;
         if (isMeadow) {
           const uvs = new Float32Array(vertexPositions.length / 3 * 2);
           for (let i = 0; i < vertexPositions.length / 3; i++) {
-            uvs[i * 2] = vertexPositions[i * 3] / 3 + 0.5;
-            uvs[i * 2 + 1] = vertexPositions[i * 3 + 2] / 3 + 0.5;
+            uvs[i * 2] = vertexPositions[i * 3] / 20 + 0.5;
+            uvs[i * 2 + 1] = vertexPositions[i * 3 + 2] / 20 + 0.5;
           }
           geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-          if (!meadowTexture) {
-            const textureCanvas = document.createElement('canvas');
-            textureCanvas.width = textureCanvas.height = 512;
-            const ctx = textureCanvas.getContext('2d');
-            ctx.fillStyle = '#78ad61';
-            ctx.fillRect(0, 0, 512, 512);
-            const fleckColors = ['rgba(37,83,43,0.12)', 'rgba(218,218,139,0.16)', 'rgba(159,197,111,0.22)', 'rgba(54,117,57,0.12)'];
-            for (let i = 0; i < 9000; i++) {
-              const x = Math.random() * 512, y = Math.random() * 512;
-              const radius = 0.6 + Math.random() * 2.6;
-              ctx.fillStyle = fleckColors[i % fleckColors.length];
-              ctx.beginPath();
-              ctx.ellipse(x, y, radius * (1.2 + Math.random()), radius * 0.62, Math.random() * Math.PI, 0, Math.PI * 2);
-              ctx.fill();
-            }
-            meadowTexture = new THREE.CanvasTexture(textureCanvas);
-            meadowTexture.wrapS = meadowTexture.wrapT = THREE.RepeatWrapping;
-            meadowTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-          }
         }
         geometry.computeVertexNormals();
         const material = isMeadow
-          ? new THREE.MeshStandardMaterial({ map: meadowTexture, roughness: 0.98, metalness: 0, side: THREE.DoubleSide })
+          ? new THREE.MeshStandardMaterial({ map: meadowTexture, vertexColors: true, roughness: 0.98, metalness: 0, side: THREE.DoubleSide })
           : new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
-        // The custom GLB meadow still shades black in Three r128 on some GPUs;
-        // keep the textured fallback meadow visible while using the GLB cliffs.
-        mesh.visible = !isMeadow;
-        // Broad triangulated meadows can self-shadow across shallow slopes.
-        mesh.receiveShadow = !isMeadow;
+        mesh.visible = true;
+        mesh.receiveShadow = true;
         mesh.castShadow = !isMeadow;
         terrain.add(mesh);
       }
       islandGroup.add(terrain);
       if (terrainFallbackGroup) {
         terrainFallbackGroup.children.forEach((object) => {
-          if (object.name === 'Procedural meadow plateau') return;
           object.visible = false;
           if (object.geometry) object.geometry.dispose();
           if (object.material) object.material.dispose();
@@ -859,7 +859,7 @@
         new THREE.MeshStandardMaterial({ color: flowerColors[i % flowerColors.length], roughness: 0.6 })
       );
       flower.position.set(fx, 0.38, fz);
-      islandGroup.add(flower);
+      terrainFallbackGroup.add(flower);
     }
 
     // Low ground-cover bushes scattered around
@@ -876,7 +876,7 @@
       );
       bush.position.set(bx, 0.42, bz);
       bush.castShadow = true;
-      islandGroup.add(bush);
+      terrainFallbackGroup.add(bush);
     }
   }
 
@@ -1087,6 +1087,31 @@
         child.userData.landmarkId = landmarkId;
         interactiveTargets.push(child);
       }
+    });
+  }
+
+  // Invisible hit volumes preserve the site's hover labels, focus camera, and
+  // landmark dialogs while the visible architecture comes from the Blender GLB.
+  function registerBlenderLandmarkHotspots() {
+    const spots = [
+      ['research_hq', -0.2, 1.2, 3.8, 3.8, 3.2],
+      ['bgu_campus', -4.2, -5.4, 4.0, 4.0, 3.8],
+      ['tech_hub', -7.4, -0.4, 3.4, 3.3, 3.0],
+      ['dairy_barn', 6.6, -4.0, 3.8, 2.7, 3.2],
+      ['puppy_haven', 6.5, 1.2, 3.0, 2.2, 3.0],
+      ['idf_outpost', 1.4, -6.6, 2.8, 5.3, 2.8],
+      ['coastal_pier', 4.4, 5.7, 1.9, 2.0, 2.4],
+      ['basketball_court', -5.6, 5.4, 3.8, 1.4, 2.8]
+    ];
+    const invisible = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
+    spots.forEach(([id, x, z, width, height, depth]) => {
+      const group = new THREE.Group();
+      group.position.set(x, 0.36, z);
+      const proxy = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), invisible);
+      proxy.position.y = height / 2;
+      group.add(proxy);
+      islandGroup.add(group);
+      registerInteractive(group, id);
     });
   }
 

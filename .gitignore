@@ -1,2 +1,4 @@
 node_modules/
 style.css
+*.blend1
+/assets/assets/
