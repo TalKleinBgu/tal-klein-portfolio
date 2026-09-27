@@ -10,155 +10,158 @@
   'use strict';
 
   const PLACES = {
+    deepmind: {
+      id: 'deepmind',
+      name: 'Data Scientist & ML Engineer',
+      logo: './assets/acrokat/brands/deepmind.svg',
+      role: 'Data Scientist & ML Researcher · Socially Embedded Lab, BGU (2024 – Present)',
+      cardDesc: 'End-to-end NLP pipeline extracting 30+ structured features from 4,000+ Hebrew court verdicts (0.92 F1) & causal inference',
+      tag: 'Current Role & Springer Publication · Beer Sheva',
+      title: 'Data Scientist & Machine Learning Engineer',
+      subtitle: 'Socially Embedded Lab, Ben-Gurion University · 2024 – Present',
+      icon: '🧠',
+      desc: 'Specializing in GenAI, LLMs, deep learning, production-scale NLP pipelines, RAG architectures, and causal inference. Currently leading LLM-driven feature extraction and causal sentencing analysis at BGU, with our paper under review at Artificial Intelligence and Law (Springer, 2026).',
+      stats: [
+        { v: '0.92', k: 'F1 Score' },
+        { v: '4,000+', k: 'Court Verdicts' },
+        { v: '+11pp', k: 'Accuracy ↑' },
+        { v: '30+', k: 'Features' }
+      ],
+      bullets: [
+        'Built an end-to-end NLP pipeline extracting 30+ structured features from 4,000+ unstructured Hebrew court verdicts using GPT-5-mini batch inference.',
+        'Designed and iteratively refined extraction prompts through error analysis on a held-out dev set, improving accuracy by 11 percentage points over a zero-shot baseline.',
+        'Conducted causal inference using propensity score matching with Rosenbaum bounds and E-value sensitivity analyses.',
+        'Publication under review (Springer AI & Law, 2026): "Examining Bias in Sentencing Decisions with LLM-Powered Control over the Facts" (Klein, T., et al.).'
+      ],
+      jumpSection: '#experience',
+      jumpLabel: 'View Research & Career in Classic CV'
+    },
+
     michigan: {
       id: 'michigan',
       name: 'Ben-Gurion University',
       logo: './assets/acrokat/brands/bgu-icon.svg',
-      role: 'M.Sc. (GPA 92) & B.Sc. (Cum Laude)',
-      cardDesc: 'Software & Information Systems Engineering, Meitar Legal-Tech Fellow & AI Teaching Assistant',
-      tag: 'Academic Excellence · B.Sc. & M.Sc.',
+      role: 'M.Sc. Software & Information Systems Eng. (GPA 92) · B.Sc. Data Eng. (GPA 86)',
+      cardDesc: 'Meitar Excellence Program M.Sc. (2024–2026, GPA 92) & B.Sc. in Data Engineering (2021–2025, GPA 86) at BGU',
+      tag: 'Education · Ben-Gurion University of the Negev',
       title: 'Ben-Gurion University of the Negev',
-      subtitle: 'Software & Information Systems Engineering · Beer Sheva',
+      subtitle: 'M.Sc. (Meitar Excellence, GPA 92) & B.Sc. Data Engineering (GPA 86)',
       icon: '🎓',
-      desc: 'After military service, I completed a seven-year academic and research journey at Ben-Gurion University of the Negev, earning my B.Sc. (Cum Laude, 89.4) and M.Sc. (GPA 92) while teaching hundreds of engineering students.',
+      desc: 'Completed my B.Sc. in Data Engineering (2021–2025, GPA 86) and M.Sc. in Software & Information Systems Engineering (2024–2026, GPA 92, Meitar Excellence Program) at Ben-Gurion University of the Negev, specializing in Data Science, LLMs, and Natural Language Processing.',
       stats: [
         { v: '92', k: 'M.Sc. GPA' },
-        { v: '89.4', k: 'B.Sc. Cum Laude' },
-        { v: '2020–26', k: 'Teaching Assistant' }
+        { v: 'Meitar', k: 'Excellence Prog.' },
+        { v: '86', k: 'B.Sc. GPA' }
       ],
       bullets: [
-        'M.Sc. thesis analyzing temporal dynamics in judicial ruling citations using Legal NLP and transformers.',
-        'Recipient of the prestigious Meitar Legal-Tech Center Research Excellence Fellowship.',
-        'Teaching Assistant for "Introduction to Artificial Intelligence" and "Technological Entrepreneurship".'
+        'M.Sc. in Software & Information Systems Engineering (2024 – 2026): GPA 92, Meitar Excellence Program, Specialization in Data Science & NLP.',
+        'M.Sc. Thesis: LLM-driven feature extraction and causal inference for sentencing analysis in Hebrew court verdicts.',
+        'B.Sc. in Data Engineering (2021 – 2025): GPA 86, covering Machine Learning, Deep Learning, NLP, Explainable ML (XAI), Information Retrieval, and Big Data.'
       ],
-      jumpSection: '#experience',
-      jumpLabel: 'View Academic Journey in Classic CV'
-    },
-
-    deepmind: {
-      id: 'deepmind',
-      name: 'AI & Legal NLP Research',
-      logo: './assets/acrokat/brands/deepmind.svg',
-      role: 'M.Sc. AI Researcher · Springer AI & Law',
-      cardDesc: 'Legal-HeBERT & BiLSTM transformer pipelines over 185K Supreme Court rulings (86% F1) & causal inference',
-      tag: 'Published AI Research · DeepMind-Style HQ',
-      title: 'AI & Legal NLP Research HQ',
-      subtitle: 'Co-Advisor: Prof. Mark Last · Springer AI & Law (Q1)',
-      icon: '🏛️',
-      desc: 'The central architectural landmark on the island: where large language models, citation network dynamics, and causal inference converge to uncover hidden temporal shifts in judicial history.',
-      stats: [
-        { v: '86%', k: 'Best F1 Score' },
-        { v: '185K', k: 'Court Rulings' },
-        { v: 'Q1', k: 'Springer Journal' }
-      ],
-      bullets: [
-        'Built a Legal-HeBERT + BiLSTM classifier that outperformed standard transformers by 7 F1 points.',
-        'Engineered a production NLP pipeline to parse and link 185,000 Hebrew Supreme Court rulings.',
-        'Applied Difference-in-Differences causal inference to measure doctrinal shifts over decades.'
-      ],
-      jumpSection: '#projects',
-      jumpLabel: 'Explore Research & Publications'
-    },
-
-    microsoft: {
-      id: 'microsoft',
-      name: 'Cloud AI & IDF C4I',
-      logo: './assets/acrokat/brands/microsoft.svg',
-      role: 'Data Scientist · IDF C4I Combat Comms',
-      cardDesc: 'Distributed search over 6.4M+ docs on Cloud (0.67s latency), Whisper AI & IDF C4I tactical radar systems',
-      tag: 'Production Engineering · Cloud AI & IDF C4I',
-      title: 'Cloud AI Lab & IDF C4I Comms Tower',
-      subtitle: 'Distributed Search, Speech AI & Tactical RF Networks',
-      icon: '📡',
-      desc: 'Flanked by the IDF C4I Tactical Radar & Communications Tower, this timber-and-glass engineering complex represents both production machine learning at scale (6.4M+ Wikipedia search engine on GCP, real-time Whisper speaker diarization) and mission-critical military communications.',
-      stats: [
-        { v: '6.4M+', k: 'Docs Indexed' },
-        { v: '0.67s', k: 'Search Latency' },
-        { v: 'C4I', k: 'IDF Full Honors' }
-      ],
-      bullets: [
-        'Architected a distributed Wikipedia search engine with custom inverted indexes, BM25, and PageRank on Cloud.',
-        'Built a real-time speaker diarization and Whisper transcription pipeline with custom voice embeddings.',
-        'IDF Combat Communications Specialist (2015–2018): managed encrypted tactical RF networks and field command systems.'
-      ],
-      jumpSection: '#projects',
-      jumpLabel: 'See All 6 Engineering Projects'
+      jumpSection: '#education',
+      jumpLabel: 'View Full Academic Education'
     },
 
     github: {
       id: 'github',
-      name: 'GitHub & Open Source',
+      name: 'GitHub & ML Projects',
       logo: './assets/acrokat/brands/github.svg',
-      role: 'Machine Learning Engineer',
-      cardDesc: 'Open-source ML repositories, RAG architectures, multimodal deep learning & end-to-end AI tools',
-      tag: 'Open Source · Deep Learning & GenAI',
-      title: 'GitHub & Open Source Studio',
-      subtitle: 'github.com/TalKleinBgu · Production ML Codebases',
+      role: '7 Production & Research ML Projects · Open Source',
+      cardDesc: '6.4M-doc Wikipedia IR Engine (8× speedup), Gemma-3 12B QLoRA Fine-Tuning (0.71 F1), DictaBERT Legal Classifier (91% acc) & Multimodal AI',
+      tag: 'Selected Work · github.com/TalKleinBgu',
+      title: 'GitHub & Selected ML Engineering Projects',
+      subtitle: 'LLMs, Fine-Tuning, Information Retrieval, Vision & Audio',
       icon: '🐙',
-      desc: 'Explore hands-on machine learning codebases, retrieval-augmented generation (RAG) architectures, custom PyTorch training loops, and full-stack AI applications.',
+      desc: 'Hands-on machine learning repositories spanning parameter-efficient LLM fine-tuning (LoRA/QLoRA), large-scale search engines on GCP, Hebrew legal & dialogue NLP, and multimodal vision/audio architectures.',
       stats: [
-        { v: 'PyTorch', k: '& HuggingFace' },
-        { v: 'RAG', k: '& LLM Agents' },
-        { v: 'Open', k: 'Source Repos' }
+        { v: '6.4M', k: 'IR Docs (1.24s)' },
+        { v: '0.71', k: 'Gemma-3 LoRA F1' },
+        { v: '91%', k: 'DictaBERT Acc.' }
       ],
       bullets: [
-        'Published end-to-end repositories covering Hebrew NLP, causal inference, information retrieval, and RL.',
-        'Specialized in fine-tuning domain-specific encoders (Legal-HeBERT) and modern LLM pipelines.',
-        'Clean, reproducible research and engineering codebases ready for production deployment.'
+        'Wikipedia-Scale IR Engine: Hybrid BM25, TF-IDF & PageRank search over 6.4M pages on GCP, cutting query latency from 9.8s → 1.24s (8× speedup).',
+        'Parameter-Efficient Fine-Tuning of Gemma-3 12B: 22-run LoRA/QLoRA ablation sweep lifting grounded QA Answer F1 from 0.03 to 0.71 (−15% perplexity).',
+        'Hebrew Legal Paragraph Classifier (91% accuracy across 4,271 paragraphs with AlephBERT/DictaBERT vs. GPT-4) & "The Sound of Silence" Hugging Face dataset (315 segments, 1,425 labels).',
+        'Multimodal Next-Frame Video Prediction (YOLO + BLIP-2 on UCF101), Melody-Conditioned LSTM Lyric Generation, and BGU Campus Bi-A* Pathfinding on OpenStreetMap.'
       ],
-      jumpSection: '#skills',
-      jumpLabel: 'Explore Technical Stack & Projects'
+      jumpSection: '#projects',
+      jumpLabel: 'Explore All 7 Projects'
     },
 
     helpdesk: {
       id: 'helpdesk',
-      name: 'IT Support & Help Desk Tower',
+      name: 'Matrix · IT Support & Help Desk',
       logo: './assets/acrokat/brands/helpdesk-icon.svg',
-      role: 'IT Support & Help Desk · Matrix Israel',
-      cardDesc: 'Enterprise troubleshooting across hardware, software & networks with rapid diagnosis and high-SLA ticket resolution',
-      tag: 'Enterprise IT Operations · Matrix Israel (2020–2021)',
-      title: 'Matrix IT Support & Help Desk Control Tower',
-      subtitle: 'Enterprise Technical Support, Diagnostics & Network Ops',
+      role: 'IT Support & Help Desk · Matrix Israel (2020 – 2021)',
+      cardDesc: 'Technical support and troubleshooting for enterprise clients across hardware, software, and network issues with rapid diagnosis',
+      tag: 'Career Experience · Matrix Israel (2020 – 2021)',
+      title: 'IT Support & Help Desk · Matrix Israel',
+      subtitle: 'Enterprise Technical Support & Troubleshooting · Center, Israel',
       icon: '🎧',
-      desc: 'Rising above the central plaza, the glass-and-steel Help Desk Control Tower commemorates my foundation in enterprise IT operations at Matrix Israel — diagnosing complex hardware, software, and network incidents in real time while communicating clearly with clients under pressure.',
+      desc: 'At Matrix Israel (2020–2021), I provided technical support and troubleshooting for enterprise clients across hardware, software, and network infrastructure, resolving high-priority help-desk tickets with rapid diagnosis and clear communication.',
       stats: [
-        { v: 'Matrix', k: 'Enterprise IT' },
-        { v: 'Tier 1–2', k: 'Rapid Triage' },
-        { v: '2020–21', k: 'Center, Israel' }
+        { v: 'Matrix', k: 'Israel' },
+        { v: '2020–21', k: 'Center, Israel' },
+        { v: 'IT Ops', k: 'Enterprise SLA' }
       ],
       bullets: [
-        'Provided comprehensive technical support and troubleshooting for enterprise clients across hardware, software, OS, and network infrastructure.',
-        'Resolved high-volume help-desk tickets with a focus on rapid root-cause diagnosis, SLA compliance, and empathetic user communication.',
-        'Built strong systems-thinking habits that directly inform how I design resilient, production-grade ML & data pipelines today.'
+        'Provided technical support and troubleshooting for enterprise clients across hardware, software, and network issues.',
+        'Resolved help-desk tickets with a focus on rapid diagnosis and clear communication.',
+        'Developed hands-on production debugging and systems reliability skills across complex enterprise environments.'
       ],
       jumpSection: '#experience',
-      jumpLabel: 'View IT Experience in Classic CV'
+      jumpLabel: 'View Matrix Role in Classic CV'
+    },
+
+    microsoft: {
+      id: 'microsoft',
+      name: 'IDF Communications & Operations',
+      logo: './assets/acrokat/brands/microsoft.svg',
+      role: 'Communications & Operations NCO · Israel Defense Forces (2017 – 2020)',
+      cardDesc: 'Managed mission-critical communications systems, operational coordination, and team training in a high-tempo environment',
+      tag: 'Military Service · IDF (2017 – 2020)',
+      title: 'Communications & Operations NCO · IDF',
+      subtitle: 'Israel Defense Forces · Tel Aviv, Israel (2017 – 2020)',
+      icon: '📡',
+      desc: 'Served as a Communications & Operations NCO in the Israel Defense Forces (2017–2020, Tel Aviv), managing mission-critical communications infrastructure and leading operational coordination in a high-tempo environment.',
+      stats: [
+        { v: 'IDF', k: 'Comms & Ops NCO' },
+        { v: '2017–20', k: 'Tel Aviv, Israel' },
+        { v: '24/7', k: 'Critical Infra' }
+      ],
+      bullets: [
+        'Managed communications systems and operational coordination in a high-tempo environment.',
+        'Led and trained a small team, ensuring reliability of mission-critical infrastructure.',
+        'Instilled strong leadership, composure under pressure, and operational ownership.'
+      ],
+      jumpSection: '#experience',
+      jumpLabel: 'View IDF Service in Classic CV'
     },
 
     blaze: {
       id: 'blaze',
-      name: 'Dairy Farm, Cows & Guide Dog',
+      name: 'Dairy Farm, Guide Dog & Basketball',
       logo: './assets/acrokat/brands/dairy-icon.svg',
-      role: 'Family Dairy Farm · Guide-Dog Trainer · Basketball',
-      cardDesc: 'Grew up on our family dairy farm with Holstein cows, raised a Golden Retriever guide-dog puppy right alongside the pasture & lifelong hoops player',
-      tag: 'Personal Roots · Farm, Guide Dog & Basketball',
-      title: 'Family Dairy Barn, Holstein Herd & Guide-Dog Pasture',
-      subtitle: '05:00 AM Farm Grit · Guide-Dog Puppy · Lifelong Hoops',
-      icon: '🐄',
+      role: 'Guide-Dog Puppy Raiser (2025–2026) · Family Farm & Basketball',
+      cardDesc: 'Raised and socialized a guide-dog puppy for 1.5 years (Israel Guide Dog Center), family dairy farm roots & lifelong basketball fan',
+      tag: 'Volunteering & Personal Life · Israel',
+      title: 'Guide-Dog Puppy Raiser, Family Farm & Basketball',
+      subtitle: 'Israel Guide Dog Center for the Blind (Jan 2025 – May 2026)',
+      icon: '🐕‍🦺',
       image: './assets/guide-dog.webp',
-      desc: 'Who I am beyond algorithms: growing up working alongside Holstein cows on our family dairy farm, raising and socializing our Golden Retriever guide-dog puppy right by the pasture for over 1.5 years, and shooting hoops on the basketball court my entire life (click the basketball on the court to shoot a 3-pointer!).',
+      desc: 'Off the clock: volunteered as a Guide-Dog Puppy Raiser for the Israel Guide Dog Center for the Blind (Jan 2025 – May 2026), grew up with a strong work ethic around our family dairy farm, and love playing and watching basketball (big Deni Avdija fan — click the basketball on the court to shoot a 3-pointer!).',
       stats: [
-        { v: 'Dairy', k: 'Family Farm Roots' },
-        { v: '1.5 Yr', k: 'Guide-Dog Raiser' },
-        { v: 'Hoops', k: 'Lifelong Player' }
+        { v: '1.5 Yrs', k: 'Guide-Dog Raiser' },
+        { v: '2025–26', k: 'Volunteering' },
+        { v: 'Hoops', k: 'Basketball & Farm' }
       ],
       bullets: [
-        'Raised on a family dairy farm with Holstein cows — instilling 05:00 AM work ethic, ownership, and hands-on problem solving.',
-        'Raised and trained a Golden Retriever guide-dog puppy for 1.5 years with the Israel Guide Dog Center, bringing him from the farm pasture to BGU lectures and labs daily.',
-        'Lifelong basketball player — built for team chemistry, court vision, and clutch execution under pressure.'
+        'Volunteer · Guide-Dog Puppy Raiser (Jan 2025 – May 2026): Raised and socialized a guide-dog puppy for 1.5 years with the Israel Guide Dog Center for the Blind.',
+        'Trained the puppy in basic obedience and public-access skills under a professional instructor, bringing him to BGU lectures and labs.',
+        'Grew up around our family dairy farm and play basketball regularly (click the basketball on the court to shoot a 3-pointer!).'
       ],
       jumpSection: '#about',
-      jumpLabel: 'Read More in About Me'
+      jumpLabel: 'Read More in About & Volunteering'
     }
   };
 

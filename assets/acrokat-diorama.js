@@ -4223,22 +4223,50 @@ void main() {
 `;l=n(e),!1!==l;){if(c.string+=l+`
 `,l.charAt(0)===`#`){c.comments+=l+`
 `;continue}if((u=l.match(i))&&(c.gamma=parseFloat(u[1])),(u=l.match(a))&&(c.exposure=parseFloat(u[1])),(u=l.match(o))&&(c.valid|=2,c.format=u[1]),(u=l.match(s))&&(c.valid|=4,c.height=parseInt(u[1],10),c.width=parseInt(u[2],10)),c.valid&2&&c.valid&4)break}return c.valid&2||t(3,`missing format specifier`),c.valid&4||t(3,`missing image size specifier`),c},i=function(e,n,r){let i=n;if(i<8||i>32767||e[0]!==2||e[1]!==2||e[2]&128)return new Uint8Array(e);i!==(e[2]<<8|e[3])&&t(3,`wrong scanline width`);let a=new Uint8Array(4*n*r);a.length||t(4,`unable to allocate buffer space`);let o=0,s=0,c=4*i,l=new Uint8Array(4),u=new Uint8Array(c),d=r;for(;d>0&&s<e.byteLength;){s+4>e.byteLength&&t(1),l[0]=e[s++],l[1]=e[s++],l[2]=e[s++],l[3]=e[s++],(l[0]!=2||l[1]!=2||(l[2]<<8|l[3])!=i)&&t(3,`bad rgbe scanline format`);let n=0,r;for(;n<c&&s<e.byteLength;){r=e[s++];let i=r>128;if(i&&(r-=128),(r===0||n+r>c)&&t(3,`bad scanline data`),i){let t=e[s++];for(let e=0;e<r;e++)u[n++]=t}else u.set(e.subarray(s,s+r),n),n+=r,s+=r}let f=i;for(let e=0;e<f;e++){let t=0;a[o]=u[e+t],t+=i,a[o+1]=u[e+t],t+=i,a[o+2]=u[e+t],t+=i,a[o+3]=u[e+t],o+=4}d--}return a},a=function(e,t,n,r){let i=2**(e[t+3]-128)/255;n[r+0]=e[t+0]*i,n[r+1]=e[t+1]*i,n[r+2]=e[t+2]*i,n[r+3]=1},o=function(e,t,n,r){let i=2**(e[t+3]-128)/255;n[r+0]=dr.toHalfFloat(Math.min(e[t+0]*i,65504)),n[r+1]=dr.toHalfFloat(Math.min(e[t+1]*i,65504)),n[r+2]=dr.toHalfFloat(Math.min(e[t+2]*i,65504)),n[r+3]=dr.toHalfFloat(1)},s=new Uint8Array(e);s.pos=0;let c=r(s),u=c.width,d=c.height,f=i(s.subarray(s.pos),u,d),p,m,h;switch(this.type){case v:h=f.length/4;let e=new Float32Array(h*4);for(let t=0;t<h;t++)a(f,t*4,e,t*4);p=e,m=v;break;case y:h=f.length/4;let t=new Uint16Array(h*4);for(let e=0;e<h;e++)o(f,e*4,t,e*4);p=t,m=y;break;default:throw Error(`THREE.HDRLoader: Unsupported type: `+this.type)}return{width:u,height:d,data:p,header:c.string,gamma:c.gamma,exposure:c.exposure,type:m,colorSpace:Fe,minFilter:l,magFilter:l,generateMipmaps:!1,flipY:!0}}setDataType(e){return this.type=e,this}};e(((e,t)=>{(function(n,r){typeof e==`object`&&t!==void 0?t.exports=r():typeof define==`function`&&define.amd?define(r):(n=typeof globalThis<`u`?globalThis:n||self,n.polygonClipping=r())})(e,(function(){function e(e,t){var n={label:0,sent:function(){if(a[0]&1)throw a[1];return a[1]},trys:[],ops:[]},r,i,a,o;return o={next:s(0),throw:s(1),return:s(2)},typeof Symbol==`function`&&(o[Symbol.iterator]=function(){return this}),o;function s(e){return function(t){return c([e,t])}}function c(o){if(r)throw TypeError(`Generator is already executing.`);for(;n;)try{if(r=1,i&&(a=o[0]&2?i.return:o[0]?i.throw||((a=i.return)&&a.call(i),0):i.next)&&!(a=a.call(i,o[1])).done)return a;switch(i=0,a&&(o=[o[0]&2,a.value]),o[0]){case 0:case 1:a=o;break;case 4:return n.label++,{value:o[1],done:!1};case 5:n.label++,i=o[1],o=[0];continue;case 7:o=n.ops.pop(),n.trys.pop();continue;default:if((a=n.trys,!(a=a.length>0&&a[a.length-1]))&&(o[0]===6||o[0]===2)){n=0;continue}if(o[0]===3&&(!a||o[1]>a[0]&&o[1]<a[3])){n.label=o[1];break}if(o[0]===6&&n.label<a[1]){n.label=a[1],a=o;break}if(a&&n.label<a[2]){n.label=a[2],n.ops.push(o);break}a[2]&&n.ops.pop(),n.trys.pop();continue}o=t.call(e,n)}catch(e){o=[6,e],i=0}finally{r=a=0}if(o[0]&5)throw o[1];return{value:o[0]?o[1]:void 0,done:!0}}}var t=function(){function e(e,t){this.next=null,this.key=e,this.data=t,this.left=null,this.right=null}return e}();function n(e,t){return e>t?1:e<t?-1:0}function r(e,n,r){for(var i=new t(null,null),a=i,o=i;;){var s=r(e,n.key);if(s<0){if(n.left===null)break;if(r(e,n.left.key)<0){var c=n.left;if(n.left=c.right,c.right=n,n=c,n.left===null)break}o.left=n,o=n,n=n.left}else if(s>0){if(n.right===null)break;if(r(e,n.right.key)>0){var c=n.right;if(n.right=c.left,c.left=n,n=c,n.right===null)break}a.right=n,a=n,n=n.right}else break}return a.right=n.left,o.left=n.right,n.left=i.right,n.right=i.left,n}function i(e,n,i,a){var o=new t(e,n);if(i===null)return o.left=o.right=null,o;i=r(e,i,a);var s=a(e,i.key);return s<0?(o.left=i.left,o.right=i,i.left=null):s>=0&&(o.right=i.right,o.left=i,i.right=null),o}function a(e,t,n){var i=null,a=null;if(t){t=r(e,t,n);var o=n(t.key,e);o===0?(i=t.left,a=t.right):o<0?(a=t.right,t.right=null,i=t):(i=t.left,t.left=null,a=t)}return{left:i,right:a}}function o(e,t,n){return t===null?e:e===null?t:(t=r(e.key,t,n),t.left=e,t)}function s(e,t,n,r,i){if(e){r(``+t+(n?`└── `:`├── `)+i(e)+`
-`);var a=t+(n?`    `:`│   `);e.left&&s(e.left,a,!1,r,i),e.right&&s(e.right,a,!0,r,i)}}var c=function(){function c(e){e===void 0&&(e=n),this._root=null,this._size=0,this._comparator=e}return c.prototype.insert=function(e,t){return this._size++,this._root=i(e,t,this._root,this._comparator)},c.prototype.add=function(e,n){var i=new t(e,n);this._root===null&&(i.left=i.right=null,this._size++,this._root=i);var a=this._comparator,o=r(e,this._root,a),s=a(e,o.key);return s===0?this._root=o:(s<0?(i.left=o.left,i.right=o,o.left=null):s>0&&(i.right=o.right,i.left=o,o.right=null),this._size++,this._root=i),this._root},c.prototype.remove=function(e){this._root=this._remove(e,this._root,this._comparator)},c.prototype._remove=function(e,t,n){var i;return t===null?null:(t=r(e,t,n),n(e,t.key)===0?(t.left===null?i=t.right:(i=r(e,t.left,n),i.right=t.right),this._size--,i):t)},c.prototype.pop=function(){var e=this._root;if(e){for(;e.left;)e=e.left;return this._root=r(e.key,this._root,this._comparator),this._root=this._remove(e.key,this._root,this._comparator),{key:e.key,data:e.data}}return null},c.prototype.findStatic=function(e){for(var t=this._root,n=this._comparator;t;){var r=n(e,t.key);if(r===0)return t;t=r<0?t.left:t.right}return null},c.prototype.find=function(e){return this._root&&(this._root=r(e,this._root,this._comparator),this._comparator(e,this._root.key)!==0)?null:this._root},c.prototype.contains=function(e){for(var t=this._root,n=this._comparator;t;){var r=n(e,t.key);if(r===0)return!0;t=r<0?t.left:t.right}return!1},c.prototype.forEach=function(e,t){for(var n=this._root,r=[],i=!1;!i;)n===null?r.length===0?i=!0:(n=r.pop(),e.call(t,n),n=n.right):(r.push(n),n=n.left);return this},c.prototype.range=function(e,t,n,r){for(var i=[],a=this._comparator,o=this._root,s;i.length!==0||o;)if(o)i.push(o),o=o.left;else{if(o=i.pop(),s=a(o.key,t),s>0)break;if(a(o.key,e)>=0&&n.call(r,o))return this;o=o.right}return this},c.prototype.keys=function(){var e=[];return this.forEach(function(t){var n=t.key;return e.push(n)}),e},c.prototype.values=function(){var e=[];return this.forEach(function(t){var n=t.data;return e.push(n)}),e},c.prototype.min=function(){return this._root?this.minNode(this._root).key:null},c.prototype.max=function(){return this._root?this.maxNode(this._root).key:null},c.prototype.minNode=function(e){if(e===void 0&&(e=this._root),e)for(;e.left;)e=e.left;return e},c.prototype.maxNode=function(e){if(e===void 0&&(e=this._root),e)for(;e.right;)e=e.right;return e},c.prototype.at=function(e){for(var t=this._root,n=!1,r=0,i=[];!n;)if(t)i.push(t),t=t.left;else if(i.length>0){if(t=i.pop(),r===e)return t;r++,t=t.right}else n=!0;return null},c.prototype.next=function(e){var t=this._root,n=null;if(e.right){for(n=e.right;n.left;)n=n.left;return n}for(var r=this._comparator;t;){var i=r(e.key,t.key);if(i===0)break;i<0?(n=t,t=t.left):t=t.right}return n},c.prototype.prev=function(e){var t=this._root,n=null;if(e.left!==null){for(n=e.left;n.right;)n=n.right;return n}for(var r=this._comparator;t;){var i=r(e.key,t.key);if(i===0)break;i<0?t=t.left:(n=t,t=t.right)}return n},c.prototype.clear=function(){return this._root=null,this._size=0,this},c.prototype.toList=function(){return d(this._root)},c.prototype.load=function(e,t,n){t===void 0&&(t=[]),n===void 0&&(n=!1);var r=e.length,i=this._comparator;if(n&&m(e,t,0,r-1,i),this._root===null)this._root=l(e,t,0,r),this._size=r;else{var a=p(this.toList(),u(e,t),i);r=this._size+r,this._root=f({head:a},0,r)}return this},c.prototype.isEmpty=function(){return this._root===null},Object.defineProperty(c.prototype,`size`,{get:function(){return this._size},enumerable:!0,configurable:!0}),Object.defineProperty(c.prototype,`root`,{get:function(){return this._root},enumerable:!0,configurable:!0}),c.prototype.toString=function(e){e===void 0&&(e=function(e){return String(e.key)});var t=[];return s(this._root,``,!0,function(e){return t.push(e)},e),t.join(``)},c.prototype.update=function(e,t,n){var r=this._comparator,s=a(e,this._root,r),c=s.left,l=s.right;r(e,t)<0?l=i(t,n,l,r):c=i(t,n,c,r),this._root=o(c,l,r)},c.prototype.split=function(e){return a(e,this._root,this._comparator)},c.prototype[Symbol.iterator]=function(){var t,n,r;return e(this,function(e){switch(e.label){case 0:t=this._root,n=[],r=!1,e.label=1;case 1:return r?[3,6]:t===null?[3,2]:(n.push(t),t=t.left,[3,5]);case 2:return n.length===0?[3,4]:(t=n.pop(),[4,t]);case 3:return e.sent(),t=t.right,[3,5];case 4:r=!0,e.label=5;case 5:return[3,1];case 6:return[2]}})},c}();function l(e,n,r,i){var a=i-r;if(a>0){var o=r+Math.floor(a/2),s=e[o],c=n[o],u=new t(s,c);return u.left=l(e,n,r,o),u.right=l(e,n,o+1,i),u}return null}function u(e,n){for(var r=new t(null,null),i=r,a=0;a<e.length;a++)i=i.next=new t(e[a],n[a]);return i.next=null,r.next}function d(e){for(var n=e,r=[],i=!1,a=new t(null,null),o=a;!i;)n?(r.push(n),n=n.left):r.length>0?(n=o=o.next=r.pop(),n=n.right):i=!0;return o.next=null,a.next}function f(e,t,n){var r=n-t;if(r>0){var i=t+Math.floor(r/2),a=f(e,t,i),o=e.head;return o.left=a,e.head=e.head.next,o.right=f(e,i+1,n),o}return null}function p(e,n,r){for(var i=new t(null,null),a=i,o=e,s=n;o!==null&&s!==null;)r(o.key,s.key)<0?(a.next=o,o=o.next):(a.next=s,s=s.next),a=a.next;return o===null?s!==null&&(a.next=s):a.next=o,i.next}function m(e,t,n,r,i){if(!(n>=r)){for(var a=e[n+r>>1],o=n-1,s=r+1;;){do o++;while(i(e[o],a)<0);do s--;while(i(e[s],a)>0);if(o>=s)break;var c=e[o];e[o]=e[s],e[s]=c,c=t[o],t[o]=t[s],t[s]=c}m(e,t,n,s,i),m(e,t,s+1,r,i)}}let h=(e,t)=>e.ll.x<=t.x&&t.x<=e.ur.x&&e.ll.y<=t.y&&t.y<=e.ur.y,g=(e,t)=>{if(t.ur.x<e.ll.x||e.ur.x<t.ll.x||t.ur.y<e.ll.y||e.ur.y<t.ll.y)return null;let n=e.ll.x<t.ll.x?t.ll.x:e.ll.x,r=e.ur.x<t.ur.x?e.ur.x:t.ur.x,i=e.ll.y<t.ll.y?t.ll.y:e.ll.y,a=e.ur.y<t.ur.y?e.ur.y:t.ur.y;return{ll:{x:n,y:i},ur:{x:r,y:a}}},_=2**-52;_===void 0&&(_=2**-52);let v=_*_,y=(e,t)=>{if(-_<e&&e<_&&-_<t&&t<_)return 0;let n=e-t;return n*n<v*e*t?0:e<t?-1:1};class b{constructor(){this.reset()}reset(){this.xRounder=new x,this.yRounder=new x}round(e,t){return{x:this.xRounder.round(e),y:this.yRounder.round(t)}}}class x{constructor(){this.tree=new c,this.round(0)}round(e){let t=this.tree.add(e),n=this.tree.prev(t);if(n!==null&&y(t.key,n.key)===0)return this.tree.remove(e),n.key;let r=this.tree.next(t);return r!==null&&y(t.key,r.key)===0?(this.tree.remove(e),r.key):e}}let S=new b,C=11102230246251565e-32,w=134217729;(3+8*C)*C;function T(e,t,n,r,i){let a,o,s,c,l=t[0],u=r[0],d=0,f=0;u>l==u>-l?(a=l,l=t[++d]):(a=u,u=r[++f]);let p=0;if(d<e&&f<n)for(u>l==u>-l?(o=l+a,s=a-(o-l),l=t[++d]):(o=u+a,s=a-(o-u),u=r[++f]),a=o,s!==0&&(i[p++]=s);d<e&&f<n;)u>l==u>-l?(o=a+l,c=o-a,s=a-(o-c)+(l-c),l=t[++d]):(o=a+u,c=o-a,s=a-(o-c)+(u-c),u=r[++f]),a=o,s!==0&&(i[p++]=s);for(;d<e;)o=a+l,c=o-a,s=a-(o-c)+(l-c),l=t[++d],a=o,s!==0&&(i[p++]=s);for(;f<n;)o=a+u,c=o-a,s=a-(o-c)+(u-c),u=r[++f],a=o,s!==0&&(i[p++]=s);return(a!==0||p===0)&&(i[p++]=a),p}function E(e,t){let n=t[0];for(let r=1;r<e;r++)n+=t[r];return n}function D(e){return new Float64Array(e)}(3+16*C)*C,(2+12*C)*C,(9+64*C)*C*C;let O=D(4),k=D(8),A=D(12),j=D(16),M=D(4);function N(e,t,n,r,i,a,o){let s,c,l,u,d,f,p,m,h,g,_,v,y,b,x,S,C,D,N=e-i,P=n-i,F=t-a,I=r-a;b=N*I,f=w*N,p=f-(f-N),m=N-p,f=w*I,h=f-(f-I),g=I-h,x=m*g-(b-p*h-m*h-p*g),S=F*P,f=w*F,p=f-(f-F),m=F-p,f=w*P,h=f-(f-P),g=P-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,O[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,O[1]=y-(_+d)+(d-S),D=v+_,d=D-v,O[2]=v-(D-d)+(_-d),O[3]=D;let L=E(4,O),R=22204460492503146e-32*o;if(L>=R||-L>=R||(d=e-N,s=e-(N+d)+(d-i),d=n-P,l=n-(P+d)+(d-i),d=t-F,c=t-(F+d)+(d-a),d=r-I,u=r-(I+d)+(d-a),s===0&&c===0&&l===0&&u===0)||(R=11093356479670487e-47*o+33306690738754706e-32*Math.abs(L),L+=N*u+I*s-(F*l+P*c),L>=R||-L>=R))return L;b=s*I,f=w*s,p=f-(f-s),m=s-p,f=w*I,h=f-(f-I),g=I-h,x=m*g-(b-p*h-m*h-p*g),S=c*P,f=w*c,p=f-(f-c),m=c-p,f=w*P,h=f-(f-P),g=P-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D;let ee=T(4,O,4,M,k);b=N*u,f=w*N,p=f-(f-N),m=N-p,f=w*u,h=f-(f-u),g=u-h,x=m*g-(b-p*h-m*h-p*g),S=F*l,f=w*F,p=f-(f-F),m=F-p,f=w*l,h=f-(f-l),g=l-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D;let te=T(ee,k,4,M,A);return b=s*u,f=w*s,p=f-(f-s),m=s-p,f=w*u,h=f-(f-u),g=u-h,x=m*g-(b-p*h-m*h-p*g),S=c*l,f=w*c,p=f-(f-c),m=c-p,f=w*l,h=f-(f-l),g=l-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D,j[T(te,A,4,M,j)-1]}function P(e,t,n,r,i,a){let o=(t-a)*(n-i),s=(e-i)*(r-a),c=o-s,l=Math.abs(o+s);return Math.abs(c)>=33306690738754716e-32*l?c:-N(e,t,n,r,i,a,l)}let F=(e,t)=>e.x*t.y-e.y*t.x,I=(e,t)=>e.x*t.x+e.y*t.y,L=(e,t,n)=>{let r=P(e.x,e.y,t.x,t.y,n.x,n.y);return r>0?-1:+(r<0)},R=e=>Math.sqrt(I(e,e)),ee=(e,t,n)=>{let r={x:t.x-e.x,y:t.y-e.y},i={x:n.x-e.x,y:n.y-e.y};return F(i,r)/R(i)/R(r)},te=(e,t,n)=>{let r={x:t.x-e.x,y:t.y-e.y},i={x:n.x-e.x,y:n.y-e.y};return I(i,r)/R(i)/R(r)},ne=(e,t,n)=>t.y===0?null:{x:e.x+t.x/t.y*(n-e.y),y:n},re=(e,t,n)=>t.x===0?null:{x:n,y:e.y+t.y/t.x*(n-e.x)},ie=(e,t,n,r)=>{if(t.x===0)return re(n,r,e.x);if(r.x===0)return re(e,t,n.x);if(t.y===0)return ne(n,r,e.y);if(r.y===0)return ne(e,t,n.y);let i=F(t,r);if(i==0)return null;let a={x:n.x-e.x,y:n.y-e.y},o=F(a,t)/i,s=F(a,r)/i,c=e.x+s*t.x,l=n.x+o*r.x,u=e.y+s*t.y,d=n.y+o*r.y;return{x:(c+l)/2,y:(u+d)/2}};class z{static compare(e,t){let n=z.comparePoints(e.point,t.point);return n===0?(e.point!==t.point&&e.link(t),e.isLeft===t.isLeft?ae.compare(e.segment,t.segment):e.isLeft?1:-1):n}static comparePoints(e,t){return e.x<t.x?-1:e.x>t.x?1:e.y<t.y?-1:+(e.y>t.y)}constructor(e,t){e.events===void 0?e.events=[this]:e.events.push(this),this.point=e,this.isLeft=t}link(e){if(e.point===this.point)throw Error(`Tried to link already linked events`);let t=e.point.events;for(let e=0,n=t.length;e<n;e++){let n=t[e];this.point.events.push(n),n.point=this.point}this.checkForConsuming()}checkForConsuming(){let e=this.point.events.length;for(let t=0;t<e;t++){let n=this.point.events[t];if(n.segment.consumedBy===void 0)for(let r=t+1;r<e;r++){let e=this.point.events[r];e.consumedBy===void 0&&n.otherSE.point.events===e.otherSE.point.events&&n.segment.consume(e.segment)}}}getAvailableLinkedEvents(){let e=[];for(let t=0,n=this.point.events.length;t<n;t++){let n=this.point.events[t];n!==this&&!n.segment.ringOut&&n.segment.isInResult()&&e.push(n)}return e}getLeftmostComparator(e){let t=new Map,n=n=>{let r=n.otherSE;t.set(n,{sine:ee(this.point,e.point,r.point),cosine:te(this.point,e.point,r.point)})};return(e,r)=>{t.has(e)||n(e),t.has(r)||n(r);let{sine:i,cosine:a}=t.get(e),{sine:o,cosine:s}=t.get(r);return i>=0&&o>=0?a<s?1:a>s?-1:0:i<0&&o<0?a<s?-1:+(a>s):o<i?-1:+(o>i)}}}let B=0;class ae{static compare(e,t){let n=e.leftSE.point.x,r=t.leftSE.point.x,i=e.rightSE.point.x,a=t.rightSE.point.x;if(a<n)return 1;if(i<r)return-1;let o=e.leftSE.point.y,s=t.leftSE.point.y,c=e.rightSE.point.y,l=t.rightSE.point.y;if(n<r){if(s<o&&s<c)return 1;if(s>o&&s>c)return-1;let n=e.comparePoint(t.leftSE.point);if(n<0)return 1;if(n>0)return-1;let r=t.comparePoint(e.rightSE.point);return r===0?-1:r}if(n>r){if(o<s&&o<l)return-1;if(o>s&&o>l)return 1;let n=t.comparePoint(e.leftSE.point);if(n!==0)return n;let r=e.comparePoint(t.rightSE.point);return r<0?1:r>0?-1:1}if(o<s)return-1;if(o>s)return 1;if(i<a){let n=t.comparePoint(e.rightSE.point);if(n!==0)return n}if(i>a){let n=e.comparePoint(t.rightSE.point);if(n<0)return 1;if(n>0)return-1}if(i!==a){let e=c-o,t=i-n,u=l-s,d=a-r;if(e>t&&u<d)return 1;if(e<t&&u>d)return-1}return i>a?1:i<a||c<l?-1:c>l?1:e.id<t.id?-1:+(e.id>t.id)}constructor(e,t,n,r){this.id=++B,this.leftSE=e,e.segment=this,e.otherSE=t,this.rightSE=t,t.segment=this,t.otherSE=e,this.rings=n,this.windings=r}static fromRing(e,t,n){let r,i,a,o=z.comparePoints(e,t);if(o<0)r=e,i=t,a=1;else if(o>0)r=t,i=e,a=-1;else throw Error(`Tried to create degenerate segment at [${e.x}, ${e.y}]`);return new ae(new z(r,!0),new z(i,!1),[n],[a])}replaceRightSE(e){this.rightSE=e,this.rightSE.segment=this,this.rightSE.otherSE=this.leftSE,this.leftSE.otherSE=this.rightSE}bbox(){let e=this.leftSE.point.y,t=this.rightSE.point.y;return{ll:{x:this.leftSE.point.x,y:e<t?e:t},ur:{x:this.rightSE.point.x,y:e>t?e:t}}}vector(){return{x:this.rightSE.point.x-this.leftSE.point.x,y:this.rightSE.point.y-this.leftSE.point.y}}isAnEndpoint(e){return e.x===this.leftSE.point.x&&e.y===this.leftSE.point.y||e.x===this.rightSE.point.x&&e.y===this.rightSE.point.y}comparePoint(e){if(this.isAnEndpoint(e))return 0;let t=this.leftSE.point,n=this.rightSE.point,r=this.vector();if(t.x===n.x)return e.x===t.x?0:e.x<t.x?1:-1;let i=(e.y-t.y)/r.y,a=t.x+i*r.x;if(e.x===a)return 0;let o=(e.x-t.x)/r.x,s=t.y+o*r.y;return e.y===s?0:e.y<s?-1:1}getIntersection(e){let t=this.bbox(),n=e.bbox(),r=g(t,n);if(r===null)return null;let i=this.leftSE.point,a=this.rightSE.point,o=e.leftSE.point,s=e.rightSE.point,c=h(t,o)&&this.comparePoint(o)===0,l=h(n,i)&&e.comparePoint(i)===0,u=h(t,s)&&this.comparePoint(s)===0,d=h(n,a)&&e.comparePoint(a)===0;if(l&&c)return d&&!u?a:!d&&u?s:null;if(l)return u&&i.x===s.x&&i.y===s.y?null:i;if(c)return d&&a.x===o.x&&a.y===o.y?null:o;if(d&&u)return null;if(d)return a;if(u)return s;let f=ie(i,this.vector(),o,e.vector());return f===null||!h(r,f)?null:S.round(f.x,f.y)}split(e){let t=[],n=e.events!==void 0,r=new z(e,!0),i=new z(e,!1),a=this.rightSE;this.replaceRightSE(i),t.push(i),t.push(r);let o=new ae(r,a,this.rings.slice(),this.windings.slice());return z.comparePoints(o.leftSE.point,o.rightSE.point)>0&&o.swapEvents(),z.comparePoints(this.leftSE.point,this.rightSE.point)>0&&this.swapEvents(),n&&(r.checkForConsuming(),i.checkForConsuming()),t}swapEvents(){let e=this.rightSE;this.rightSE=this.leftSE,this.leftSE=e,this.leftSE.isLeft=!0,this.rightSE.isLeft=!1;for(let e=0,t=this.windings.length;e<t;e++)this.windings[e]*=-1}consume(e){let t=this,n=e;for(;t.consumedBy;)t=t.consumedBy;for(;n.consumedBy;)n=n.consumedBy;let r=ae.compare(t,n);if(r!==0){if(r>0){let e=t;t=n,n=e}if(t.prev===n){let e=t;t=n,n=e}for(let e=0,r=n.rings.length;e<r;e++){let r=n.rings[e],i=n.windings[e],a=t.rings.indexOf(r);a===-1?(t.rings.push(r),t.windings.push(i)):t.windings[a]+=i}n.rings=null,n.windings=null,n.consumedBy=t,n.leftSE.consumedBy=t.leftSE,n.rightSE.consumedBy=t.rightSE}}prevInResult(){return this._prevInResult===void 0&&(this.prev?this.prev.isInResult()?this._prevInResult=this.prev:this._prevInResult=this.prev.prevInResult():this._prevInResult=null),this._prevInResult}beforeState(){if(this._beforeState!==void 0)return this._beforeState;if(!this.prev)this._beforeState={rings:[],windings:[],multiPolys:[]};else{let e=this.prev.consumedBy||this.prev;this._beforeState=e.afterState()}return this._beforeState}afterState(){if(this._afterState!==void 0)return this._afterState;let e=this.beforeState();this._afterState={rings:e.rings.slice(0),windings:e.windings.slice(0),multiPolys:[]};let t=this._afterState.rings,n=this._afterState.windings,r=this._afterState.multiPolys;for(let e=0,r=this.rings.length;e<r;e++){let r=this.rings[e],i=this.windings[e],a=t.indexOf(r);a===-1?(t.push(r),n.push(i)):n[a]+=i}let i=[],a=[];for(let e=0,r=t.length;e<r;e++){if(n[e]===0)continue;let r=t[e],o=r.poly;if(a.indexOf(o)===-1)if(r.isExterior)i.push(o);else{a.indexOf(o)===-1&&a.push(o);let e=i.indexOf(r.poly);e!==-1&&i.splice(e,1)}}for(let e=0,t=i.length;e<t;e++){let t=i[e].multiPoly;r.indexOf(t)===-1&&r.push(t)}return this._afterState}isInResult(){if(this.consumedBy)return!1;if(this._isInResult!==void 0)return this._isInResult;let e=this.beforeState().multiPolys,t=this.afterState().multiPolys;switch(he.type){case`union`:{let n=e.length===0,r=t.length===0;this._isInResult=n!==r;break}case`intersection`:{let n,r;e.length<t.length?(n=e.length,r=t.length):(n=t.length,r=e.length),this._isInResult=r===he.numMultiPolys&&n<r;break}case`xor`:{let n=Math.abs(e.length-t.length);this._isInResult=n%2==1;break}case`difference`:{let n=e=>e.length===1&&e[0].isSubject;this._isInResult=n(e)!==n(t);break}default:throw Error(`Unrecognized operation type found ${he.type}`)}return this._isInResult}}class V{constructor(e,t,n){if(!Array.isArray(e)||e.length===0||(this.poly=t,this.isExterior=n,this.segments=[],typeof e[0][0]!=`number`||typeof e[0][1]!=`number`))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);let r=S.round(e[0][0],e[0][1]);this.bbox={ll:{x:r.x,y:r.y},ur:{x:r.x,y:r.y}};let i=r;for(let t=1,n=e.length;t<n;t++){if(typeof e[t][0]!=`number`||typeof e[t][1]!=`number`)throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);let n=S.round(e[t][0],e[t][1]);n.x===i.x&&n.y===i.y||(this.segments.push(ae.fromRing(i,n,this)),n.x<this.bbox.ll.x&&(this.bbox.ll.x=n.x),n.y<this.bbox.ll.y&&(this.bbox.ll.y=n.y),n.x>this.bbox.ur.x&&(this.bbox.ur.x=n.x),n.y>this.bbox.ur.y&&(this.bbox.ur.y=n.y),i=n)}(r.x!==i.x||r.y!==i.y)&&this.segments.push(ae.fromRing(i,r,this))}getSweepEvents(){let e=[];for(let t=0,n=this.segments.length;t<n;t++){let n=this.segments[t];e.push(n.leftSE),e.push(n.rightSE)}return e}}class oe{constructor(e,t){if(!Array.isArray(e))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);this.exteriorRing=new V(e[0],this,!0),this.bbox={ll:{x:this.exteriorRing.bbox.ll.x,y:this.exteriorRing.bbox.ll.y},ur:{x:this.exteriorRing.bbox.ur.x,y:this.exteriorRing.bbox.ur.y}},this.interiorRings=[];for(let t=1,n=e.length;t<n;t++){let n=new V(e[t],this,!1);n.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=n.bbox.ll.x),n.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=n.bbox.ll.y),n.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=n.bbox.ur.x),n.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=n.bbox.ur.y),this.interiorRings.push(n)}this.multiPoly=t}getSweepEvents(){let e=this.exteriorRing.getSweepEvents();for(let t=0,n=this.interiorRings.length;t<n;t++){let n=this.interiorRings[t].getSweepEvents();for(let t=0,r=n.length;t<r;t++)e.push(n[t])}return e}}class se{constructor(e,t){if(!Array.isArray(e))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);try{typeof e[0][0][0]==`number`&&(e=[e])}catch{}this.polys=[],this.bbox={ll:{x:1/0,y:1/0},ur:{x:-1/0,y:-1/0}};for(let t=0,n=e.length;t<n;t++){let n=new oe(e[t],this);n.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=n.bbox.ll.x),n.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=n.bbox.ll.y),n.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=n.bbox.ur.x),n.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=n.bbox.ur.y),this.polys.push(n)}this.isSubject=t}getSweepEvents(){let e=[];for(let t=0,n=this.polys.length;t<n;t++){let n=this.polys[t].getSweepEvents();for(let t=0,r=n.length;t<r;t++)e.push(n[t])}return e}}class ce{static factory(e){let t=[];for(let n=0,r=e.length;n<r;n++){let r=e[n];if(!r.isInResult()||r.ringOut)continue;let i=null,a=r.leftSE,o=r.rightSE,s=[a],c=a.point,l=[];for(;i=a,a=o,s.push(a),a.point!==c;)for(;;){let e=a.getAvailableLinkedEvents();if(e.length===0){let e=s[0].point,t=s[s.length-1].point;throw Error(`Unable to complete output ring starting at [${e.x}, ${e.y}]. Last matching segment found ends at [${t.x}, ${t.y}].`)}if(e.length===1){o=e[0].otherSE;break}let n=null;for(let e=0,t=l.length;e<t;e++)if(l[e].point===a.point){n=e;break}if(n!==null){let e=l.splice(n)[0],r=s.splice(e.index);r.unshift(r[0].otherSE),t.push(new ce(r.reverse()));continue}l.push({index:s.length,point:a.point});let r=a.getLeftmostComparator(i);o=e.sort(r)[0].otherSE;break}t.push(new ce(s))}return t}constructor(e){this.events=e;for(let t=0,n=e.length;t<n;t++)e[t].segment.ringOut=this;this.poly=null}getGeom(){let e=this.events[0].point,t=[e];for(let n=1,r=this.events.length-1;n<r;n++){let r=this.events[n].point,i=this.events[n+1].point;L(r,e,i)!==0&&(t.push(r),e=r)}if(t.length===1)return null;let n=t[0],r=t[1];L(n,e,r)===0&&t.shift(),t.push(t[0]);let i=this.isExteriorRing()?1:-1,a=this.isExteriorRing()?0:t.length-1,o=this.isExteriorRing()?t.length:-1,s=[];for(let e=a;e!=o;e+=i)s.push([t[e].x,t[e].y]);return s}isExteriorRing(){if(this._isExteriorRing===void 0){let e=this.enclosingRing();this._isExteriorRing=e?!e.isExteriorRing():!0}return this._isExteriorRing}enclosingRing(){return this._enclosingRing===void 0&&(this._enclosingRing=this._calcEnclosingRing()),this._enclosingRing}_calcEnclosingRing(){let e=this.events[0];for(let t=1,n=this.events.length;t<n;t++){let n=this.events[t];z.compare(e,n)>0&&(e=n)}let t=e.segment.prevInResult(),n=t?t.prevInResult():null;for(;;){if(!t)return null;if(!n)return t.ringOut;if(n.ringOut!==t.ringOut)return n.ringOut.enclosingRing()===t.ringOut?t.ringOut.enclosingRing():t.ringOut;t=n.prevInResult(),n=t?t.prevInResult():null}}}class le{constructor(e){this.exteriorRing=e,e.poly=this,this.interiorRings=[]}addInterior(e){this.interiorRings.push(e),e.poly=this}getGeom(){let e=[this.exteriorRing.getGeom()];if(e[0]===null)return null;for(let t=0,n=this.interiorRings.length;t<n;t++){let n=this.interiorRings[t].getGeom();n!==null&&e.push(n)}return e}}class ue{constructor(e){this.rings=e,this.polys=this._composePolys(e)}getGeom(){let e=[];for(let t=0,n=this.polys.length;t<n;t++){let n=this.polys[t].getGeom();n!==null&&e.push(n)}return e}_composePolys(e){let t=[];for(let n=0,r=e.length;n<r;n++){let r=e[n];if(!r.poly)if(r.isExteriorRing())t.push(new le(r));else{let e=r.enclosingRing();e.poly||t.push(new le(e)),e.poly.addInterior(r)}}return t}}class de{constructor(e){let t=arguments.length>1&&arguments[1]!==void 0?arguments[1]:ae.compare;this.queue=e,this.tree=new c(t),this.segments=[]}process(e){let t=e.segment,n=[];if(e.consumedBy)return e.isLeft?this.queue.remove(e.otherSE):this.tree.remove(t),n;let r=e.isLeft?this.tree.add(t):this.tree.find(t);if(!r)throw Error(`Unable to find segment #${t.id} [${t.leftSE.point.x}, ${t.leftSE.point.y}] -> [${t.rightSE.point.x}, ${t.rightSE.point.y}] in SweepLine tree.`);let i=r,a=r,o,s;for(;o===void 0;)i=this.tree.prev(i),i===null?o=null:i.key.consumedBy===void 0&&(o=i.key);for(;s===void 0;)a=this.tree.next(a),a===null?s=null:a.key.consumedBy===void 0&&(s=a.key);if(e.isLeft){let r=null;if(o){let e=o.getIntersection(t);if(e!==null&&(t.isAnEndpoint(e)||(r=e),!o.isAnEndpoint(e))){let t=this._splitSafely(o,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}let i=null;if(s){let e=s.getIntersection(t);if(e!==null&&(t.isAnEndpoint(e)||(i=e),!s.isAnEndpoint(e))){let t=this._splitSafely(s,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}if(r!==null||i!==null){let e=null;e=r===null?i:i===null||z.comparePoints(r,i)<=0?r:i,this.queue.remove(t.rightSE),n.push(t.rightSE);let a=t.split(e);for(let e=0,t=a.length;e<t;e++)n.push(a[e])}n.length>0?(this.tree.remove(t),n.push(e)):(this.segments.push(t),t.prev=o)}else{if(o&&s){let e=o.getIntersection(s);if(e!==null){if(!o.isAnEndpoint(e)){let t=this._splitSafely(o,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}if(!s.isAnEndpoint(e)){let t=this._splitSafely(s,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}}this.tree.remove(t)}return n}_splitSafely(e,t){this.tree.remove(e);let n=e.rightSE;this.queue.remove(n);let r=e.split(t);return r.push(n),e.consumedBy===void 0&&this.tree.add(e),r}}let fe=typeof process<`u`&&{}.POLYGON_CLIPPING_MAX_QUEUE_SIZE||1e6,pe=typeof process<`u`&&{}.POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS||1e6;class me{run(e,t,n){he.type=e,S.reset();let r=[new se(t,!0)];for(let e=0,t=n.length;e<t;e++)r.push(new se(n[e],!1));if(he.numMultiPolys=r.length,he.type===`difference`){let e=r[0],t=1;for(;t<r.length;)g(r[t].bbox,e.bbox)===null?r.splice(t,1):t++}if(he.type===`intersection`)for(let e=0,t=r.length;e<t;e++){let t=r[e];for(let n=e+1,i=r.length;n<i;n++)if(g(t.bbox,r[n].bbox)===null)return[]}let i=new c(z.compare);for(let e=0,t=r.length;e<t;e++){let t=r[e].getSweepEvents();for(let e=0,n=t.length;e<n;e++)if(i.insert(t[e]),i.size>fe)throw Error(`Infinite loop when putting segment endpoints in a priority queue (queue size too big).`)}let a=new de(i),o=i.size,s=i.pop();for(;s;){let e=s.key;if(i.size===o){let t=e.segment;throw Error(`Unable to pop() ${e.isLeft?`left`:`right`} SweepEvent [${e.point.x}, ${e.point.y}] from segment #${t.id} [${t.leftSE.point.x}, ${t.leftSE.point.y}] -> [${t.rightSE.point.x}, ${t.rightSE.point.y}] from queue.`)}if(i.size>fe)throw Error(`Infinite loop when passing sweep line over endpoints (queue size too big).`);if(a.segments.length>pe)throw Error(`Infinite loop when passing sweep line over endpoints (too many sweep line segments).`);let t=a.process(e);for(let e=0,n=t.length;e<n;e++){let n=t[e];n.consumedBy===void 0&&i.insert(n)}o=i.size,s=i.pop()}return S.reset(),new ue(ce.factory(a.segments)).getGeom()}}let he=new me;return{union:function(e){var t=[...arguments].slice(1);return he.run(`union`,e,t)},intersection:function(e){var t=[...arguments].slice(1);return he.run(`intersection`,e,t)},xor:function(e){var t=[...arguments].slice(1);return he.run(`xor`,e,t)},difference:function(e){var t=[...arguments].slice(1);return he.run(`difference`,e,t)}}}))}))();function xd(e,t){return 1.88-wt.smoothstep(t,-3.1,1.1)*.96}
+`);var a=t+(n?`    `:`│   `);e.left&&s(e.left,a,!1,r,i),e.right&&s(e.right,a,!0,r,i)}}var c=function(){function c(e){e===void 0&&(e=n),this._root=null,this._size=0,this._comparator=e}return c.prototype.insert=function(e,t){return this._size++,this._root=i(e,t,this._root,this._comparator)},c.prototype.add=function(e,n){var i=new t(e,n);this._root===null&&(i.left=i.right=null,this._size++,this._root=i);var a=this._comparator,o=r(e,this._root,a),s=a(e,o.key);return s===0?this._root=o:(s<0?(i.left=o.left,i.right=o,o.left=null):s>0&&(i.right=o.right,i.left=o,o.right=null),this._size++,this._root=i),this._root},c.prototype.remove=function(e){this._root=this._remove(e,this._root,this._comparator)},c.prototype._remove=function(e,t,n){var i;return t===null?null:(t=r(e,t,n),n(e,t.key)===0?(t.left===null?i=t.right:(i=r(e,t.left,n),i.right=t.right),this._size--,i):t)},c.prototype.pop=function(){var e=this._root;if(e){for(;e.left;)e=e.left;return this._root=r(e.key,this._root,this._comparator),this._root=this._remove(e.key,this._root,this._comparator),{key:e.key,data:e.data}}return null},c.prototype.findStatic=function(e){for(var t=this._root,n=this._comparator;t;){var r=n(e,t.key);if(r===0)return t;t=r<0?t.left:t.right}return null},c.prototype.find=function(e){return this._root&&(this._root=r(e,this._root,this._comparator),this._comparator(e,this._root.key)!==0)?null:this._root},c.prototype.contains=function(e){for(var t=this._root,n=this._comparator;t;){var r=n(e,t.key);if(r===0)return!0;t=r<0?t.left:t.right}return!1},c.prototype.forEach=function(e,t){for(var n=this._root,r=[],i=!1;!i;)n===null?r.length===0?i=!0:(n=r.pop(),e.call(t,n),n=n.right):(r.push(n),n=n.left);return this},c.prototype.range=function(e,t,n,r){for(var i=[],a=this._comparator,o=this._root,s;i.length!==0||o;)if(o)i.push(o),o=o.left;else{if(o=i.pop(),s=a(o.key,t),s>0)break;if(a(o.key,e)>=0&&n.call(r,o))return this;o=o.right}return this},c.prototype.keys=function(){var e=[];return this.forEach(function(t){var n=t.key;return e.push(n)}),e},c.prototype.values=function(){var e=[];return this.forEach(function(t){var n=t.data;return e.push(n)}),e},c.prototype.min=function(){return this._root?this.minNode(this._root).key:null},c.prototype.max=function(){return this._root?this.maxNode(this._root).key:null},c.prototype.minNode=function(e){if(e===void 0&&(e=this._root),e)for(;e.left;)e=e.left;return e},c.prototype.maxNode=function(e){if(e===void 0&&(e=this._root),e)for(;e.right;)e=e.right;return e},c.prototype.at=function(e){for(var t=this._root,n=!1,r=0,i=[];!n;)if(t)i.push(t),t=t.left;else if(i.length>0){if(t=i.pop(),r===e)return t;r++,t=t.right}else n=!0;return null},c.prototype.next=function(e){var t=this._root,n=null;if(e.right){for(n=e.right;n.left;)n=n.left;return n}for(var r=this._comparator;t;){var i=r(e.key,t.key);if(i===0)break;i<0?(n=t,t=t.left):t=t.right}return n},c.prototype.prev=function(e){var t=this._root,n=null;if(e.left!==null){for(n=e.left;n.right;)n=n.right;return n}for(var r=this._comparator;t;){var i=r(e.key,t.key);if(i===0)break;i<0?t=t.left:(n=t,t=t.right)}return n},c.prototype.clear=function(){return this._root=null,this._size=0,this},c.prototype.toList=function(){return d(this._root)},c.prototype.load=function(e,t,n){t===void 0&&(t=[]),n===void 0&&(n=!1);var r=e.length,i=this._comparator;if(n&&m(e,t,0,r-1,i),this._root===null)this._root=l(e,t,0,r),this._size=r;else{var a=p(this.toList(),u(e,t),i);r=this._size+r,this._root=f({head:a},0,r)}return this},c.prototype.isEmpty=function(){return this._root===null},Object.defineProperty(c.prototype,`size`,{get:function(){return this._size},enumerable:!0,configurable:!0}),Object.defineProperty(c.prototype,`root`,{get:function(){return this._root},enumerable:!0,configurable:!0}),c.prototype.toString=function(e){e===void 0&&(e=function(e){return String(e.key)});var t=[];return s(this._root,``,!0,function(e){return t.push(e)},e),t.join(``)},c.prototype.update=function(e,t,n){var r=this._comparator,s=a(e,this._root,r),c=s.left,l=s.right;r(e,t)<0?l=i(t,n,l,r):c=i(t,n,c,r),this._root=o(c,l,r)},c.prototype.split=function(e){return a(e,this._root,this._comparator)},c.prototype[Symbol.iterator]=function(){var t,n,r;return e(this,function(e){switch(e.label){case 0:t=this._root,n=[],r=!1,e.label=1;case 1:return r?[3,6]:t===null?[3,2]:(n.push(t),t=t.left,[3,5]);case 2:return n.length===0?[3,4]:(t=n.pop(),[4,t]);case 3:return e.sent(),t=t.right,[3,5];case 4:r=!0,e.label=5;case 5:return[3,1];case 6:return[2]}})},c}();function l(e,n,r,i){var a=i-r;if(a>0){var o=r+Math.floor(a/2),s=e[o],c=n[o],u=new t(s,c);return u.left=l(e,n,r,o),u.right=l(e,n,o+1,i),u}return null}function u(e,n){for(var r=new t(null,null),i=r,a=0;a<e.length;a++)i=i.next=new t(e[a],n[a]);return i.next=null,r.next}function d(e){for(var n=e,r=[],i=!1,a=new t(null,null),o=a;!i;)n?(r.push(n),n=n.left):r.length>0?(n=o=o.next=r.pop(),n=n.right):i=!0;return o.next=null,a.next}function f(e,t,n){var r=n-t;if(r>0){var i=t+Math.floor(r/2),a=f(e,t,i),o=e.head;return o.left=a,e.head=e.head.next,o.right=f(e,i+1,n),o}return null}function p(e,n,r){for(var i=new t(null,null),a=i,o=e,s=n;o!==null&&s!==null;)r(o.key,s.key)<0?(a.next=o,o=o.next):(a.next=s,s=s.next),a=a.next;return o===null?s!==null&&(a.next=s):a.next=o,i.next}function m(e,t,n,r,i){if(!(n>=r)){for(var a=e[n+r>>1],o=n-1,s=r+1;;){do o++;while(i(e[o],a)<0);do s--;while(i(e[s],a)>0);if(o>=s)break;var c=e[o];e[o]=e[s],e[s]=c,c=t[o],t[o]=t[s],t[s]=c}m(e,t,n,s,i),m(e,t,s+1,r,i)}}let h=(e,t)=>e.ll.x<=t.x&&t.x<=e.ur.x&&e.ll.y<=t.y&&t.y<=e.ur.y,g=(e,t)=>{if(t.ur.x<e.ll.x||e.ur.x<t.ll.x||t.ur.y<e.ll.y||e.ur.y<t.ll.y)return null;let n=e.ll.x<t.ll.x?t.ll.x:e.ll.x,r=e.ur.x<t.ur.x?e.ur.x:t.ur.x,i=e.ll.y<t.ll.y?t.ll.y:e.ll.y,a=e.ur.y<t.ur.y?e.ur.y:t.ur.y;return{ll:{x:n,y:i},ur:{x:r,y:a}}},_=2**-52;_===void 0&&(_=2**-52);let v=_*_,y=(e,t)=>{if(-_<e&&e<_&&-_<t&&t<_)return 0;let n=e-t;return n*n<v*e*t?0:e<t?-1:1};class b{constructor(){this.reset()}reset(){this.xRounder=new x,this.yRounder=new x}round(e,t){return{x:this.xRounder.round(e),y:this.yRounder.round(t)}}}class x{constructor(){this.tree=new c,this.round(0)}round(e){let t=this.tree.add(e),n=this.tree.prev(t);if(n!==null&&y(t.key,n.key)===0)return this.tree.remove(e),n.key;let r=this.tree.next(t);return r!==null&&y(t.key,r.key)===0?(this.tree.remove(e),r.key):e}}let S=new b,C=11102230246251565e-32,w=134217729;(3+8*C)*C;function T(e,t,n,r,i){let a,o,s,c,l=t[0],u=r[0],d=0,f=0;u>l==u>-l?(a=l,l=t[++d]):(a=u,u=r[++f]);let p=0;if(d<e&&f<n)for(u>l==u>-l?(o=l+a,s=a-(o-l),l=t[++d]):(o=u+a,s=a-(o-u),u=r[++f]),a=o,s!==0&&(i[p++]=s);d<e&&f<n;)u>l==u>-l?(o=a+l,c=o-a,s=a-(o-c)+(l-c),l=t[++d]):(o=a+u,c=o-a,s=a-(o-c)+(u-c),u=r[++f]),a=o,s!==0&&(i[p++]=s);for(;d<e;)o=a+l,c=o-a,s=a-(o-c)+(l-c),l=t[++d],a=o,s!==0&&(i[p++]=s);for(;f<n;)o=a+u,c=o-a,s=a-(o-c)+(u-c),u=r[++f],a=o,s!==0&&(i[p++]=s);return(a!==0||p===0)&&(i[p++]=a),p}function E(e,t){let n=t[0];for(let r=1;r<e;r++)n+=t[r];return n}function D(e){return new Float64Array(e)}(3+16*C)*C,(2+12*C)*C,(9+64*C)*C*C;let O=D(4),k=D(8),A=D(12),j=D(16),M=D(4);function N(e,t,n,r,i,a,o){let s,c,l,u,d,f,p,m,h,g,_,v,y,b,x,S,C,D,N=e-i,P=n-i,F=t-a,I=r-a;b=N*I,f=w*N,p=f-(f-N),m=N-p,f=w*I,h=f-(f-I),g=I-h,x=m*g-(b-p*h-m*h-p*g),S=F*P,f=w*F,p=f-(f-F),m=F-p,f=w*P,h=f-(f-P),g=P-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,O[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,O[1]=y-(_+d)+(d-S),D=v+_,d=D-v,O[2]=v-(D-d)+(_-d),O[3]=D;let L=E(4,O),R=22204460492503146e-32*o;if(L>=R||-L>=R||(d=e-N,s=e-(N+d)+(d-i),d=n-P,l=n-(P+d)+(d-i),d=t-F,c=t-(F+d)+(d-a),d=r-I,u=r-(I+d)+(d-a),s===0&&c===0&&l===0&&u===0)||(R=11093356479670487e-47*o+33306690738754706e-32*Math.abs(L),L+=N*u+I*s-(F*l+P*c),L>=R||-L>=R))return L;b=s*I,f=w*s,p=f-(f-s),m=s-p,f=w*I,h=f-(f-I),g=I-h,x=m*g-(b-p*h-m*h-p*g),S=c*P,f=w*c,p=f-(f-c),m=c-p,f=w*P,h=f-(f-P),g=P-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D;let ee=T(4,O,4,M,k);b=N*u,f=w*N,p=f-(f-N),m=N-p,f=w*u,h=f-(f-u),g=u-h,x=m*g-(b-p*h-m*h-p*g),S=F*l,f=w*F,p=f-(f-F),m=F-p,f=w*l,h=f-(f-l),g=l-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D;let te=T(ee,k,4,M,A);return b=s*u,f=w*s,p=f-(f-s),m=s-p,f=w*u,h=f-(f-u),g=u-h,x=m*g-(b-p*h-m*h-p*g),S=c*l,f=w*c,p=f-(f-c),m=c-p,f=w*l,h=f-(f-l),g=l-h,C=m*g-(S-p*h-m*h-p*g),_=x-C,d=x-_,M[0]=x-(_+d)+(d-C),v=b+_,d=v-b,y=b-(v-d)+(_-d),_=y-S,d=y-_,M[1]=y-(_+d)+(d-S),D=v+_,d=D-v,M[2]=v-(D-d)+(_-d),M[3]=D,j[T(te,A,4,M,j)-1]}function P(e,t,n,r,i,a){let o=(t-a)*(n-i),s=(e-i)*(r-a),c=o-s,l=Math.abs(o+s);return Math.abs(c)>=33306690738754716e-32*l?c:-N(e,t,n,r,i,a,l)}let F=(e,t)=>e.x*t.y-e.y*t.x,I=(e,t)=>e.x*t.x+e.y*t.y,L=(e,t,n)=>{let r=P(e.x,e.y,t.x,t.y,n.x,n.y);return r>0?-1:+(r<0)},R=e=>Math.sqrt(I(e,e)),ee=(e,t,n)=>{let r={x:t.x-e.x,y:t.y-e.y},i={x:n.x-e.x,y:n.y-e.y};return F(i,r)/R(i)/R(r)},te=(e,t,n)=>{let r={x:t.x-e.x,y:t.y-e.y},i={x:n.x-e.x,y:n.y-e.y};return I(i,r)/R(i)/R(r)},ne=(e,t,n)=>t.y===0?null:{x:e.x+t.x/t.y*(n-e.y),y:n},re=(e,t,n)=>t.x===0?null:{x:n,y:e.y+t.y/t.x*(n-e.x)},ie=(e,t,n,r)=>{if(t.x===0)return re(n,r,e.x);if(r.x===0)return re(e,t,n.x);if(t.y===0)return ne(n,r,e.y);if(r.y===0)return ne(e,t,n.y);let i=F(t,r);if(i==0)return null;let a={x:n.x-e.x,y:n.y-e.y},o=F(a,t)/i,s=F(a,r)/i,c=e.x+s*t.x,l=n.x+o*r.x,u=e.y+s*t.y,d=n.y+o*r.y;return{x:(c+l)/2,y:(u+d)/2}};class z{static compare(e,t){let n=z.comparePoints(e.point,t.point);return n===0?(e.point!==t.point&&e.link(t),e.isLeft===t.isLeft?ae.compare(e.segment,t.segment):e.isLeft?1:-1):n}static comparePoints(e,t){return e.x<t.x?-1:e.x>t.x?1:e.y<t.y?-1:+(e.y>t.y)}constructor(e,t){e.events===void 0?e.events=[this]:e.events.push(this),this.point=e,this.isLeft=t}link(e){if(e.point===this.point)throw Error(`Tried to link already linked events`);let t=e.point.events;for(let e=0,n=t.length;e<n;e++){let n=t[e];this.point.events.push(n),n.point=this.point}this.checkForConsuming()}checkForConsuming(){let e=this.point.events.length;for(let t=0;t<e;t++){let n=this.point.events[t];if(n.segment.consumedBy===void 0)for(let r=t+1;r<e;r++){let e=this.point.events[r];e.consumedBy===void 0&&n.otherSE.point.events===e.otherSE.point.events&&n.segment.consume(e.segment)}}}getAvailableLinkedEvents(){let e=[];for(let t=0,n=this.point.events.length;t<n;t++){let n=this.point.events[t];n!==this&&!n.segment.ringOut&&n.segment.isInResult()&&e.push(n)}return e}getLeftmostComparator(e){let t=new Map,n=n=>{let r=n.otherSE;t.set(n,{sine:ee(this.point,e.point,r.point),cosine:te(this.point,e.point,r.point)})};return(e,r)=>{t.has(e)||n(e),t.has(r)||n(r);let{sine:i,cosine:a}=t.get(e),{sine:o,cosine:s}=t.get(r);return i>=0&&o>=0?a<s?1:a>s?-1:0:i<0&&o<0?a<s?-1:+(a>s):o<i?-1:+(o>i)}}}let B=0;class ae{static compare(e,t){let n=e.leftSE.point.x,r=t.leftSE.point.x,i=e.rightSE.point.x,a=t.rightSE.point.x;if(a<n)return 1;if(i<r)return-1;let o=e.leftSE.point.y,s=t.leftSE.point.y,c=e.rightSE.point.y,l=t.rightSE.point.y;if(n<r){if(s<o&&s<c)return 1;if(s>o&&s>c)return-1;let n=e.comparePoint(t.leftSE.point);if(n<0)return 1;if(n>0)return-1;let r=t.comparePoint(e.rightSE.point);return r===0?-1:r}if(n>r){if(o<s&&o<l)return-1;if(o>s&&o>l)return 1;let n=t.comparePoint(e.leftSE.point);if(n!==0)return n;let r=e.comparePoint(t.rightSE.point);return r<0?1:r>0?-1:1}if(o<s)return-1;if(o>s)return 1;if(i<a){let n=t.comparePoint(e.rightSE.point);if(n!==0)return n}if(i>a){let n=e.comparePoint(t.rightSE.point);if(n<0)return 1;if(n>0)return-1}if(i!==a){let e=c-o,t=i-n,u=l-s,d=a-r;if(e>t&&u<d)return 1;if(e<t&&u>d)return-1}return i>a?1:i<a||c<l?-1:c>l?1:e.id<t.id?-1:+(e.id>t.id)}constructor(e,t,n,r){this.id=++B,this.leftSE=e,e.segment=this,e.otherSE=t,this.rightSE=t,t.segment=this,t.otherSE=e,this.rings=n,this.windings=r}static fromRing(e,t,n){let r,i,a,o=z.comparePoints(e,t);if(o<0)r=e,i=t,a=1;else if(o>0)r=t,i=e,a=-1;else throw Error(`Tried to create degenerate segment at [${e.x}, ${e.y}]`);return new ae(new z(r,!0),new z(i,!1),[n],[a])}replaceRightSE(e){this.rightSE=e,this.rightSE.segment=this,this.rightSE.otherSE=this.leftSE,this.leftSE.otherSE=this.rightSE}bbox(){let e=this.leftSE.point.y,t=this.rightSE.point.y;return{ll:{x:this.leftSE.point.x,y:e<t?e:t},ur:{x:this.rightSE.point.x,y:e>t?e:t}}}vector(){return{x:this.rightSE.point.x-this.leftSE.point.x,y:this.rightSE.point.y-this.leftSE.point.y}}isAnEndpoint(e){return e.x===this.leftSE.point.x&&e.y===this.leftSE.point.y||e.x===this.rightSE.point.x&&e.y===this.rightSE.point.y}comparePoint(e){if(this.isAnEndpoint(e))return 0;let t=this.leftSE.point,n=this.rightSE.point,r=this.vector();if(t.x===n.x)return e.x===t.x?0:e.x<t.x?1:-1;let i=(e.y-t.y)/r.y,a=t.x+i*r.x;if(e.x===a)return 0;let o=(e.x-t.x)/r.x,s=t.y+o*r.y;return e.y===s?0:e.y<s?-1:1}getIntersection(e){let t=this.bbox(),n=e.bbox(),r=g(t,n);if(r===null)return null;let i=this.leftSE.point,a=this.rightSE.point,o=e.leftSE.point,s=e.rightSE.point,c=h(t,o)&&this.comparePoint(o)===0,l=h(n,i)&&e.comparePoint(i)===0,u=h(t,s)&&this.comparePoint(s)===0,d=h(n,a)&&e.comparePoint(a)===0;if(l&&c)return d&&!u?a:!d&&u?s:null;if(l)return u&&i.x===s.x&&i.y===s.y?null:i;if(c)return d&&a.x===o.x&&a.y===o.y?null:o;if(d&&u)return null;if(d)return a;if(u)return s;let f=ie(i,this.vector(),o,e.vector());return f===null||!h(r,f)?null:S.round(f.x,f.y)}split(e){let t=[],n=e.events!==void 0,r=new z(e,!0),i=new z(e,!1),a=this.rightSE;this.replaceRightSE(i),t.push(i),t.push(r);let o=new ae(r,a,this.rings.slice(),this.windings.slice());return z.comparePoints(o.leftSE.point,o.rightSE.point)>0&&o.swapEvents(),z.comparePoints(this.leftSE.point,this.rightSE.point)>0&&this.swapEvents(),n&&(r.checkForConsuming(),i.checkForConsuming()),t}swapEvents(){let e=this.rightSE;this.rightSE=this.leftSE,this.leftSE=e,this.leftSE.isLeft=!0,this.rightSE.isLeft=!1;for(let e=0,t=this.windings.length;e<t;e++)this.windings[e]*=-1}consume(e){let t=this,n=e;for(;t.consumedBy;)t=t.consumedBy;for(;n.consumedBy;)n=n.consumedBy;let r=ae.compare(t,n);if(r!==0){if(r>0){let e=t;t=n,n=e}if(t.prev===n){let e=t;t=n,n=e}for(let e=0,r=n.rings.length;e<r;e++){let r=n.rings[e],i=n.windings[e],a=t.rings.indexOf(r);a===-1?(t.rings.push(r),t.windings.push(i)):t.windings[a]+=i}n.rings=null,n.windings=null,n.consumedBy=t,n.leftSE.consumedBy=t.leftSE,n.rightSE.consumedBy=t.rightSE}}prevInResult(){return this._prevInResult===void 0&&(this.prev?this.prev.isInResult()?this._prevInResult=this.prev:this._prevInResult=this.prev.prevInResult():this._prevInResult=null),this._prevInResult}beforeState(){if(this._beforeState!==void 0)return this._beforeState;if(!this.prev)this._beforeState={rings:[],windings:[],multiPolys:[]};else{let e=this.prev.consumedBy||this.prev;this._beforeState=e.afterState()}return this._beforeState}afterState(){if(this._afterState!==void 0)return this._afterState;let e=this.beforeState();this._afterState={rings:e.rings.slice(0),windings:e.windings.slice(0),multiPolys:[]};let t=this._afterState.rings,n=this._afterState.windings,r=this._afterState.multiPolys;for(let e=0,r=this.rings.length;e<r;e++){let r=this.rings[e],i=this.windings[e],a=t.indexOf(r);a===-1?(t.push(r),n.push(i)):n[a]+=i}let i=[],a=[];for(let e=0,r=t.length;e<r;e++){if(n[e]===0)continue;let r=t[e],o=r.poly;if(a.indexOf(o)===-1)if(r.isExterior)i.push(o);else{a.indexOf(o)===-1&&a.push(o);let e=i.indexOf(r.poly);e!==-1&&i.splice(e,1)}}for(let e=0,t=i.length;e<t;e++){let t=i[e].multiPoly;r.indexOf(t)===-1&&r.push(t)}return this._afterState}isInResult(){if(this.consumedBy)return!1;if(this._isInResult!==void 0)return this._isInResult;let e=this.beforeState().multiPolys,t=this.afterState().multiPolys;switch(he.type){case`union`:{let n=e.length===0,r=t.length===0;this._isInResult=n!==r;break}case`intersection`:{let n,r;e.length<t.length?(n=e.length,r=t.length):(n=t.length,r=e.length),this._isInResult=r===he.numMultiPolys&&n<r;break}case`xor`:{let n=Math.abs(e.length-t.length);this._isInResult=n%2==1;break}case`difference`:{let n=e=>e.length===1&&e[0].isSubject;this._isInResult=n(e)!==n(t);break}default:throw Error(`Unrecognized operation type found ${he.type}`)}return this._isInResult}}class V{constructor(e,t,n){if(!Array.isArray(e)||e.length===0||(this.poly=t,this.isExterior=n,this.segments=[],typeof e[0][0]!=`number`||typeof e[0][1]!=`number`))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);let r=S.round(e[0][0],e[0][1]);this.bbox={ll:{x:r.x,y:r.y},ur:{x:r.x,y:r.y}};let i=r;for(let t=1,n=e.length;t<n;t++){if(typeof e[t][0]!=`number`||typeof e[t][1]!=`number`)throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);let n=S.round(e[t][0],e[t][1]);n.x===i.x&&n.y===i.y||(this.segments.push(ae.fromRing(i,n,this)),n.x<this.bbox.ll.x&&(this.bbox.ll.x=n.x),n.y<this.bbox.ll.y&&(this.bbox.ll.y=n.y),n.x>this.bbox.ur.x&&(this.bbox.ur.x=n.x),n.y>this.bbox.ur.y&&(this.bbox.ur.y=n.y),i=n)}(r.x!==i.x||r.y!==i.y)&&this.segments.push(ae.fromRing(i,r,this))}getSweepEvents(){let e=[];for(let t=0,n=this.segments.length;t<n;t++){let n=this.segments[t];e.push(n.leftSE),e.push(n.rightSE)}return e}}class oe{constructor(e,t){if(!Array.isArray(e))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);this.exteriorRing=new V(e[0],this,!0),this.bbox={ll:{x:this.exteriorRing.bbox.ll.x,y:this.exteriorRing.bbox.ll.y},ur:{x:this.exteriorRing.bbox.ur.x,y:this.exteriorRing.bbox.ur.y}},this.interiorRings=[];for(let t=1,n=e.length;t<n;t++){let n=new V(e[t],this,!1);n.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=n.bbox.ll.x),n.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=n.bbox.ll.y),n.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=n.bbox.ur.x),n.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=n.bbox.ur.y),this.interiorRings.push(n)}this.multiPoly=t}getSweepEvents(){let e=this.exteriorRing.getSweepEvents();for(let t=0,n=this.interiorRings.length;t<n;t++){let n=this.interiorRings[t].getSweepEvents();for(let t=0,r=n.length;t<r;t++)e.push(n[t])}return e}}class se{constructor(e,t){if(!Array.isArray(e))throw Error(`Input geometry is not a valid Polygon or MultiPolygon`);try{typeof e[0][0][0]==`number`&&(e=[e])}catch{}this.polys=[],this.bbox={ll:{x:1/0,y:1/0},ur:{x:-1/0,y:-1/0}};for(let t=0,n=e.length;t<n;t++){let n=new oe(e[t],this);n.bbox.ll.x<this.bbox.ll.x&&(this.bbox.ll.x=n.bbox.ll.x),n.bbox.ll.y<this.bbox.ll.y&&(this.bbox.ll.y=n.bbox.ll.y),n.bbox.ur.x>this.bbox.ur.x&&(this.bbox.ur.x=n.bbox.ur.x),n.bbox.ur.y>this.bbox.ur.y&&(this.bbox.ur.y=n.bbox.ur.y),this.polys.push(n)}this.isSubject=t}getSweepEvents(){let e=[];for(let t=0,n=this.polys.length;t<n;t++){let n=this.polys[t].getSweepEvents();for(let t=0,r=n.length;t<r;t++)e.push(n[t])}return e}}class ce{static factory(e){let t=[];for(let n=0,r=e.length;n<r;n++){let r=e[n];if(!r.isInResult()||r.ringOut)continue;let i=null,a=r.leftSE,o=r.rightSE,s=[a],c=a.point,l=[];for(;i=a,a=o,s.push(a),a.point!==c;)for(;;){let e=a.getAvailableLinkedEvents();if(e.length===0){let e=s[0].point,t=s[s.length-1].point;throw Error(`Unable to complete output ring starting at [${e.x}, ${e.y}]. Last matching segment found ends at [${t.x}, ${t.y}].`)}if(e.length===1){o=e[0].otherSE;break}let n=null;for(let e=0,t=l.length;e<t;e++)if(l[e].point===a.point){n=e;break}if(n!==null){let e=l.splice(n)[0],r=s.splice(e.index);r.unshift(r[0].otherSE),t.push(new ce(r.reverse()));continue}l.push({index:s.length,point:a.point});let r=a.getLeftmostComparator(i);o=e.sort(r)[0].otherSE;break}t.push(new ce(s))}return t}constructor(e){this.events=e;for(let t=0,n=e.length;t<n;t++)e[t].segment.ringOut=this;this.poly=null}getGeom(){let e=this.events[0].point,t=[e];for(let n=1,r=this.events.length-1;n<r;n++){let r=this.events[n].point,i=this.events[n+1].point;L(r,e,i)!==0&&(t.push(r),e=r)}if(t.length===1)return null;let n=t[0],r=t[1];L(n,e,r)===0&&t.shift(),t.push(t[0]);let i=this.isExteriorRing()?1:-1,a=this.isExteriorRing()?0:t.length-1,o=this.isExteriorRing()?t.length:-1,s=[];for(let e=a;e!=o;e+=i)s.push([t[e].x,t[e].y]);return s}isExteriorRing(){if(this._isExteriorRing===void 0){let e=this.enclosingRing();this._isExteriorRing=e?!e.isExteriorRing():!0}return this._isExteriorRing}enclosingRing(){return this._enclosingRing===void 0&&(this._enclosingRing=this._calcEnclosingRing()),this._enclosingRing}_calcEnclosingRing(){let e=this.events[0];for(let t=1,n=this.events.length;t<n;t++){let n=this.events[t];z.compare(e,n)>0&&(e=n)}let t=e.segment.prevInResult(),n=t?t.prevInResult():null;for(;;){if(!t)return null;if(!n)return t.ringOut;if(n.ringOut!==t.ringOut)return n.ringOut.enclosingRing()===t.ringOut?t.ringOut.enclosingRing():t.ringOut;t=n.prevInResult(),n=t?t.prevInResult():null}}}class le{constructor(e){this.exteriorRing=e,e.poly=this,this.interiorRings=[]}addInterior(e){this.interiorRings.push(e),e.poly=this}getGeom(){let e=[this.exteriorRing.getGeom()];if(e[0]===null)return null;for(let t=0,n=this.interiorRings.length;t<n;t++){let n=this.interiorRings[t].getGeom();n!==null&&e.push(n)}return e}}class ue{constructor(e){this.rings=e,this.polys=this._composePolys(e)}getGeom(){let e=[];for(let t=0,n=this.polys.length;t<n;t++){let n=this.polys[t].getGeom();n!==null&&e.push(n)}return e}_composePolys(e){let t=[];for(let n=0,r=e.length;n<r;n++){let r=e[n];if(!r.poly)if(r.isExteriorRing())t.push(new le(r));else{let e=r.enclosingRing();e.poly||t.push(new le(e)),e.poly.addInterior(r)}}return t}}class de{constructor(e){let t=arguments.length>1&&arguments[1]!==void 0?arguments[1]:ae.compare;this.queue=e,this.tree=new c(t),this.segments=[]}process(e){let t=e.segment,n=[];if(e.consumedBy)return e.isLeft?this.queue.remove(e.otherSE):this.tree.remove(t),n;let r=e.isLeft?this.tree.add(t):this.tree.find(t);if(!r)throw Error(`Unable to find segment #${t.id} [${t.leftSE.point.x}, ${t.leftSE.point.y}] -> [${t.rightSE.point.x}, ${t.rightSE.point.y}] in SweepLine tree.`);let i=r,a=r,o,s;for(;o===void 0;)i=this.tree.prev(i),i===null?o=null:i.key.consumedBy===void 0&&(o=i.key);for(;s===void 0;)a=this.tree.next(a),a===null?s=null:a.key.consumedBy===void 0&&(s=a.key);if(e.isLeft){let r=null;if(o){let e=o.getIntersection(t);if(e!==null&&(t.isAnEndpoint(e)||(r=e),!o.isAnEndpoint(e))){let t=this._splitSafely(o,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}let i=null;if(s){let e=s.getIntersection(t);if(e!==null&&(t.isAnEndpoint(e)||(i=e),!s.isAnEndpoint(e))){let t=this._splitSafely(s,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}if(r!==null||i!==null){let e=null;e=r===null?i:i===null||z.comparePoints(r,i)<=0?r:i,this.queue.remove(t.rightSE),n.push(t.rightSE);let a=t.split(e);for(let e=0,t=a.length;e<t;e++)n.push(a[e])}n.length>0?(this.tree.remove(t),n.push(e)):(this.segments.push(t),t.prev=o)}else{if(o&&s){let e=o.getIntersection(s);if(e!==null){if(!o.isAnEndpoint(e)){let t=this._splitSafely(o,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}if(!s.isAnEndpoint(e)){let t=this._splitSafely(s,e);for(let e=0,r=t.length;e<r;e++)n.push(t[e])}}}this.tree.remove(t)}return n}_splitSafely(e,t){this.tree.remove(e);let n=e.rightSE;this.queue.remove(n);let r=e.split(t);return r.push(n),e.consumedBy===void 0&&this.tree.add(e),r}}let fe=typeof process<`u`&&{}.POLYGON_CLIPPING_MAX_QUEUE_SIZE||1e6,pe=typeof process<`u`&&{}.POLYGON_CLIPPING_MAX_SWEEPLINE_SEGMENTS||1e6;class me{run(e,t,n){he.type=e,S.reset();let r=[new se(t,!0)];for(let e=0,t=n.length;e<t;e++)r.push(new se(n[e],!1));if(he.numMultiPolys=r.length,he.type===`difference`){let e=r[0],t=1;for(;t<r.length;)g(r[t].bbox,e.bbox)===null?r.splice(t,1):t++}if(he.type===`intersection`)for(let e=0,t=r.length;e<t;e++){let t=r[e];for(let n=e+1,i=r.length;n<i;n++)if(g(t.bbox,r[n].bbox)===null)return[]}let i=new c(z.compare);for(let e=0,t=r.length;e<t;e++){let t=r[e].getSweepEvents();for(let e=0,n=t.length;e<n;e++)if(i.insert(t[e]),i.size>fe)throw Error(`Infinite loop when putting segment endpoints in a priority queue (queue size too big).`)}let a=new de(i),o=i.size,s=i.pop();for(;s;){let e=s.key;if(i.size===o){let t=e.segment;throw Error(`Unable to pop() ${e.isLeft?`left`:`right`} SweepEvent [${e.point.x}, ${e.point.y}] from segment #${t.id} [${t.leftSE.point.x}, ${t.leftSE.point.y}] -> [${t.rightSE.point.x}, ${t.rightSE.point.y}] from queue.`)}if(i.size>fe)throw Error(`Infinite loop when passing sweep line over endpoints (queue size too big).`);if(a.segments.length>pe)throw Error(`Infinite loop when passing sweep line over endpoints (too many sweep line segments).`);let t=a.process(e);for(let e=0,n=t.length;e<n;e++){let n=t[e];n.consumedBy===void 0&&i.insert(n)}o=i.size,s=i.pop()}return S.reset(),new ue(ce.factory(a.segments)).getGeom()}}let he=new me;return{union:function(e){var t=[...arguments].slice(1);return he.run(`union`,e,t)},intersection:function(e){var t=[...arguments].slice(1);return he.run(`intersection`,e,t)},xor:function(e){var t=[...arguments].slice(1);return he.run(`xor`,e,t)},difference:function(e){var t=[...arguments].slice(1);return he.run(`difference`,e,t)}}}))}))();function xd(e,t){return 1.72-wt.smoothstep(t,-5.5,2.5)*.72}
+
+// River flows from North-East-Center (0.8, -9.8) through (-0.68, -2.85) and (-2.3, 2.2) to South-West coast (-4.4, 8.9)
+var Td=new Pi([
+  new Y(.8,0,-9.8),
+  new Y(0,0,-6.2),
+  new Y(-.68,0,-2.85),
+  new Y(-1.48,0,-.3),
+  new Y(-2.3,0,2.2),
+  new Y(-3.35,0,5.55),
+  new Y(-4.4,0,8.9)
+]),Ed=Td.getPoints(180);
+
+// Two Stone Arch Bridges:
+// Bridge 1 (North-Central): (-0.68, -2.85), rotY = -0.31
+// Bridge 2 (South-Central): (-2.30,  2.20), rotY = -0.31
+// Pathways ONLY cross the river directly over Bridge 1 or Bridge 2!
 var Sd=[
-  {id:"dock-to-gate",width:.68,points:[[-6.95,4.72],[-6.35,4.15],[-5.25,3.15],[-4.15,1.65],[-3.75,-.15]]},
-  {id:"github-to-helpdesk",width:.58,points:[[-6.15,-.35],[-4.95,-.55],[-3.75,-.65],[-2.15,-1.25],[-.55,-1.55],[.45,-1.5]]},
-  {id:"deepmind-to-plaza",width:.62,points:[[-1.65,-3.25],[-1.55,-2.25],[-1.15,-1.45],[.45,-1.5]]},
-  {id:"bridge-to-bgu",width:.6,points:[[.45,-1.5],[1.45,-1.45],[2.85,-2.15],[4.15,-2.85],[4.75,-2.65]]},
-  {id:"bridge-to-east",width:.58,points:[[1.45,-1.45],[3.15,-.85],[4.85,-.75],[5.75,-.85]]},
-  {id:"east-to-blaze",width:.58,points:[[3.15,-.85],[3.85,.75],[4.55,1.95],[5.35,2.25]]},
-  {id:"plaza-to-microsoft",width:.62,points:[[-1.15,-1.45],[-.85,.65],[-.35,2.45],[.55,3.45]]},
-  {id:"microsoft-to-blaze",width:.55,points:[[.55,3.45],[2.25,3.55],[3.85,3.15],[4.85,2.65]]}
+  // West side paths (Left Dock/Gate -> GitHub -> Help Desk)
+  {id:"dock-to-south-bridge",width:.68,points:[[-9.0,5.3],[-8.4,4.8],[-6.6,3.6],[-4.5,2.6],[-3.25,2.2]]},
+  {id:"south-bridge-crossing",width:.66,points:[[-3.25,2.2],[-2.3,2.2],[-1.35,2.2]]},
+  {id:"west-github-to-south-bridge",width:.6,points:[[-5.8,1.1],[-5.2,2.1],[-4.5,2.6]]},
+  {id:"west-github-to-north-bridge",width:.6,points:[[-5.8,-.5],[-4.6,-2.1],[-3.1,-2.85],[-1.65,-2.85]]},
+  {id:"west-helpdesk-spur",width:.6,points:[[-4.2,-4.1],[-3.6,-3.3],[-3.1,-2.85]]},
+  {id:"north-bridge-crossing",width:.66,points:[[-1.65,-2.85],[-.68,-2.85],[.3,-2.85]]},
+  // East side paths (IDF, BGU, Data Scientist HQ, Dairy Barn & Basketball Court)
+  {id:"north-bridge-to-idf-bgu",width:.62,points:[[.3,-2.85],[1.6,-3.2],[2.2,-4.1]]},
+  {id:"north-bridge-to-bgu",width:.62,points:[[.3,-2.85],[2.1,-2.1],[3.8,-1.2],[4.4,-.8]]},
+  {id:"south-bridge-to-ds-hq",width:.68,points:[[-1.35,2.2],[-.8,3.3],[-.6,4.1]]},
+  {id:"east-spine-ds-to-bgu",width:.62,points:[[-.8,3.3],[.8,2.2],[2.4,.8],[3.8,-1.2]]},
+  {id:"east-to-blaze-and-court",width:.6,points:[[2.4,.8],[4.2,2.1],[4.8,2.8]]},
+  {id:"bgu-to-court",width:.58,points:[[3.8,-1.2],[6.1,-1.1],[7.5,-.9]]}
 ];
-function Cd(e,t){
-  let dx=e-.45,dz=t+1.5;
-  let rx=dx*Math.cos(.38)-dz*Math.sin(.38),rz=dx*Math.sin(.38)+dz*Math.cos(.38);
+
+function bridgeBump(e,t,bx,bz,rot){
+  let dx=e-bx,dz=t-bz;
+  let rx=dx*Math.cos(rot)-dz*Math.sin(rot),rz=dx*Math.sin(rot)+dz*Math.cos(rot);
   let n=1-wt.smoothstep(Math.abs(rx),1.08,1.82),r=1-wt.smoothstep(Math.abs(rz),.38,.68);
-  return xd(e,t)+.038+.195*n*r;
+  return .21*n*r;
+}
+function Cd(e,t){
+  let b1=bridgeBump(e,t,-.68,-2.85,.31);
+  let b2=bridgeBump(e,t,-2.3,2.2,.31);
+  return xd(e,t)+.038+Math.max(b1,b2);
 }
 function wd({points:e}){
   let t=new Pi(e.map(([e,t])=>new Y(e,0,t)));
@@ -4247,10 +4275,9 @@ function wd({points:e}){
 function buildDynamicPathways(){
   let pos=[],norm=[],uv=[],idx=[],vOffset=0;
   for(let seg of Sd){
-    let pts=wd(seg),halfW=seg.width*.52,arcLen=0;
+    let pts=wd(seg),halfW=seg.width*.52;
     for(let i=0;i<pts.length;i++){
       let p=pts[i];
-      if(i>0)arcLen+=p.distanceTo(pts[i-1]);
       let prev=pts[Math.max(0,i-1)],next=pts[Math.min(pts.length-1,i+1)];
       let dir=next.clone().sub(prev).normalize();
       let perp=new Y(-dir.z,0,dir.x);
@@ -4283,16 +4310,6 @@ function buildDynamicPathways(){
   return g;
 }
 
-// River now flows from North-East highlands (2.8, -7.9) across center (0.45, -1.5) to South-West coast (-3.3, 7.3)
-var Td=new Pi([
-  new Y(2.8,0,-7.9),
-  new Y(1.75,0,-4.6),
-  new Y(.45,0,-1.5),
-  new Y(-.95,0,1.55),
-  new Y(-2.15,0,4.45),
-  new Y(-3.3,0,7.3)
-]),Ed=Td.getPoints(160);
-
 function Dd(e,t){
   let n=1/0;
   for(let r=1;r<Ed.length;r++){
@@ -4304,9 +4321,10 @@ function Dd(e,t){
 function Od(e){return 1+.058*Math.sin(e*5+.75)+.036*Math.cos(e*9-.45)+.022*Math.sin(e*13+.3)}
 function kd(){
   let e=[],t=[],n=[];
-  for(let r=0;r<=160;r++){
-    let i=r/160*Math.PI*2,a=Od(i),o=Math.cos(i)*10.4*a,s=Math.sin(i)*8.3*a,c=1-wt.smoothstep(Dd(o,s),.34,.86);
-    if(e.push(o,-.18,s,o,xd(o,s)-c*.73+.008,s),t.push(r*.2,0,r*.2,1),r<160){
+  for(let r=0;r<=180;r++){
+    let i=r/180*Math.PI*2,a=1+.058*Math.sin(i*5+.75)+.036*Math.cos(i*9-.45)+.022*Math.sin(i*13+.3),
+      o=Math.cos(i)*13.2*a,s=Math.sin(i)*10.6*a,c=1-wt.smoothstep(Dd(o,s),.34,.88);
+    if(e.push(o,-.2,s,o,xd(o,s)-c*.73+.008,s),t.push(r*.2,0,r*.2,1),r<180){
       let e=r*2;
       n.push(e,e+1,e+2,e+2,e+1,e+3);
     }
@@ -4316,12 +4334,14 @@ function kd(){
 }
 function Ad(){
   let e=[],t=[],n=[];
-  for(let n=0;n<=64;n++)for(let r=0;r<=160;r++){
-    let i=r/160*Math.PI*2,a=n/64,o=Od(i),s=Math.cos(i)*10.4*a*o,c=Math.sin(i)*8.3*a*o,l=1-wt.smoothstep(Dd(s,c),.34,.86);
+  for(let n=0;n<=72;n++)for(let r=0;r<=180;r++){
+    let i=r/180*Math.PI*2,a=n/72,
+      o=1+.058*Math.sin(i*5+.75)+.036*Math.cos(i*9-.45)+.022*Math.sin(i*13+.3),
+      s=Math.cos(i)*13.2*a*o,c=Math.sin(i)*10.6*a*o,l=1-wt.smoothstep(Dd(s,c),.34,.88);
     e.push(s,xd(s,c)-l*.73,c),t.push(s,c);
   }
-  for(let e=0;e<64;e++)for(let t=0;t<160;t++){
-    let r=e*161+t,i=r+160+1;
+  for(let e=0;e<72;e++)for(let t=0;t<180;t++){
+    let r=e*181+t,i=r+180+1;
     n.push(r,r+1,i,i,r+1,i+1);
   }
   let r=new kr;
@@ -4332,8 +4352,8 @@ function jd(e=!1){
     o=new Ki(
       new Y(i.x,.52,i.z),
       new Y(i.x+a.x*.25,.52,i.z+a.z*.25),
-      new Y(i.x+a.x*.62,.18,i.z+a.z*.62),
-      new Y(i.x+a.x*.96,.17,i.z+a.z*.96)
+      new Y(i.x+a.x*.65,.18,i.z+a.z*.65),
+      new Y(i.x+a.x*1.02,.17,i.z+a.z*1.02)
     );
   for(let i=0;i<=192;i++){
     let a=Math.max(0,(i-160)/32),s=Math.min(1,i/160),c=i<=160?Td.getPoint(s):o.getPoint(a),l=i<=160?Td.getTangent(s):o.getTangent(a),u=new Y(-l.z,0,l.x).normalize().multiplyScalar(.44+a*.1);
@@ -4453,14 +4473,26 @@ function Fd(e,t="#8eafb6",n,r=!1){
   return o.userData.architecturalGlass=!0,e.add(o),o;
 }
 
-// Completely new, spacious landmark coordinates on the enlarged (10.4 x 8.3) island
+// ═══════════════════════════════════════════════════════════════════════════
+// EXACT 3-ROW LAYOUT ON THE EXPANDED (13.2 x 10.6) ISLAND:
+// Front Row (z ≈ +3.6..+4.8):
+//   - deepmind (Data Scientist & ML Engineer): {x: -0.6, z: 4.8}
+//   - blaze (Dairy Barn + Large Green Grass Cow Yard + Guide-Dog): {x: 5.0, z: 3.4}
+// Second Row (z ≈ -0.6..+0.3):
+//   - github (GitHub & ML Projects): {x: -5.8, z: 0.2}
+//   - michigan (Ben-Gurion University): {x: 4.4, z: -0.6}
+//   - Half Basketball Court (se): {x: 8.8, z: -0.8}
+// Back Row (z ≈ -5.2):
+//   - helpdesk (Matrix · IT Support & Help Desk): {x: -4.2, z: -5.2}
+//   - microsoft (IDF Communications & Ops NCO + Radar Tower): {x: 2.2, z: -5.2}
+// ═══════════════════════════════════════════════════════════════════════════
 var Id={
-  deepmind:{x:-1.65,z:-4.35},
-  michigan:{x:4.75,z:-3.65},
-  github:{x:-6.45,z:-.55},
-  helpdesk:{x:-3.75,z:-.75},
-  microsoft:{x:.55,z:4.25},
-  blaze:{x:5.55,z:2.15}
+  deepmind:{x:-.6,z:4.8},
+  blaze:{x:5.0,z:3.4},
+  github:{x:-5.8,z:.2},
+  michigan:{x:4.4,z:-.6},
+  helpdesk:{x:-4.2,z:-5.2},
+  microsoft:{x:2.2,z:-5.2}
 };
 
 function Ld(e,t,n,r){
@@ -4500,77 +4532,62 @@ function Ld(e,t,n,r){
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 1. BEN-GURION UNIVERSITY (michigan) — Relocated to North-East Ridge (4.75, -3.65)
-  // Redesigned as a 3-Story Modern Negev Sandstone, Warm Cedar Wood & Glass Campus
-  // with Dual-Pitched Clerestory Skylight Roof, Left-Side Colonnade Entrance & Right Clock Tower
+  // 1. BEN-GURION UNIVERSITY (michigan) — Second Row Right (4.4, -0.6)
   // ═══════════════════════════════════════════════════════════════════════════
   let C=y("michigan");
-  C.rotation.y=-.18;
-  v(C,3.35,.18,2.25,c,0,.03,0);
-  // Main 3-story sandstone & warm wood academic volume
-  v(C,2.25,2.15,1.72,c,-.38,1.12,0);
-  // Modern cedar-wood & glass lecture hall wing on the right
-  v(C,1.15,1.85,1.62,l,.98,.98,.06);
-  // 3 stories x 4 wide modern glass windows on sandstone facade (with cedar louvers)
+  C.rotation.y=-.14;
+  v(C,3.35,.26,2.25,c,0,0,0);
+  v(C,2.25,2.15,1.72,c,-.38,1.16,0);
+  v(C,1.15,1.85,1.62,l,.98,1.02,.06);
   for(let fl=0;fl<3;fl++){
-    let wy=.52+fl*.62;
+    let wy=.56+fl*.62;
     for(let col=0;col<4;col++){
       let wx=-1.22+col*.54;
-      if(fl===0&&col<=1)continue; // Leave space for left-side double entrance colonnade
+      if(fl===0&&col<=1)continue;
       v(C,.42,.46,.07,f,wx,wy,.86);
       v(C,.36,.4,.075,(fl+col)%3==0?g:h[(fl+col)%3],wx,wy,.88);
-      v(C,.44,.04,.12,l,wx,wy+.23,.91); // warm wood sun-shade louver
+      v(C,.44,.04,.12,l,wx,wy+.23,.91);
     }
   }
-  // Panoramic curtain wall on the modern wood wing
-  v(C,.88,1.35,.06,h[1],.98,1.02,.88);
-  for(let bar of[-.28,0,.28])v(C,.025,1.36,.08,p,.98+bar,1.02,.89);
-  // Left-side Double Entrance Doors & Sandstone Colonnade (moved to x = -0.95)
+  v(C,.88,1.35,.06,h[1],.98,1.06,.88);
+  for(let bar of[-.28,0,.28])v(C,.025,1.36,.08,p,.98+bar,1.06,.89);
   let O=new Cn;
   O.name="michigan-entry";
   C.add(O);
-  v(O,.86,.88,.1,f,-.95,.52,.87);
+  v(O,.86,.88,.1,f,-.95,.56,.87);
   for(let dx of[-1.14,-.76]){
-    v(O,.32,.78,.06,l,dx,.5,.92);
-    v(O,.24,.42,.02,m,dx,.62,.95);
+    v(O,.32,.78,.06,l,dx,.54,.92);
+    v(O,.24,.42,.02,m,dx,.66,.95);
   }
-  // Cantilevered wood & steel entrance canopy + 3 columns
-  v(O,1.12,.07,.46,p,-.95,.98,1.06);
-  for(let cx of[-1.42,-.95,-.48])_(new Si(.045,.055,.92,12),c,O,cx,.48,1.22);
-  // Modern Butterfly / Clerestory Zinc-Slate Roof with Glass Skylight Spine
+  v(O,1.12,.07,.46,p,-.95,1.02,1.06);
+  for(let cx of[-1.42,-.95,-.48])_(new Si(.045,.055,.92,12),c,O,cx,.52,1.22);
   for(let side of[-1,1]){
-    let rSlope=v(C,2.42,.07,1.08,n.slate,-.38,2.32,side*.46);
+    let rSlope=v(C,2.42,.07,1.08,n.slate,-.38,2.36,side*.46);
     rSlope.rotation.x=side*.36;
   }
-  v(C,2.28,.24,.36,m,-.38,2.38,0); // Clerestory glass skylight
-  v(C,2.36,.06,.44,p,-.38,2.52,0);
-  // Rooftop Solar Panels & Greenery Planter on the Right Wing
-  v(C,1.22,.08,1.68,d,.98,1.94,.06);
+  v(C,2.28,.24,.36,m,-.38,2.42,0);
+  v(C,2.36,.06,.44,p,-.38,2.56,0);
+  v(C,1.22,.08,1.68,d,.98,1.98,.06);
   for(let sp of[-.28,.22]){
-    let panel=v(C,.42,.03,.68,blueAccent,.98+sp,2.04,.06);
+    let panel=v(C,.42,.03,.68,blueAccent,.98+sp,2.08,.06);
     panel.rotation.x=.28;
   }
-  // Stepped BGU Academic Bell/Crest Tower on the Right-Back (x = 1.05, z = -0.35, 3.65m tall)
-  v(C,.88,3.25,.88,c,1.05,1.65,-.35);
-  v(C,.98,.14,.98,d,1.05,3.32,-.35);
-  v(C,.72,.42,.72,l,1.05,3.58,-.35);
-  _(new Ci(.58,.45,4),n.slate,C,1.05,3.98,-.35).rotation.y=Math.PI/4;
-  b(C,"michigan",.52,.55,1.05,2.65,.11);
+  v(C,.88,3.25,.88,c,1.05,1.68,-.35);
+  v(C,.98,.14,.98,d,1.05,3.36,-.35);
+  v(C,.72,.42,.72,l,1.05,3.62,-.35);
+  _(new Ci(.58,.45,4),n.slate,C,1.05,4.02,-.35).rotation.y=Math.PI/4;
+  b(C,"michigan",.52,.55,1.05,2.68,.11);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 2. CLOUD AI & IDF C4I (microsoft) — Relocated to South-Central Promenade (0.55, 4.25)
-  // Redesigned as a 4-Story High-Tech Glass Curtain-Wall, White Stone & Wood Complex
-  // with Diagrid Steel Exoskeleton, Rooftop Helipad/Drone Deck & IDF C4I Radar Tower
+  // 2. IDF COMMUNICATIONS & OPERATIONS NCO (microsoft) — Back Row Right (2.2, -5.2)
   // ═══════════════════════════════════════════════════════════════════════════
   let k=y("microsoft");
-  k.rotation.y=.08;
-  v(k,3.25,.16,2.15,c,0,.02,0);
-  // 4-Story Glass & Steel Main Volume + Left Warm Cedar Wood Core
-  v(k,2.68,2.62,1.68,f,.18,1.38,0);
-  v(k,.92,2.88,1.78,l,-.98,1.52,.04);
-  // 4 Floors x 5 Curtain-Wall Glass Bays + White Stone Horizontal Floor Plates
+  k.rotation.y=-.08;
+  v(k,3.25,.26,2.15,c,0,0,0);
+  v(k,2.68,2.62,1.68,f,.18,1.42,0);
+  v(k,.92,2.88,1.78,l,-.98,1.56,.04);
   for(let fl=0;fl<4;fl++){
-    let fy=.42+fl*.62;
+    let fy=.46+fl*.62;
     v(k,2.82,.07,1.8,d,.18,fy-.28,0);
     for(let col=0;col<5;col++){
       let fx=-.42+col*.48;
@@ -4578,29 +4595,25 @@ function Ld(e,t,n,r){
       if((fl+col)%4==0)v(k,.38,.03,.05,cyanGlow,fx,fy-.18,.86);
     }
   }
-  v(k,2.86,.12,1.84,d,.18,2.74,0);
-  // Architectural Steel Diagrid Bracing on Front Facade
+  v(k,2.86,.12,1.84,d,.18,2.78,0);
   for(let dx of[-.42,.54]){
-    let d1=v(k,.035,2.65,.045,p,dx,1.38,.86);
+    let d1=v(k,.035,2.65,.045,p,dx,1.42,.86);
     d1.rotation.z=.32;
-    let d2=v(k,.035,2.65,.045,p,dx,1.38,.86);
+    let d2=v(k,.035,2.65,.045,p,dx,1.42,.86);
     d2.rotation.z=-.32;
   }
-  // Central-Right Revolving Glass Entrance Portal & Curved Steel Canopy
-  v(k,.78,.72,.12,m,.35,.42,.88);
-  v(k,.96,.06,.52,p,.35,.82,1.08);
-  b(k,"microsoft",.58,.58,-.98,2.18,.95);
-  // Rooftop Drone/Helipad Deck & Glass Penthouse Lounge
-  v(k,1.45,.55,1.15,m,.45,3.04,-.12);
-  v(k,1.56,.08,1.24,p,.45,3.34,-.12);
-  _(new Si(.48,.48,.04,24),f,k,-.42,2.82,.15);
-  _(new Ka(.42,.018,8,24),cyanGlow,k,-.42,2.85,.15).rotation.x=Math.PI/2;
+  v(k,.78,.72,.12,m,.35,.46,.88);
+  v(k,.96,.06,.52,p,.35,.86,1.08);
+  b(k,"microsoft",.58,.58,-.98,2.22,.95);
+  v(k,1.45,.55,1.15,m,.45,3.08,-.12);
+  v(k,1.56,.08,1.24,p,.45,3.38,-.12);
+  _(new Si(.48,.48,.04,24),f,k,-.42,2.86,.15);
+  _(new Ka(.42,.018,8,24),cyanGlow,k,-.42,2.89,.15).rotation.x=Math.PI/2;
 
-  // IDF C4I Tactical Radar & Communications Tower (flanking on the right at x = 2.08, z = -0.35)
   let A=new Cn;
   A.name="space-needle";
   A.position.set(2.08,0,-.35);
-  A.scale.setScalar(.78);
+  A.scale.setScalar(.8);
   k.add(A);
   let j=(e,t,n)=>{
     let r=_(new Si(n,n,e.distanceTo(t),10),p,A);
@@ -4640,101 +4653,81 @@ function Ld(e,t,n,r){
   _(new Ga(.058,14,10),beaconMat,A,0,3.88,0);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 3. GITHUB & OPEN SOURCE STUDIO (github) — Relocated to West Overlook (-6.45, -0.55)
-  // Redesigned as a 3-Story Cantilevered Brick, Warm Cedar & Glass Loft Studio
+  // 3. GITHUB & OPEN SOURCE STUDIO (github) — Second Row Left (-5.8, 0.2)
   // ═══════════════════════════════════════════════════════════════════════════
   let M=y("github");
-  M.rotation.y=.32;
-  v(M,2.85,.16,2.05,c,0,.02,0);
-  // Floor 1: Warm Red-Orange Canal Brick & Timber Base
-  v(M,2.42,.88,1.68,u,0,.52,0);
-  // Floor 2: Cantilevered Charcoal Steel & Panoramic Glass Box (shifted right)
-  v(M,2.56,.86,1.78,n.charcoal,.18,1.38,.06);
-  v(M,2.64,.08,1.84,p,.18,.96,.06);
-  v(M,2.64,.08,1.84,p,.18,1.82,.06);
-  // Floor 3: Natural Cedar Timber Penthouse Loft & Sloped Sawtooth Skylight Roof (shifted left)
-  v(M,1.52,.78,1.38,l,-.36,2.22,-.08);
-  let sawRoof=v(M,1.66,.08,1.52,n.slate,-.36,2.68,-.08);
+  M.rotation.y=.22;
+  v(M,2.85,.26,2.05,c,0,0,0);
+  v(M,2.42,.88,1.68,u,0,.56,0);
+  v(M,2.56,.86,1.78,n.charcoal,.18,1.42,.06);
+  v(M,2.64,.08,1.84,p,.18,1.0,.06);
+  v(M,2.64,.08,1.84,p,.18,1.86,.06);
+  v(M,1.52,.78,1.38,l,-.36,2.26,-.08);
+  let sawRoof=v(M,1.66,.08,1.52,n.slate,-.36,2.72,-.08);
   sawRoof.rotation.z=.18;
-  // Ground floor 5 tall industrial glass studio bays + Left-Side Entrance Door (x = -0.78)
   for(let col=0;col<5;col++){
     let gx=-.88+col*.44;
     if(col===0){
-      // Left-side timber & glass double door
-      v(M,.46,.76,.08,f,gx,.46,.85);
-      v(M,.38,.68,.04,l,gx,.44,.88);
-      v(M,.28,.42,.02,m,gx,.52,.91);
+      v(M,.46,.76,.08,f,gx,.5,.85);
+      v(M,.38,.68,.04,l,gx,.48,.88);
+      v(M,.28,.42,.02,m,gx,.56,.91);
     } else {
-      v(M,.34,.62,.05,h[col%3],gx,.54,.84);
-      v(M,.36,.03,.08,p,gx,.54,.86);
+      v(M,.34,.62,.05,h[col%3],gx,.58,.84);
+      v(M,.36,.03,.08,p,gx,.58,.86);
     }
   }
-  // 2nd floor 4 wide panoramic glass studio windows
   for(let col=0;col<4;col++){
     let gx=-.68+col*.56;
-    v(M,.48,.62,.05,col===2?g:h[(col+1)%3],gx,1.38,.96);
-    v(M,.025,.64,.07,p,gx,1.38,.97);
+    v(M,.48,.62,.05,col===2?g:h[(col+1)%3],gx,1.42,.96);
+    v(M,.025,.64,.07,p,gx,1.42,.97);
   }
-  // 3rd floor 3 penthouse windows + outdoor rooftop terrace railing on right
   for(let col=0;col<3;col++){
-    v(M,.36,.46,.05,h[col%3],-.78+col*.42,2.22,.62);
+    v(M,.36,.46,.05,h[col%3],-.78+col*.42,2.26,.62);
   }
-  for(let rx=0;rx<6;rx++)v(M,.025,.36,.025,p,.45+rx*.18,2.02,.88);
-  v(M,1.05,.035,.04,p,.9,2.2,.88);
-  // GitHub Signboard & Outdoor Timber Deck
-  v(M,.68,.56,.08,d,.92,1.38,.97).name="github-sign";
-  b(M,"github",.44,.44,.92,1.38,1.02);
-  v(M,2.25,.08,.78,l,0,.12,1.22);
+  for(let rx=0;rx<6;rx++)v(M,.025,.36,.025,p,.45+rx*.18,2.06,.88);
+  v(M,1.05,.035,.04,p,.9,2.24,.88);
+  v(M,.68,.56,.08,d,.92,1.42,.97).name="github-sign";
+  b(M,"github",.44,.44,.92,1.42,1.02);
+  v(M,2.25,.08,.78,l,0,.16,1.22);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 4. NEW! MATRIX IT SUPPORT & HELP DESK CONTROL TOWER (helpdesk) — at (-3.75, -0.75)
-  // 5-Story Modern Glass, Steel & Cedar Skyscraper Control Tower with 360° Dispatch Deck,
-  // Illuminated Blue Status Rings & Sculpted Rooftop Support Headset Beacon
+  // 4. MATRIX IT SUPPORT & HELP DESK TOWER (helpdesk) — Back Row Left (-4.2, -5.2)
+  // Features the Official Matrix Logo Signboard!
   // ═══════════════════════════════════════════════════════════════════════════
   let H=y("helpdesk");
-  H.rotation.y=.22;
-  // Stepped Limestone & Warm Timber Plaza Base
-  v(H,2.38,.16,1.92,c,0,.02,0);
-  v(H,2.06,.12,1.64,l,0,.14,0);
-  // Ground-Floor Reception Lobby & Right-Front Double Glass Doors (x = 0.36)
-  v(H,1.82,.78,1.42,n.charcoal,0,.56,0);
-  v(H,.64,.68,.08,f,.36,.52,.72);
-  for(let dx of[.21,.51])v(H,.26,.6,.04,m,dx,.5,.75);
-  v(H,.84,.06,.38,blueAccent,.36,.88,.86);
-  // Left Ground-Floor IT Diagnostic Bay Window
-  v(H,.72,.48,.05,g,-.42,.56,.72);
-  // 4-Story Sleek Octagonal/Box Glass & Brushed Steel Control Tower Shaft (y = 0.95 to 2.95)
-  v(H,1.36,1.98,1.18,f,0,1.92,-.04);
+  H.rotation.y=.18;
+  v(H,2.45,.26,1.98,c,0,0,0);
+  v(H,2.12,.12,1.68,l,0,.16,0);
+  v(H,1.86,.78,1.44,n.charcoal,0,.58,0);
+  v(H,.64,.68,.08,f,.36,.54,.73);
+  for(let dx of[.21,.51])v(H,.26,.6,.04,m,dx,.52,.76);
+  v(H,.84,.06,.38,blueAccent,.36,.9,.87);
+  v(H,.72,.48,.05,g,-.42,.58,.73);
+  v(H,1.38,1.98,1.2,f,0,1.96,-.04);
   for(let fl=0;fl<4;fl++){
-    let ty=1.18+fl*.48;
-    // Glowing blue LED status ring & brushed steel spandrel between floors
-    v(H,1.46,.055,1.28,p,0,ty-.22,-.04);
-    v(H,1.48,.024,1.3,cyanGlow,0,ty-.18,-.04);
-    // 3 wrap-around curtain-wall glass windows per floor
+    let ty=1.22+fl*.48;
+    v(H,1.48,.055,1.3,p,0,ty-.22,-.04);
+    v(H,1.5,.024,1.32,cyanGlow,0,ty-.18,-.04);
     [-.42,0,.42].forEach((wx,colIdx)=>{
-      v(H,.36,.34,.04,h[(fl+colIdx)%3],wx,ty,.56);
-      v(H,.02,.36,.06,p,wx,ty,.57);
+      v(H,.36,.34,.04,h[(fl+colIdx)%3],wx,ty,.57);
+      v(H,.02,.36,.06,p,wx,ty,.58);
     });
-    // Side glass panels
     for(let side of[-1,1]){
-      v(H,.04,.34,.78,h[(fl+1)%3],side*.69,ty,-.04);
+      v(H,.04,.34,.78,h[(fl+1)%3],side*.7,ty,-.04);
     }
   }
-  // Cantilevered 5th-Floor 360° Help Desk Dispatch Sky-Deck (y = 2.92 to 3.48)
-  v(H,1.68,.1,1.44,d,0,2.94,-.04);
-  v(H,1.56,.44,1.32,m,0,3.2,-.04);
+  v(H,1.72,.1,1.46,d,0,2.98,-.04);
+  v(H,1.58,.44,1.34,m,0,3.24,-.04);
   for(let postX of[-.74,-.25,.25,.74]){
-    v(H,.035,.46,.035,p,postX,3.2,.63);
+    v(H,.035,.46,.035,p,postX,3.24,.64);
   }
-  // Sloped Modern Blue-Slate Crown Roof
-  v(H,1.74,.09,1.5,n.slate,0,3.46,-.04);
-  v(H,1.12,.18,.96,blueAccent,0,3.58,-.04);
-  // HELP DESK Signboard on Front Facade
-  v(H,1.44,.38,.08,d,0,1.02,.74);
-  b(H,"helpdesk",1.36,.34,0,1.02,.79);
-  // 3D Sculpted Support Headset & IT Dispatch Beacon on the Tower Crown!
+  v(H,1.76,.09,1.52,n.slate,0,3.5,-.04);
+  v(H,1.14,.18,.98,blueAccent,0,3.62,-.04);
+  // Prominent Matrix · Help Desk Signboard on Front Facade
+  v(H,1.62,.46,.09,d,0,1.04,.75);
+  b(H,"helpdesk",1.54,.41,0,1.04,.805);
   let hdTop=new Cn;
-  hdTop.position.set(0,3.72,-.04);
+  hdTop.position.set(0,3.76,-.04);
   H.add(hdTop);
   let bandArc=new Pi(Array.from({length:19},(_,idx)=>{
     let a=Math.PI*(idx/18);
@@ -4745,21 +4738,21 @@ function Ld(e,t,n,r){
     _(new Si(.09,.09,.06,16),blueAccent,hdTop,side*.28,.04,0).rotation.z=Math.PI/2;
     _(new Ga(.065,12,10),cyanGlow,hdTop,side*.31,.04,0);
   }
-  // Boom mic + comms whip mast
   _(new qa(new Pi([new Y(.28,.02,0),new Y(.22,-.08,.14),new Y(.06,-.1,.2)]),12,.014,6,!1),p,hdTop);
   _(new Ga(.028,10,8),cyanGlow,hdTop,.05,-.1,.21);
   _(new Si(.016,.024,.48,10),p,hdTop,0,.5,0);
   _(new Ga(.048,12,10),cyanGlow,hdTop,0,.76,0);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 5. HERITAGE DAIRY FARM, REALISTIC HOLSTEIN COWS & GUIDE-DOG PASTURE (blaze)
-  // Relocated to South-East Sunny Meadow (5.55, 2.15)
-  // Upgraded Modern Timber-Brick Eco-Barn with Clerestory Glass Dormers, Side Porch,
-  // Dual Connected Grain Silos, & Realistic Sculpted 3D Holstein Cows!
+  // 5. HERITAGE DAIRY FARM + LARGE GREEN GRASS COW YARD (blaze) — Front Row Right (5.0, 3.4)
+  // Stone pad is ONLY under the Barn & Silos (bx = -0.85).
+  // To the right (x = +0.55 to +3.45, z = -0.75 to +1.95) is a HUGE FENCED GREEN GRASS YARD
+  // where the 3 realistic Holstein cows graze directly on the grass!
   // ═══════════════════════════════════════════════════════════════════════════
   let P=y("blaze");
-  P.rotation.y=-.24;
-  v(P,3.45,.16,2.55,c,0,.02,0);
+  P.rotation.y=-.12;
+  // Stone foundation ONLY under the barn & silos (leaving the entire right side as natural green grass!)
+  v(P,2.55,.24,2.15,c,-.68,0,-.12);
 
   let barnRed=u.clone();
   a.add(barnRed);
@@ -4774,84 +4767,79 @@ function Ld(e,t,n,r){
   let collarRed=s("#b91c1c",{roughness:.5});
   let hayMat=s("#eab308",{roughness:.85});
 
-  // Main Barn Body: Lower Warm Stone & Brick + Upper Cedar Wood Cladding
-  let bx=-.42;
-  v(P,2.24,.62,1.84,c,bx,.38,0);
-  v(P,2.18,1.08,1.78,barnRed,bx,1.18,0);
-  for(let cx of[bx-1.06,bx+1.06])for(let cz of[-.86,.86])v(P,.09,1.62,.09,d,cx,.88,cz);
-  v(P,2.22,.08,1.82,d,bx,1.68,0);
+  let bx=-.82;
+  v(P,2.14,.62,1.78,c,bx,.4,-.12);
+  v(P,2.08,1.08,1.72,barnRed,bx,1.2,-.12);
+  for(let cx of[bx-1.01,bx+1.01])for(let cz of[-.95,.71])v(P,.09,1.62,.09,d,cx,.9,cz);
+  v(P,2.12,.08,1.76,d,bx,1.7,-.12);
 
-  // Upper Gambrel Hayloft + Modern Clerestory Glass Skylight Dormers
-  v(P,1.62,.64,1.72,l,bx,2.02,0);
+  v(P,1.56,.64,1.68,l,bx,2.04,-.12);
   for(let side of[-1,1]){
-    let lowerSlope=v(P,1.18,.075,1.94,n.slate,bx+side*.72,1.92,0);
+    let lowerSlope=v(P,1.14,.075,1.88,n.slate,bx+side*.69,1.94,-.12);
     lowerSlope.rotation.z=-side*.52;
-    let upperSlope=v(P,.9,.075,1.94,n.slate,bx+side*.35,2.32,0);
+    let upperSlope=v(P,.86,.075,1.88,n.slate,bx+side*.34,2.34,-.12);
     upperSlope.rotation.z=-side*.24;
-    // Modern glass dormer window on the roof
-    v(P,.36,.28,.48,d,bx+side*.52,2.18,.15);
-    v(P,.38,.22,.42,m,bx+side*.56,2.18,.15);
+    v(P,.34,.28,.46,d,bx+side*.5,2.2,.04);
+    v(P,.36,.22,.4,m,bx+side*.54,2.2,.04);
   }
-  v(P,.16,.08,1.96,d,bx,2.44,0);
-  // Rooftop Cupola & Weathervane
-  v(P,.48,.34,.48,l,bx,2.58,0);
-  _(new Ci(.38,.24,4),n.slate,P,bx,2.88,0).rotation.y=Math.PI/4;
+  v(P,.16,.08,1.9,d,bx,2.46,-.12);
+  v(P,.46,.34,.46,l,bx,2.6,-.12);
+  _(new Ci(.36,.24,4),n.slate,P,bx,2.9,-.12).rotation.y=Math.PI/4;
 
-  // Asymmetrical Double Barn Doors (shifted slightly right) + Left Dutch Door
-  v(P,1.08,.96,.09,d,bx+.18,.56,.88);
-  for(let dx of[-.24,.24]){
-    v(P,.44,.88,.06,l,bx+.18+dx,.55,.91);
-    let br1=v(P,.42,.04,.025,d,bx+.18+dx,.55,.945);
+  // Barn Doors & Hay Bales
+  v(P,1.04,.96,.09,d,bx+.16,.58,.76);
+  for(let dx of[-.23,.23]){
+    v(P,.42,.88,.06,l,bx+.16+dx,.57,.79);
+    let br1=v(P,.4,.04,.025,d,bx+.16+dx,.57,.825);
     br1.rotation.z=.58;
-    let br2=v(P,.42,.04,.025,d,bx+.18+dx,.55,.945);
+    let br2=v(P,.4,.04,.025,d,bx+.16+dx,.57,.825);
     br2.rotation.z=-.58;
   }
-  // Left-side Dutch Door & Golden Hay Bales
-  v(P,.42,.82,.08,d,bx-.68,.49,.88);
-  v(P,.34,.36,.06,l,bx-.68,.31,.91);
-  v(P,.34,.34,.06,g,bx-.68,.69,.91);
-  v(P,.34,.22,.26,hayMat,bx-.95,.21,.98);
-  v(P,.32,.2,.24,hayMat,bx-.91,.41,.96);
+  v(P,.4,.82,.08,d,bx-.66,.51,.76);
+  v(P,.32,.36,.06,l,bx-.66,.33,.79);
+  v(P,.32,.34,.06,g,bx-.66,.71,.79);
+  v(P,.34,.22,.26,hayMat,bx-.92,.23,.86);
+  v(P,.32,.2,.24,hayMat,bx-.88,.43,.84);
 
-  // 4 Side Windows per side + Side Wooden Porch Overhang
-  for(let sz of[-.64,-.21,.21,.64]){
-    v(P,.08,.36,.26,d,bx-1.08,1.04,sz);
-    v(P,.06,.28,.2,m,bx-1.1,1.04,sz);
+  for(let sz of[-.74,-.32,.1,.52]){
+    v(P,.08,.36,.26,d,bx-1.03,1.06,sz);
+    v(P,.06,.28,.2,m,bx-1.05,1.06,sz);
   }
-  let porchRoof=v(P,.55,.05,1.68,n.slate,bx-1.32,.82,0);
-  porchRoof.rotation.z=.28;
-  for(let pz of[-.72,0,.72])v(P,.05,.72,.05,l,bx-1.52,.44,pz);
+  v(P,.58,.46,.08,d,bx,2.04,.75);
+  v(P,.48,.36,.06,g,bx,2.04,.78);
+  v(P,1.34,.38,.09,f,bx,1.34,.77);
+  b(P,"blaze",1.24,.32,bx,1.34,.825);
 
-  // Front Hayloft Panoramic Window & Heritage Dairy Signboard
-  v(P,.58,.46,.08,d,bx,2.02,.87);
-  v(P,.48,.36,.06,g,bx,2.02,.9);
-  v(P,1.38,.38,.09,f,bx,1.32,.89);
-  b(P,"blaze",1.28,.32,bx,1.32,.945);
-
-  // Dual Cylindrical Grain Silos (Main Tall Silo + Secondary Feed Silo + Overhead Catwalk)
-  let sx=1.08,sz=-.24;
-  _(new Si(.45,.47,.22,28),c,P,sx,.18,sz);
-  _(new Si(.42,.42,2.35,32),siloMat,P,sx,1.42,sz);
+  // Dual Grain Silos behind/beside barn (at x = 0.35, z = -0.65 and z = 0.08)
+  let sx=.36,sz=-.68;
+  _(new Si(.42,.44,.22,28),c,P,sx,.2,sz);
+  _(new Si(.39,.39,2.35,32),siloMat,P,sx,1.44,sz);
   for(let sy of[.55,.98,1.41,1.84,2.28]){
-    let hoop=_(new Ka(.428,.015,8,32),p,P,sx,sy,sz);
+    let hoop=_(new Ka(.398,.015,8,32),p,P,sx,sy,sz);
     hoop.rotation.x=Math.PI/2;
   }
-  _(new Ga(.425,28,16,0,Math.PI*2,0,Math.PI/2),domeMat,P,sx,2.58,sz);
-  // Secondary Medium Silo (at x = 1.18, z = 0.56)
-  _(new Si(.33,.35,.18,24),c,P,1.18,.16,.56);
-  _(new Si(.31,.31,1.68,28),siloMat,P,1.18,1.06,.56);
-  _(new Ga(.315,24,14,0,Math.PI*2,0,Math.PI/2),domeMat,P,1.18,1.9,.56);
-  // Overhead steel catwalk connecting the two silos
-  v(P,.18,.06,.82,p,1.13,1.88,.16);
+  _(new Ga(.395,28,16,0,Math.PI*2,0,Math.PI/2),domeMat,P,sx,2.6,sz);
+  _(new Si(.3,.32,.18,24),c,P,.38,.18,.08);
+  _(new Si(.28,.28,1.68,28),siloMat,P,.38,1.08,.08);
+  _(new Ga(.285,24,14,0,Math.PI*2,0,Math.PI/2),domeMat,P,.38,1.92,.08);
+  v(P,.16,.06,.76,p,.37,1.9,-.3);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // REALISTIC SCULPTED 3D HOLSTEIN DAIRY COWS (Organic Ellipsoids, Tapered Limbs,
-  // Curved Horns, Bell Collar, Udder & Swaying Tail!)
+  // SPACIOUS FENCED GREEN GRASS PASTURE YARD FOR THE COWS (x = 0.85..3.65, z = -0.65..2.05)
+  // Every cow is placed at local y = terrainDelta so its hooves rest directly on the GREEN GRASS!
   // ═══════════════════════════════════════════════════════════════════════════
+  let barnWorldX=Id.blaze.x,barnWorldZ=Id.blaze.z,barnBaseY=xd(barnWorldX,barnWorldZ);
+  let localGrassY=(lx,lz)=>{
+    let cosR=Math.cos(-.12),sinR=Math.sin(-.12);
+    let wx=barnWorldX+lx*cosR+lz*sinR;
+    let wz=barnWorldZ-lx*sinR+lz*cosR;
+    return xd(wx,wz)-barnBaseY;
+  };
+
   let animatedCows=[];
   function buildHolsteinCow(parent,cx,cz,rotY,scale=1,phase=0){
     let cow=new Cn;
-    cow.position.set(cx,0,cz);
+    cow.position.set(cx,localGrassY(cx,cz),cz);
     cow.rotation.y=rotY;
     cow.scale.setScalar(scale);
     parent.add(cow);
@@ -4863,17 +4851,14 @@ function Ld(e,t,n,r){
       return mesh;
     };
 
-    // Sculpted Organic Barrel Torso, Deep Chest Brisket, Shoulders & Rounded Rump
     addEllipsoid(cow,.21,.19,.34,cowWhite,0,.34,0);
     addEllipsoid(cow,.195,.185,.18,cowWhite,0,.33,.21,.12,0,0);
     addEllipsoid(cow,.205,.185,.19,cowWhite,0,.35,-.21,-.08,0,0);
-    // Organic Black Holstein Coat Patches (conforming smoothly to flanks & back)
     addEllipsoid(cow,.216,.13,.15,cowBlack,.015,.38,.08,.1,0,-.08);
     addEllipsoid(cow,.215,.12,.14,cowBlack,-.015,.35,-.14,-.12,0,.09);
     addEllipsoid(cow,.16,.08,.22,cowBlack,0,.47,-.03);
     addEllipsoid(cow,.18,.11,.11,cowBlack,.05,.31,.23);
 
-    // Sculpted Neck & Red Leather Collar + Golden Brass Cowbell
     let neckPivot=new Cn;
     neckPivot.position.set(0,.37,.28);
     cow.add(neckPivot);
@@ -4883,28 +4868,20 @@ function Ld(e,t,n,r){
     collar.rotation.x=1.05;
     _(new Si(.024,.034,.045,12),cowBellGold,neckPivot,0,-.065,.09);
 
-    // Anatomical Bovine Head, Cheeks, Moist Pink Muzzle, Nostrils, Eyes, Ears & Curved Horns
     let head=new Cn;
     head.position.set(0,.09,.17);
     head.rotation.x=.24;
     neckPivot.add(head);
-    // Cranial skull & black blaze with white forehead star
     addEllipsoid(head,.115,.105,.135,cowBlack,0,.01,0);
     addEllipsoid(head,.055,.045,.06,cowWhite,0,.065,.05,.2,0,0);
-    // Tapered bridge of nose
     addEllipsoid(head,.092,.078,.11,cowWhite,0,-.02,.1);
-    // Broad rounded pink muzzle & sculpted nostrils
     addEllipsoid(head,.096,.068,.065,cowPink,0,-.048,.185);
     for(let side of[-1,1]){
-      // Nostrils
       addEllipsoid(head,.016,.012,.018,cowBlack,side*.038,-.042,.242);
-      // Expressive dark eyes + white sclera highlight
       addEllipsoid(head,.022,.022,.022,cowWhite,side*.098,.025,.045);
       addEllipsoid(head,.016,.016,.016,cowBlack,side*.105,.025,.052);
-      // Leaf-shaped drooping bovine ears
       addEllipsoid(head,.065,.024,.032,cowBlack,side*.145,.035,-.03,0,side*-.25,side*-.32);
       addEllipsoid(head,.048,.014,.02,cowPink,side*.145,.032,-.022,0,side*-.25,side*-.32);
-      // Curved ivory horns
       let hornCurve=new Pi([
         new Y(side*.075,.075,-.03),
         new Y(side*.125,.115,-.02),
@@ -4913,26 +4890,20 @@ function Ld(e,t,n,r){
       _(new qa(hornCurve,12,.016,8,!1),cowHorn,head);
     }
 
-    // Realistic Pink Udder & 4 Teats
     addEllipsoid(cow,.095,.065,.115,cowPink,0,.175,-.08);
     for(let tx of[-.035,.035])for(let tz of[-.11,-.05]){
       _(new Si(.01,.007,.035,8),cowPink,cow,tx,.12,tz);
     }
 
-    // 4 Anatomical Legs (Upper thigh/forearm, knee/hock joint, cannon bone, fetlock & cloven black hooves)
     for(let lx of[-.115,.115])for(let lz of[-.22,.21]){
       let isHind=lz<0;
       let upper=_(new Si(.038,.052,.15,14),isHind&&lx>0?cowBlack:cowWhite,cow,lx,.22,lz);
       upper.rotation.x=isHind?.12:-.06;
-      // Knee / Hock joint
       addEllipsoid(cow,.036,.036,.036,cowWhite,lx,.145,lz+(isHind?-.015:.008));
-      // Lower cannon bone
       _(new Si(.026,.032,.12,12),cowWhite,cow,lx,.08,lz);
-      // Cloven black hoof
       _(new Si(.034,.028,.038,12),cowBlack,cow,lx,.019,lz+.008);
     }
 
-    // Draped Curved Tail & Fluffy Tail Switch
     let tailGrp=new Cn;
     tailGrp.position.set(0,.42,-.33);
     cow.add(tailGrp);
@@ -4948,74 +4919,96 @@ function Ld(e,t,n,r){
     return cow;
   }
 
-  // 3 Realistic Holstein Cows in the sunny pasture (2 adults + 1 calf)
-  buildHolsteinCow(P,.92,.82,-.52,.92,0);
-  buildHolsteinCow(P,1.42,.28,-1.22,.86,1.8);
-  buildHolsteinCow(P,.48,1.18,.28,.64,3.4);
+  // 3 Realistic Holstein Cows spread across the wide GREEN GRASS yard (x = 1.3..3.1, z = -0.1..1.5)
+  buildHolsteinCow(P,1.45,.45,-.42,.95,0);
+  buildHolsteinCow(P,2.65,-.05,-1.18,.90,1.8);
+  buildHolsteinCow(P,2.15,1.25,.35,.68,3.4);
 
-  // Split-Rail Wooden Pasture Fence & Water Trough along the Meadow
-  for(let fx of[.15,.72,1.28,1.82])v(P,.06,.36,.06,l,fx,.22,1.38);
-  v(P,1.74,.04,.035,l,.98,.32,1.38);
-  v(P,1.74,.04,.035,l,.98,.19,1.38);
+  // Full 4-Sided Split-Rail Wooden Pasture Fence Enclosure around the Green Grass Cow Yard!
+  let fencePosts=[
+    [.85,1.95],[1.55,1.95],[2.25,1.95],[2.95,1.95],[3.55,1.95],
+    [3.55,1.25],[3.55,.55],[3.55,-.15],[3.55,-.75],
+    [2.85,-.75],[2.15,-.75],[1.45,-.75],[.85,-.75]
+  ];
+  for(let i=0;i<fencePosts.length;i++){
+    let[fx,fz]=fencePosts[i],fy=localGrassY(fx,fz);
+    v(P,.065,.38,.065,l,fx,fy+.19,fz);
+    if(i<fencePosts.length-1){
+      let[nx,nz]=fencePosts[i+1],ny=localGrassY(nx,nz);
+      let mx=(fx+nx)/2,mz=(fz+nz)/2,my=(fy+ny)/2;
+      let len=Math.hypot(nx-fx,nz-fz);
+      let isZ=Math.abs(nz-fz)>Math.abs(nx-fx);
+      v(P,isZ?.038:len,.04,isZ?len:.038,l,mx,my+.31,mz);
+      v(P,isZ?.038:len,.04,isZ?len:.038,l,mx,my+.18,mz);
+    }
+  }
+  // Blue Water Trough inside the grass pasture
+  v(P,.58,.18,.32,blueAccent,1.25,localGrassY(1.25,-.42)+.09,-.42);
 
-  // Keep an 'amsterdam-bicycle' group reference so scene lookup never fails
   let R=new Cn;
   R.name="amsterdam-bicycle";
-  R.position.set(5.55,xd(5.55,2.15),2.15);
+  R.position.set(5.0,xd(5.0,3.4),3.4);
   let wheelProxy=new Cn;
   wheelProxy.name="bicycle-wheel";
   R.add(wheelProxy);
   e.add(R);
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 6. PRO HALF BASKETBALL COURT (se) — Relocated to East Athletic Terrace (6.35, -0.95)
+  // 6. EXPANDED PRO HALF BASKETBALL COURT (se) — Far-Right Terrace (8.8, -0.8)
+  // Built on an Elevated Stone Plinth (+0.32m above center terrain) so 100% of the
+  // wider/longer court sits cleanly ABOVE the grass slope with ZERO grass clipping!
   // ═══════════════════════════════════════════════════════════════════════════
   let se=new Cn;
   se.name="empire-state-building";
-  se.position.set(6.35,xd(6.35,-.95),-.95);
-  se.rotation.y=-.38;
+  se.position.set(8.8,xd(8.8,-.8)+.24,-.8);
+  se.rotation.y=-.28;
   e.add(se);
 
   let courtBlue=s("#1d4ed8",{roughness:.45});
   let courtMaple=s("#d99552",{roughness:.4});
   let rimOrange=s("#ea580c",{metalness:.45,roughness:.28});
 
-  v(se,2.36,.1,2.08,c,0,.04,0);
-  v(se,2.22,.04,1.94,courtBlue,0,.095,0);
-  v(se,1.98,.03,1.72,courtMaple,0,.115,.04);
-  v(se,.68,.032,.78,courtBlue,0,.118,-.42);
-  v(se,.72,.033,.035,d,0,.12,-.03);
-  for(let kx of[-.35,.35])v(se,.035,.033,.78,d,kx,.12,-.42);
-  v(se,1.98,.033,.035,d,0,.12,-.81);
-  v(se,1.98,.033,.035,d,0,.12,.89);
-  for(let bxLine of[-.98,.98])v(se,.035,.033,1.72,d,bxLine,.12,.04);
-  let arcPts=Array.from({length:25},(_,i)=>{
-    let ang=-Math.PI*.82+(i/24)*Math.PI*1.64;
-    return new Y(Math.sin(ang)*.82,.132,-.68+Math.cos(ang)*.78);
+  // Deep limestone terrace foundation block extending down into the hillside so it never floats or clips grass!
+  v(se,2.92,.52,2.58,c,0,-.18,0);
+  v(se,2.74,.05,2.40,courtBlue,0,.095,0);
+  v(se,2.46,.035,2.14,courtMaple,0,.12,.04);
+  // Painted Key & Court Lines on the wider court
+  v(se,.84,.038,.96,courtBlue,0,.124,-.52);
+  v(se,.88,.04,.04,d,0,.126,-.04);
+  for(let kx of[-.43,.43])v(se,.04,.04,.96,d,kx,.126,-.52);
+  // Outer White Boundary Lines
+  v(se,2.46,.04,.04,d,0,.126,-1.01);
+  v(se,2.46,.04,.04,d,0,.126,1.09);
+  for(let bxLine of[-1.21,1.21])v(se,.04,.04,2.14,d,bxLine,.126,.04);
+  // 3-Point Arc & Free-Throw Semicircle
+  let arcPts=Array.from({length:29},(_,i)=>{
+    let ang=-Math.PI*.82+(i/28)*Math.PI*1.64;
+    return new Y(Math.sin(ang)*1.02,.14,-.82+Math.cos(ang)*.96);
   });
-  _(new qa(new Pi(arcPts),36,.016,6,!1),d,se);
+  _(new qa(new Pi(arcPts),40,.018,6,!1),d,se);
   let ftPts=Array.from({length:17},(_,i)=>{
     let ang=-Math.PI*.5+(i/16)*Math.PI;
-    return new Y(Math.sin(ang)*.32,.132,-.03+Math.cos(ang)*.32);
+    return new Y(Math.sin(ang)*.38,.14,-.04+Math.cos(ang)*.38);
   });
-  _(new qa(new Pi(ftPts),24,.014,6,!1),d,se);
+  _(new qa(new Pi(ftPts),24,.015,6,!1),d,se);
 
-  _(new Si(.048,.058,1.58,14),f,se,0,.88,-.92);
-  v(se,.07,.07,.32,f,0,1.58,-.78);
-  v(se,.92,.58,.035,m,0,1.62,-.61);
-  v(se,.96,.03,.042,d,0,1.91,-.61);
-  v(se,.96,.03,.042,d,0,1.33,-.61);
-  for(let gx of[-.47,.47])v(se,.03,.6,.042,d,gx,1.62,-.61);
-  v(se,.3,.22,.044,rimOrange,0,1.55,-.605);
-  v(se,.25,.17,.046,m,0,1.55,-.602);
-  let hoopRim=_(new Ka(.145,.016,10,28),rimOrange,se,0,1.44,-.44);
+  // Stanchion Pole, Tempered-Glass Backboard, Breakaway Rim & Net
+  _(new Si(.052,.064,1.68,14),f,se,0,.94,-1.14);
+  v(se,.075,.075,.36,f,0,1.68,-.98);
+  v(se,1.02,.62,.038,m,0,1.72,-.79);
+  v(se,1.06,.032,.044,d,0,2.03,-.79);
+  v(se,1.06,.032,.044,d,0,1.41,-.79);
+  for(let gx of[-.52,.52])v(se,.032,.64,.044,d,gx,1.72,-.79);
+  v(se,.34,.24,.046,rimOrange,0,1.64,-.785);
+  v(se,.28,.19,.048,m,0,1.64,-.782);
+  let hoopRim=_(new Ka(.155,.017,10,28),rimOrange,se,0,1.52,-.61);
   hoopRim.rotation.x=Math.PI/2;
   for(let ni=0;ni<10;ni++){
     let nang=ni/10*Math.PI*2,nang2=((ni+1.5)/10)*Math.PI*2;
     let strand=new Pi([
-      new Y(Math.cos(nang)*.14,1.43,-.44+Math.sin(nang)*.14),
-      new Y(Math.cos(nang+.3)*.105,1.31,-.44+Math.sin(nang+.3)*.105),
-      new Y(Math.cos(nang2)*.085,1.2,-.44+Math.sin(nang2)*.085)
+      new Y(Math.cos(nang)*.15,1.51,-.61+Math.sin(nang)*.15),
+      new Y(Math.cos(nang+.3)*.115,1.38,-.61+Math.sin(nang+.3)*.115),
+      new Y(Math.cos(nang2)*.092,1.26,-.61+Math.sin(nang2)*.092)
     ]);
     _(new qa(strand,10,.005,5,!1),d,se);
   }
@@ -5122,7 +5115,7 @@ function Vd(e,t=!1){
       void main(){
         vec2 p=waterWorldPosition.xz;
         if(stream<.5){
-          vec2 island=p/vec2(10.4,8.3);
+          vec2 island=p/vec2(13.2,10.6);
           float a=atan(island.y,island.x);
           float shoreline=1.+.058*sin(a*5.+.75)+.036*cos(a*9.-.45)+.022*sin(a*13.+.3);
           if(length(island)<shoreline-.008)discard;
@@ -5162,7 +5155,7 @@ function Vd(e,t=!1){
         float ring=exp(-pow((length(p-ripple)-age*1.4)*12.,2.))*max(0.,1.-age/2.);
         col+=ring*.18;
         float radius=length(p/vec2(1.18,1.));
-        float alpha=stream>.5?mix(.48,.90,sin(surfaceUv.x*3.14159)):(1.-smoothstep(10.2,15.8,radius))*.88;
+        float alpha=stream>.5?mix(.48,.90,sin(surfaceUv.x*3.14159)):(1.-smoothstep(13.0,19.5,radius))*.88;
         if(stream>.5){
           alpha*=smoothstep(0.,.055,surfaceUv.x)*(1.-smoothstep(.945,1.,surfaceUv.x));
           alpha*=1.-smoothstep(12.35,13.,surfaceUv.y);
@@ -5175,23 +5168,20 @@ function Vd(e,t=!1){
   });
 }
 
+// Hd: Basketball on the Expanded Half Court (8.8, -0.8) — Camera & Picnic Blanket REMOVED!
 function Hd(e,t){
   let{geometries:n,materials:r}=t,
     i=(e,t=.55,n=0)=>{let i=new io({color:e,roughness:t,metalness:n});return r.add(i),i},
-    a=i("#20282b"),o=i("#f9f6e9"),s=i("#bfc7c4",.24,.8);
+    a=i("#20282b");
   function c(e,t,i,a=0,o=0,s=0){
     n.add(e),r.add(t);
     let c=new $r(e,t);
     return c.position.set(a,o,s),c.castShadow=!0,c.receiveShadow=!0,i.add(c),c;
   }
-  function l(e,t,n,r,i,a=0,o=0,s=0){
-    return c(new vd(e,t,n,2,Math.min(.025,e/3,t/3,n/3)),r,i,a,o,s);
-  }
-  // Basketball positioned on the relocated Half Basketball Court (6.35, -0.95)
   let u=new Cn;
   u.name="soccer-ball";
-  u.scale.setScalar(.36);
-  u.position.set(6.18,xd(6.35,-.95)+.24,-.48);
+  u.scale.setScalar(.38);
+  u.position.set(8.62,xd(8.8,-.8)+.48,-.24);
   u.rotation.set(.15,.4,.2);
   e.add(u);
   let bballOrange=i("#ea580c",.38,0);
@@ -5200,48 +5190,13 @@ function Hd(e,t){
     let seam=c(new Ka(.331,.011,8,36),a,u);
     seam.rotation.set(bRot[0],bRot[1],bRot[2]);
   }
-  // Picnic blanket relocated to the sunny west meadow near GitHub/Bridge (-4.2, 2.2)
-  let m=new Cn;
-  m.name="picnic-blanket";
-  m.position.set(-4.2,xd(-4.2,2.2)+.035,2.2);
-  m.scale.setScalar(.8);
-  let h=(xd(-4.2,2.21)-xd(-4.2,2.19))/.02;
-  m.quaternion.setFromUnitVectors(new Y(0,1,0),new Y(0,1,-h).normalize());
-  m.quaternion.multiply(new Tt().setFromAxisAngle(new Y(0,1,0),.2));
-  e.add(m);
-  let g=new Wa(.98,.8,8,6).toNonIndexed();
-  g.rotateX(-Math.PI/2);
-  let _=g.attributes.position,v=g.attributes.uv,y=[],b=new Z("#f6e8cd"),x=new Z("#2563eb");
-  for(let e=0;e<_.count;e+=3){
-    let t=(v.getX(e)+v.getX(e+1)+v.getX(e+2))/3,n=(v.getY(e)+v.getY(e+1)+v.getY(e+2))/3,r=(Math.floor(t*8)+Math.floor(n*6))%2?x:b;
-    for(let t=0;t<3;t++){
-      let n=e+t,i=_.getX(n),a=_.getZ(n);
-      _.setY(n,.012+Math.sin(i*15+a*8)*.003),y.push(r.r,r.g,r.b);
-    }
-  }
-  g.setAttribute("color",new Q(y,3)),g.computeVertexNormals(),c(g,new io({vertexColors:!0,roughness:1,side:2}),m);
-  for(let e of[-.4,.4])for(let t=0;t<15;t++)l(.008,.005,.05,o,m,-.45+t*.064,.012,e);
-  let S=new Cn;
-  S.name="photography-camera";
-  l(.62,.32,.23,a,S,0,.93,0),l(.64,.065,.25,s,S,0,1.12,0),l(.64,.035,.24,s,S,0,.765,0),l(.13,.3,.29,a,S,-.27,.94,.025),l(.18,.1,.15,a,S,0,1.16,-.025);
-  let C=c(new Si(.17,.18,.27,32),a,S,.045,.95,.23);
-  C.rotation.x=Math.PI/2;
-  for(let e of[.15,.23,.31])c(new Ka(.173,.012,8,28),s,S,.045,.95,e);
-  let w=new ao({color:"#2563eb",metalness:.6,roughness:.1,clearcoat:1});
-  c(new xi(.147,32),w,S,.045,.95,.37),c(new xi(.075,32),a,S,.045,.95,.372);
-  let T=c(new Si(.045,.045,.028,16),s,S,-.23,1.17,0);
-  T.name="shutter-button",l(.26,.16,.008,i("#3b555d",.2,.3),S,.06,.94,-.12);
-  for(let e of S.children)e.position.y-=.94;
-  S.scale.setScalar(.55),S.rotation.set(-Math.PI/2,0,-.35);
-  let E=new Kn().setFromObject(S);
-  S.position.set(.08,.022-E.min.y,-.035),m.add(S);
   let D=new Vr({transparent:!0,opacity:0,depthWrite:!1}),O=c(new Ga(.55,12,8),D,u);
   O.castShadow=!1,O.receiveShadow=!1;
   let homePos=u.position.clone(),A=u.rotation.clone(),j=null;
-  let hoopPos=new Y(6.51,xd(6.35,-.95)+1.44,-1.36);
+  // Rim world position on the rotated (rotY = -0.28) elevated court at (8.8, -0.8)
+  let hoopPos=new Y(8.97,xd(8.8,-.8)+1.76,-1.39);
   return{
     soccer:u,
-    camera:S,
     bounce(e){j===null&&(j=e)},
     update(e){
       if(j===null){
@@ -5260,11 +5215,11 @@ function Hd(e,t){
         let p=t/1.0;
         u.position.x=homePos.x+(hoopPos.x-homePos.x)*p;
         u.position.z=homePos.z+(hoopPos.z-homePos.z)*p;
-        u.position.y=homePos.y*(1-p)+hoopPos.y*p+Math.sin(p*Math.PI)*1.15;
+        u.position.y=homePos.y*(1-p)+hoopPos.y*p+Math.sin(p*Math.PI)*1.2;
         u.rotation.x=A.x-p*10.;
       } else if(t<1.35){
         let dp=(t-1.0)/.35;
-        u.position.set(hoopPos.x,hoopPos.y-dp*1.25,hoopPos.z);
+        u.position.set(hoopPos.x,hoopPos.y-dp*1.32,hoopPos.z);
       } else {
         let rp=(t-1.35)/.4;
         u.position.lerpVectors(new Y(hoopPos.x,homePos.y,hoopPos.z),homePos,rp);
@@ -5376,9 +5331,9 @@ function Gd(e,t,n,r){
 
 function Kd(e,t,n){
   let{geometries:r,materials:i}=e,a=new Cn;
-  a.name="matcha-and-cleveland-bench",a.position.set(1.85,xd(1.85,1.2),1.2),a.rotation.y=-Math.PI/3;
+  a.name="matcha-and-cleveland-bench",a.position.set(1.6,xd(1.6,1.1),1.1),a.rotation.y=-Math.PI/3;
   let o=(e,t=.65,n=0)=>{let r=new io({color:e,roughness:t,metalness:n});return i.add(r),r},
-    s=o("#354346",.38,.65),c=o("#182b46",.96),l=o("#3f5068",1);
+    s=o("#354346",.38,.65),c=o("#182b46",.96);
   function u(e,t,n,a=0,o=0,s=0){
     r.add(e),i.add(t);
     let c=new $r(e,t);
@@ -5421,14 +5376,14 @@ function qd(e,t,n){
   performance.mark("map:scene-start");
   let r=new Ku({antialias:!0,alpha:!0,powerPreference:"high-performance"});
   r.setPixelRatio(Math.min(devicePixelRatio,2)),r.shadowMap.enabled=!0,r.shadowMap.type=1,r.toneMapping=4,r.toneMappingExposure=1,r.domElement.setAttribute("aria-hidden","true"),e.appendChild(r.domElement);
-  let i=new jn,a=!0,o=!0,s=new $o(34,1,.1,110),c=new Y(5.9,20.2,30.2);
+  let i=new jn,a=!0,o=!0,s=new $o(34,1,.1,130),c=new Y(6.4,22.8,34.5);
   s.position.copy(c);
   let l=new rd(s,r.domElement);
-  l.target.set(0,1.4,0),l.enableDamping=!0,l.dampingFactor=.065,l.enablePan=!1,l.enabled=!1,l.minDistance=10,l.maxDistance=54,l.minPolarAngle=.4,l.maxPolarAngle=1.22,l.rotateSpeed=.55,l.zoomSpeed=.65,l.addEventListener("change",()=>{a=!0,o=!0}),i.environmentIntensity=.46,i.add(new Vo(14806271,9215644,.84));
+  l.target.set(0,1.4,0),l.enableDamping=!0,l.dampingFactor=.065,l.enablePan=!1,l.enabled=!1,l.minDistance=11,l.maxDistance=62,l.minPolarAngle=.4,l.maxPolarAngle=1.22,l.rotateSpeed=.55,l.zoomSpeed=.65,l.addEventListener("change",()=>{a=!0,o=!0}),i.environmentIntensity=.46,i.add(new Vo(14806271,9215644,.84));
   let u=new is(16770242,1.5);
-  u.position.set(-9,6,14),i.add(u);
+  u.position.set(-10,7,16),i.add(u);
   let d=new is(16773082,1.65);
-  d.position.set(-6,14,-8),d.castShadow=!0,d.shadow.mapSize.set(2048,2048),Object.assign(d.shadow.camera,{left:-16.5,right:16.5,top:16.5,bottom:-16.5,near:1,far:52}),d.shadow.bias=-4e-4,d.shadow.normalBias=.025,d.shadow.radius=4,i.add(d);
+  d.position.set(-7,15,-9),d.castShadow=!0,d.shadow.mapSize.set(2048,2048),Object.assign(d.shadow.camera,{left:-20,right:20,top:20,bottom:-20,near:1,far:60}),d.shadow.bias=-4e-4,d.shadow.normalBias=.025,d.shadow.radius=4,i.add(d);
   let f=new Set,p=new Set,m=new Set,h=Pd(m,p,r.capabilities.getMaxAnisotropy());
   new bd(h.manager).load("/textures/aristea_wreck_1k.hdr",e=>{e.mapping=303,i.environment=e,i.environmentIntensity=.46,m.add(e),a=!0});
   let g=(e,t={})=>{let n=new io({color:e,roughness:.7,...t});return p.add(n),n},
@@ -5452,44 +5407,51 @@ function qd(e,t,n){
   let w=(e,t,n,r,i,a=0,o=0,s=0,c=.06)=>S(r.userData.architecturalGlass?new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3)):C(new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3))),r,i,a,o,s),
     T=(e,t,n,r,i=0,a=0,o=0)=>S(new Si(e,e,t,36),n,r,i,a,o),
     E=(e,t,n,r)=>S(new qa(new Pi(e),Math.max(8,e.length*3),t,5,!1),n,r),
-    D=S(new Wa(220,220),new Vr({color:"#eef3f9",toneMapped:!1}),i,0,-.33,0);
+    D=S(new Wa(240,240),new Vr({color:"#eef3f9",toneMapped:!1}),i,0,-.33,0);
   D.rotation.x=-Math.PI/2,D.castShadow=!1;
   let O=new Cn;
   i.add(O),S(kd(),x,O),S(Ad(),y,O);
 
-  // Relocated River (flowing from North-East to South-West)
+  // River Channel
   let k=Vd(h.waterHeight,!0),A=k.uniforms,j=S(jd(!0),x,O);
   j.name="riverbed",j.castShadow=!1;
   let M=S(jd(),k,O);
   M.name="river-surface",M.castShadow=!1,M.renderOrder=2;
-  let N=Td.getPoint(.22),P=Gd({geometries:f,materials:p,textures:m},N.x,N.z,xd(N.x,N.z)-.38);
+  let N=Td.getPoint(.18),P=Gd({geometries:f,materials:p,textures:m},N.x,N.z,xd(N.x,N.z)-.38);
   i.add(P.object);
 
-  // Stone Arch Footbridge positioned over the new river channel at (0.45, -1.5)
-  let F=new Cn;
-  F.position.set(.45,xd(.45,-1.5),-1.5);
-  F.rotation.y=-.38;
-  O.add(F);
-  for(let e=0;e<15;e++){
-    let t=-1.05+e*.15,n=.14+Math.sin(e/14*Math.PI)*.24;
-    w(.155,.16,.76,_,F,t,n,0,.015);
-    for(let e of[-.38,.38])w(.16,.25,.1,_,F,t,n+.2,e,.015);
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TWO ARCHED STONE BRIDGES (F1 North-Central & F2 South-Central)
+  // Every river-crossing pathway crosses strictly over F1 or F2!
+  // ═══════════════════════════════════════════════════════════════════════════
+  function buildStoneBridge(bx,bz,rotY){
+    let br=new Cn;
+    br.position.set(bx,xd(bx,bz),bz);
+    br.rotation.y=rotY;
+    O.add(br);
+    for(let e=0;e<15;e++){
+      let t=-1.05+e*.15,n=.14+Math.sin(e/14*Math.PI)*.24;
+      w(.155,.16,.78,_,br,t,n,0,.015);
+      for(let side of[-.39,.39])w(.16,.26,.1,_,br,t,n+.21,side,.015);
+    }
+    for(let end of[-.98,.98])w(.3,.72,.86,x,br,end,-.15,0);
+    return br;
   }
-  for(let e of[-.98,.98])w(.3,.7,.84,x,F,e,-.15,0);
+  buildStoneBridge(-.68,-2.85,-.31);
+  buildStoneBridge(-2.3,2.2,-.31);
 
   let I=[];
   for(let e of Sd)for(let t of wd(e))I.push({x:t.x,z:t.z,radius:e.width/2+.18});
 
-  // Dynamic Cobblestone Pathways connecting all relocated landmarks, bridge & left-side gate
   let L=S(buildDynamicPathways(),h.pathway,O);
   L.name="continuous-garden-walk",L.castShadow=!1;
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // FLORAL ARCH GATE (R) — Moved to the LEFT SIDE (-6.35, 4.15)
+  // FLORAL ARCH GATE (R) — Left Coast (-8.4, 4.8)
   // ═══════════════════════════════════════════════════════════════════════════
   let R=new Cn;
   R.name="garden-entrance";
-  R.position.set(-6.35,xd(-6.35,4.15),4.15);
+  R.position.set(-8.4,xd(-8.4,4.8),4.8);
   R.rotation.y=-.62;
   O.add(R);
   let ee=g("#426b38",{roughness:.86}),te=b.clone();
@@ -5529,13 +5491,11 @@ function qd(e,t,n){
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // AI & LEGAL NLP RESEARCH HQ (deepmind) — Relocated to North-West Highland (-1.65, -4.35)
-  // Redesigned as a 4-Story Contemporary Brick, Warm Cedar Slats & Glass Atrium HQ
-  // with Right-Side Double-Height Glass Entrance, Timber Pergola & Solar Skylight Roof!
+  // FRONT FLAGSHIP BUILDING: DATA SCIENTIST & ML ENGINEER (deepmind) — at (-0.6, 4.8)
   // ═══════════════════════════════════════════════════════════════════════════
   let V=new Cn;
   V.position.set(Id.deepmind.x,xd(Id.deepmind.x,Id.deepmind.z),Id.deepmind.z);
-  V.rotation.y=.12;
+  V.rotation.y=.06;
   V.scale.setScalar(.96);
   V.name="deepmind";
   V.userData.place="deepmind";
@@ -5558,8 +5518,7 @@ function qd(e,t,n){
     fe=Hd(i,{geometries:f,materials:p,textures:m});
   i.add(Kd({geometries:f,materials:p,textures:m},b,h.manager));
 
-  let pe=e.querySelector("[data-camera-hint]"),
-    me=h.chelseaBrick,he=h.chelseaStone,
+  let me=h.chelseaBrick,he=h.chelseaStone,
     ge=g("#3b5266",{metalness:.5,roughness:.34}),
     _e=g("#1e293b",{roughness:.58}),
     ve=Fd(p,"#dbeafe",m),
@@ -5567,22 +5526,17 @@ function qd(e,t,n){
     be=Fd(p,"#fff4df",m,!0),
     xe=h.slate;
 
-  // 4-Story Stepped Brick, Warm Wood & Glass Curtain-Wall Architecture for V (deepmind)
-  w(3.92,.16,2.88,he,V,0,.08,0);
+  w(3.92,.24,2.88,he,V,0,.04,0);
   w(3.72,.62,2.56,he,V,0,.44,0);
-  // Left & Center Terracotta Brick Body + Right Double-Height Glass & Cedar Wing
   w(2.55,2.35,2.48,me,V,-.56,1.92,0);
   w(1.22,2.55,2.54,b,V,1.28,2.02,.04);
   w(1.08,2.32,.12,ye,V,1.28,1.98,1.3);
-  // Horizontal limestone floor bands + slate parapets
   for(let fy of[1.32,1.92,2.52,3.12])w(3.82,.08,2.62,he,V,0,fy,0);
   w(3.62,.06,2.42,xe,V,0,3.18,0);
-  // 4th-Floor Penthouse Glass Observatory & Timber Pergola Canopy
   w(2.35,.72,1.75,ye,V,-.25,3.56,-.14);
   w(2.52,.09,1.92,he,V,-.25,3.96,-.14);
   for(let px=0;px<6;px++)w(.08,.06,1.88,b,V,-1.28+px*.42,3.98,-.14);
 
-  // 4 Floors x 5 Modern Floor-to-Ceiling Glass Windows with Cedar Sun-Louvers
   for(let fl=0;fl<4;fl++){
     let wy=.98+fl*.6;
     for(let col=0;col<5;col++){
@@ -5592,20 +5546,18 @@ function qd(e,t,n){
       w(.42,.035,.12,b,V,wx,wy+.22,1.33);
     }
   }
-  // Right-Side Asymmetrical Double-Height Glass Entrance Portal (at x = 1.28)
   w(.92,.86,.1,_e,V,1.28,.48,1.31);
   for(let dx of[1.06,1.5])w(.38,.78,.04,ve,V,dx,.46,1.35);
   w(1.18,.065,.52,ge,V,1.28,.94,1.52);
   for(let step=0;step<3;step++)w(1.16+step*.12,.05,.18,he,V,1.28,.14-step*.045,1.46+step*.17);
 
-  // Signboard & Wordmark
-  w(2.85,.36,.2,v,V,-.35,.88,1.36,.014);
+  // DATA SCIENTIST & ML ENGINEER Signboard on Front Flagship Building
+  w(3.05,.38,.2,v,V,-.32,.88,1.36,.014);
   let we=new zo(h.manager).load("/brands/ai-research-wordmark.svg");
-  we.colorSpace=Pe,we.anisotropy=8,m.add(we),S(new Wa(2.32,2.32/7.2),new Vr({map:we,transparent:!0,toneMapped:!1}),V,-.15,.88,1.47);
+  we.colorSpace=Pe,we.anisotropy=8,m.add(we),S(new Wa(2.58,2.58/7.2),new Vr({map:we,transparent:!0,toneMapped:!1}),V,-.12,.88,1.47);
   let Te=new zo(h.manager).load("/brands/deepmind.svg");
-  Te.colorSpace=Pe,m.add(Te),S(new Wa(.28,.28),new Vr({map:Te,transparent:!0,toneMapped:!1}),V,-1.55,.88,1.471);
+  Te.colorSpace=Pe,m.add(Te),S(new Wa(.28,.28),new Vr({map:Te,transparent:!0,toneMapped:!1}),V,-1.62,.88,1.471);
 
-  // Rooftop Planter Gardens on V
   let Ee=g("#ffffff",{roughness:.78}),H_pot=g("#7f7261"),De=new Ga(1,7,5);
   f.add(De);
   for(let e of[-1.35,.95,1.45]){
@@ -5615,17 +5567,23 @@ function qd(e,t,n){
     let n=new Sn;
     for(let idx=0;idx<260;idx++){
       let r=idx*2.399963,i=1-2*(idx+.5)/260,a=.22*Math.sqrt(1-i*i);
-      n.position.set(Math.cos(r)*a,i*.16,Math.sin(r)*a),n.rotation.set(idx*.71,r,idx*.39),n.scale.set(.041,.014,.026),n.updateMatrix(),t.setMatrixAt(idx,n.matrix),t.setColorAt(idx,new Z().setHSL(.25+idx%5*.01,.44+idx%3*.06,.26+idx%7*.032).convertSRGBToLinear());
+      n.position.set(Math.cos(r)*a,i*.16,Math.sin(r)*a),n.rotation.set(idx*.71,r,idx*.39),n.scale.set(.041,.014,.026),n.updateMatrix(),t.setMatrixAt(idx,n.matrix),t.setColorAt(idx,new Z().setHSL(.27+idx%5*.008,.45+idx%3*.05,.26+idx%7*.03).convertSRGBToLinear());
     }
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // DIVERSE VEGETATION: Deciduous Trees, Golden Trees, Blue-Blossom Jacarandas,
-  // Tall Mediterranean Cypresses & Pine Groves across the enlarged island!
+  // NATURAL GREEN TREES + ORANGE TREES 🍊 & LEMON TREES 🍋 + CYPRESSES & PINES!
+  // (No blue or yellow foliage — all foliage is natural lush green, with 3D oranges & lemons!)
   // ═══════════════════════════════════════════════════════════════════════════
   let Oe=[];
-  function ke(e,t,n,mode=0){
-    // mode: 0 = lush green, 1 = golden autumn, 2 = blue-violet Jacaranda blossom!
+  let orangeFruitMat=g("#f97316",{roughness:.32});
+  let lemonFruitMat=g("#facc15",{roughness:.34});
+  let citrusLeafMat=g("#15803d",{roughness:.55});
+  let citrusGeo=new Ga(.068,14,12);
+  f.add(citrusGeo);
+
+  function ke(e,t,n,fruitType=null){
+    // All tree foliage is 100% natural Mediterranean green!
     let i=new Cn;
     i.position.set(e,xd(e,t),t),i.scale.setScalar(n),O.add(i),Oe.push(i),T(.055,1.25,b,i,0,.58,0);
     let a=new Ga(1,6,4);
@@ -5636,17 +5594,34 @@ function qd(e,t,n){
     for(let e=0;e<850;e++){
       let t=e*2.399963,n=.64*Math.cbrt(e*73%849/849),i=1-2*(e*131%849)/849;
       s.position.set(Math.cos(t)*n*Math.sqrt(1-i*i),1.25+i*n*.95,Math.sin(t)*n*Math.sqrt(1-i*i)),s.rotation.set(e*.43,e*.7,e*.23),s.scale.set(.09,.045,.065),s.updateMatrix(),o.setMatrixAt(e,s.matrix);
-      let hue=mode===2?.63+e%5*.012:mode===1?.10+e%5*.014:.27+e%9*.008;
-      let sat=mode===2?.68:mode===1?.62:.46;
-      let lit=mode===2?.58+e%7*.03:mode===1?.52+e%7*.03:.28+e%7*.04;
+      let hue=.27+e%9*.007;
+      let sat=.46+e%3*.04;
+      let lit=.26+e%7*.038;
       o.setColorAt(e,new Z().setHSL(hue,sat,lit).convertSRGBToLinear());
     }
     for(let e=0;e<7;e++){
       let t=e*2.4;
       E([new Y(0,.6,0),new Y(Math.cos(t)*.25,1.05,Math.sin(t)*.25),new Y(Math.cos(t)*.46,1.3,Math.sin(t)*.46)],.018,b,i);
     }
+    // Add 3D Oranges or Lemons hanging around the green canopy!
+    if(fruitType==="orange"||fruitType==="lemon"){
+      let isLemon=fruitType==="lemon";
+      let fMat=isLemon?lemonFruitMat:orangeFruitMat;
+      for(let fi=0;fi<16;fi++){
+        let fang=fi*2.399963,frad=.44+(fi%3)*.06,fy=1.02+(fi%5)*.13;
+        let fx=Math.cos(fang)*frad,fz=Math.sin(fang)*frad;
+        let fruit=S(citrusGeo,fMat,i,fx,fy,fz);
+        if(isLemon){
+          fruit.scale.set(.88,1.28,.88);
+          fruit.rotation.z=.35;
+        }
+        let tinyLeaf=S(citrusGeo,citrusLeafMat,i,fx+.02,fy+.065,fz);
+        tinyLeaf.scale.set(.38,.12,.22);
+      }
+    }
     return i;
   }
+
   function buildCypress(cx,cz,scale=1){
     let r=new Cn;
     r.position.set(cx,xd(cx,cz),cz),r.scale.setScalar(scale),O.add(r),Oe.push(r);
@@ -5667,27 +5642,27 @@ function qd(e,t,n){
     }
   }
 
-  // Spread trees naturally around the enlarged 10.4 x 8.3 island
-  ke(-8.2,-2.9,1.12,0);
-  ke(-7.8,1.8,.95,2);   // Blue-blossom Jacaranda near left coast!
-  ke(-4.6,-5.6,1.05,0);
-  ke(.4,-6.1,.92,2);    // Blue-blossom Jacaranda near highland river source!
-  ke(7.6,-3.2,1.08,1);
-  ke(8.3,.8,.98,0);
-  ke(2.9,5.3,.92,2);    // Blue-blossom Jacaranda on south meadow!
-  ke(-1.8,5.6,.85,1);
-  let U=ke(-4.95,2.45,.86,0);
+  // Citrus Groves (Orange Trees 🍊 & Lemon Trees 🍋) + Deciduous & Apple Trees across the 13.2 x 10.6 island!
+  ke(-9.4,1.6,1.05,"orange");  // Orange tree near left coast
+  ke(-7.6,-3.2,1.02,"lemon");  // Lemon tree between GitHub & Help Desk
+  ke(-1.8,-7.2,1.08,"orange"); // Orange tree in northern highlands
+  ke(5.8,-6.2,1.04,"lemon");   // Lemon tree behind IDF & BGU
+  ke(9.6,2.2,1.02,"orange");   // Orange tree beside the cow pasture yard!
+  ke(2.8,6.2,.96,"lemon");     // Lemon tree between Data Scientist HQ & Dairy Farm!
+  ke(-4.2,5.8,.94,"orange");   // Orange tree near south-west meadow
+  ke(7.8,-4.2,.98,null);       // Lush green shade tree
+  let U=ke(-6.8,3.6,.92,null); // Interactive Apple Tree near left gate path
   U.name="apple-tree";
   let Ae=Rd(U,{geometries:f,materials:p,textures:m});
 
-  // Mediterranean Cypresses framing BGU, Bridge & Dairy Farm
-  buildCypress(6.8,-4.8,.95);
-  buildCypress(3.1,-5.2,.88);
-  buildCypress(-5.6,-3.2,.9);
-  buildCypress(7.9,3.1,.92);
+  // Tall Mediterranean Cypresses
+  buildCypress(6.8,-4.2,.98);
+  buildCypress(-.2,-7.6,.92);
+  buildCypress(-8.2,-1.8,.94);
+  buildCypress(10.4,-.2,.95);
 
-  // Tall Conifer Pines in the Northern Highlands
-  for(let[e,t,n]of[[6.2,-5.8,.86],[7.4,-4.4,.82],[-3.5,-6.2,.78]]){
+  // Conifer Pines in the Far Northern Highlands
+  for(let[e,t,n]of[[4.2,-7.6,.88],[7.8,-6.2,.84],[-6.2,-6.8,.82]]){
     let r=new Cn;
     r.position.set(e,xd(e,t),t),r.scale.setScalar(n),O.add(r),Oe.push(r),T(.055,1.9,b,r,0,.85,0);
     let i=new Ci(.045,.24,5);
@@ -5701,14 +5676,10 @@ function qd(e,t,n){
     }
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // 4 RELOCATED INTERACTIVE LAMPPOSTS (Me)
-  // [0]: Left Gate/Dock (-5.25, 3.55), [1]: Central Bridge (1.05, -0.95),
-  // [2]: Help Desk & AI Plaza (-2.55, -2.15), [3]: Dairy & Guide-Dog Pasture (3.85, 2.75)
-  // ═══════════════════════════════════════════════════════════════════════════
+  // 4 Interactive Lampposts along the new Bridges, Gate & Pasture
   let W=g("#2b394a",{metalness:.68,roughness:.3}),
     je=g("#60a5fa",{metalness:.72,roughness:.28}),
-    lampCoords=[[-5.25,3.55],[1.05,-.95],[-2.55,-2.15],[3.85,2.75]],
+    lampCoords=[[-7.1,4.1],[-1.1,2.2],[.45,-2.5],[3.8,2.9]],
     Me=lampCoords.map(([lx,lz],n)=>{
       let r=new Cn;
       r.name="garden-lamppost-"+n;
@@ -5739,15 +5710,15 @@ function qd(e,t,n){
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REALISTIC SCULPTED 3D GOLDEN RETRIEVER GUIDE-DOG (Fe / Ie / puppy)
-  // Positioned RIGHT NEXT TO THE COWS PASTURE at (4.45, 3.35)!
+  // Positioned on the Green Grass right next to the Cows Yard at (5.95, 5.45)!
   // ═══════════════════════════════════════════════════════════════════════════
   let Fe=new Cn;
   Fe.name="guide-dog-bay";
-  Fe.position.set(4.45,xd(4.45,3.35),3.35);
+  Fe.position.set(5.95,xd(5.95,5.45),5.45);
   O.add(Fe);
   let Ie=new Cn;
   Ie.name="guide-dog-haven";
-  Ie.rotation.y=.52;
+  Ie.rotation.y=.48;
   Fe.add(Ie);
 
   let goldenFur=g("#d99b26",{roughness:.62});
@@ -5758,7 +5729,6 @@ function qd(e,t,n){
   let noseDark=g("#0f172a",{roughness:.22});
   let tonguePink=g("#f43f5e",{roughness:.45});
 
-  // Cozy Wooden Doghouse Kennel with Blue-Slate Roof & Water Bowl beside the Pasture Fence
   let kennel=new Cn;
   kennel.position.set(-.46,0,-.24);
   kennel.rotation.y=.28;
@@ -5772,7 +5742,6 @@ function qd(e,t,n){
   }
   T(.1,.045,harnessBlue,Ie,-.04,.03,.14);
 
-  // Realistic Organic Sculpted 3D Golden Retriever Guide-Dog
   let puppy=new Cn;
   puppy.position.set(.26,0,.18);
   puppy.rotation.y=-.35;
@@ -5786,12 +5755,9 @@ function qd(e,t,n){
     return mesh;
   };
 
-  // Sculpted Canine Ribcage, Fluffy Cream Chest Ruff, Tucked Waist & Rounded Hindquarters
   dogEllipsoid(puppy,.125,.12,.23,goldenFur,0,.25,-.02);
   dogEllipsoid(puppy,.132,.13,.13,goldenLight,0,.26,.14,.18,0,0);
   dogEllipsoid(puppy,.115,.11,.13,goldenMid,0,.255,-.18,-.1,0,0);
-
-  // Blue Israel Guide Dog Center Training Harness (sculpted saddle + chest strap + reflective band + U-handle)
   dogEllipsoid(puppy,.135,.095,.11,harnessBlue,0,.28,.05);
   dogEllipsoid(puppy,.138,.025,.115,v,0,.28,.05);
   let handleCurve=new Pi([
@@ -5802,29 +5768,22 @@ function qd(e,t,n){
   ]);
   S(new qa(handleCurve,16,.012,8,!1),W,puppy);
 
-  // Sculpted Neck & Anatomical Golden Retriever Head
   let dogNeck=S(new Si(.072,.095,.14,16),goldenFur,puppy,0,.33,.18);
   dogNeck.rotation.x=.55;
   let pHead=new Cn;
   pHead.position.set(0,.41,.24);
   puppy.add(pHead);
-  // Cranial dome & cheeks
   dogEllipsoid(pHead,.102,.096,.108,goldenFur,0,.01,0);
-  // Tapered Golden Muzzle & Lower Jaw + Happy Pink Tongue
   dogEllipsoid(pHead,.068,.052,.092,goldenLight,0,-.02,.105);
   dogEllipsoid(pHead,.056,.028,.075,goldenMid,0,-.055,.095,.18,0,0);
   dogEllipsoid(pHead,.032,.012,.048,tonguePink,0,-.048,.135,.28,0,0);
-  // Wet black nose berry
   dogEllipsoid(pHead,.026,.022,.024,noseDark,0,.004,.192);
-  // Expressive dark eyes with white catchlights + soft folded teardrop ears
   for(let side of[-1,1]){
     dogEllipsoid(pHead,.019,.019,.019,noseDark,side*.052,.032,.088);
     dogEllipsoid(pHead,.007,.007,.007,v,side*.055,.038,.102);
-    // Soft folded Golden Retriever ears framing the head
     dogEllipsoid(pHead,.032,.088,.056,goldenEar,side*.102,-.015,-.01,.15,side*.12,side*.24);
   }
 
-  // 4 Anatomical Canine Legs (Shoulder/Thigh, Elbow/Stifle, Lower Leg & Rounded Paws)
   for(let px of[-.08,.08])for(let pz of[-.16,.15]){
     let isBack=pz<0;
     let upperLeg=S(new Si(.032,.044,.12,12),goldenFur,puppy,px,.17,pz);
@@ -5834,7 +5793,6 @@ function qd(e,t,n){
     dogEllipsoid(puppy,.034,.022,.044,goldenLight,px,.018,pz+.014);
   }
 
-  // Feathered Golden Retriever Tail (actively wags in animation loop!)
   let pTail=new Cn;
   pTail.position.set(0,.29,-.24);
   puppy.add(pTail);
@@ -5875,14 +5833,15 @@ function qd(e,t,n){
     }
   }
 
-  // Coastal Perimeter Rocks around the Enlarged (10.4 x 8.3) Island
-  for(let e=0;e<105;e++){
-    let t=Math.sin(e*193.7+19.3)*43758.5453%1,n=e/105*Math.PI*2,r=Math.sin(n)>.48,i=n+(r?t*.021:0),a=Od(i),o=r?.1+Math.abs(Math.sin(e*1.91))*.2:0,
-      s=Math.cos(i)*(10.22*a+o),c=Math.sin(i)*(8.15*a+o),l=xd(s,c),
+  // Coastal Perimeter Rocks around the Enlarged (13.2 x 10.6) Island
+  for(let e=0;e<115;e++){
+    let t=Math.sin(e*193.7+19.3)*43758.5453%1,n=e/115*Math.PI*2,r=Math.sin(n)>.48,i=n+(r?t*.021:0),
+      a=1+.058*Math.sin(i*5+.75)+.036*Math.cos(i*9-.45)+.022*Math.sin(i*13+.3),
+      o=r?.1+Math.abs(Math.sin(e*1.91))*.2:0,
+      s=Math.cos(i)*(12.95*a+o),c=Math.sin(i)*(10.38*a+o),l=xd(s,c),
       u=r?[.98,.32,.56,.4,.82,.45,.62][e%7]*(.94+Math.abs(t)*.12):.46+Math.abs(t)*.22;
-    // Skip rocks near the new river waterfall mouth (-3.3, 7.3) and new left-side gate/dock (-6.6, 4.5)
-    if(Math.hypot(s+3.3,c-7.3)<u+.85)continue;
-    if(Math.hypot(s+6.6,c-4.5)<u+1.25)continue;
+    if(Math.hypot(s+4.4,c-8.9)<u+.95)continue;
+    if(Math.hypot(s+8.8,c-5.1)<u+1.4)continue;
     let d=I.some(e=>Math.hypot(s-e.x,c-e.z)<e.radius+u*1.15);
     let f=new Ha(1,5);
     f.deleteAttribute("normal"),f.deleteAttribute("uv");
@@ -5903,10 +5862,10 @@ function qd(e,t,n){
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // WOODEN PIER / DOCK (Ke) & SAILBOAT (qe) — Moved to the LEFT SIDE!
+  // LEFT-SIDE WOODEN DOCK (Ke) & SAILBOAT (qe) — at (-9.0, 5.3) & (-10.5, 6.4)
   // ═══════════════════════════════════════════════════════════════════════════
   let Ke=new Cn;
-  Ke.position.set(-6.95,.76,4.72);
+  Ke.position.set(-9.0,.76,5.3);
   Ke.rotation.y=-.62;
   i.add(Ke);
   for(let e=0;e<9;e++)w(.82,.075,.2,b,Ke,0,.13,e*.22,.018);
@@ -5914,11 +5873,11 @@ function qd(e,t,n){
   for(let e of[-.34,.34])for(let t of[.1,1.7])T(.045,1.15,b,Ke,e,-.22,t);
 
   let qe=Ud({geometries:f,materials:p,textures:m},b);
-  qe.position.set(-8.35,.1,5.75);
+  qe.position.set(-10.5,.1,6.4);
   qe.rotation.y=.55;
   i.add(qe);
 
-  let Je=0,G=0,K=Vd(h.waterHeight),Ye=K.uniforms,Xe=new Wa(38,38,128,128);
+  let Je=0,G=0,K=Vd(h.waterHeight),Ye=K.uniforms,Xe=new Wa(48,48,128,128);
   Xe.rotateX(-Math.PI/2);
   let Ze=S(Xe,K,i);
   Ze.castShadow=!1,Ze.receiveShadow=!0,Ze.renderOrder=1;
@@ -5938,12 +5897,13 @@ function qd(e,t,n){
   }
   function ft(e){
     if(!ct){
-      let t=ut(e),n=Qe.intersectObject(fe.camera,!0)[0],i=Qe.intersectObjects(Object.values(oe),!0)[0],a=!!n&&(!i||n.distance<i.distance);
-      pe&&(pe.dataset.hover=String(a)),dt(a?null:t),r.domElement.style.cursor=t||Qe.intersectObjects([U,Ie,fe.soccer,fe.camera,qe,se,...Me.map(e=>e.group)],!0).length?"pointer":"grab";
+      let t=ut(e);
+      dt(t);
+      r.domElement.style.cursor=t||Qe.intersectObjects([U,Ie,fe.soccer,qe,se,...Me.map(e=>e.group)],!0).length?"pointer":"grab";
     }
   }
   function pt(e){
-    ct={x:e.clientX,y:e.clientY},lt=null,pe&&(pe.dataset.hover="false");
+    ct={x:e.clientX,y:e.clientY},lt=null;
   }
   function mt(e){
     if(!ct)return;
@@ -5962,8 +5922,6 @@ function qd(e,t,n){
     }
     let l=Qe.intersectObject(qe,!0)[0];
     if(l&&(!o||l.distance<o.distance)){q&&(G=wt.clamp(G+.85,-1.1,1.1)),a=!0;return;}
-    let u=Qe.intersectObject(fe.camera,!0)[0];
-    if(u&&(!o||u.distance<o.distance)){window.open("https://github.com/TalKleinBgu","_blank","noopener,noreferrer");return;}
     let d=Qe.intersectObject(fe.soccer,!0)[0];
     if(d&&(!o||d.distance<o.distance)){fe.bounce(at),a=!0;return;}
     let f=Qe.intersectObject(Ie,!0)[0];
@@ -5975,11 +5933,11 @@ function qd(e,t,n){
       e&&(Ye.ripple.value.set(e.point.x,e.point.z),Ye.age.value=0);
     }
   }
-  function ht(){dt(null),ct=null,pe&&(pe.dataset.hover="false");}
+  function ht(){dt(null),ct=null;}
   function gt(t="deepmind"){
     nt=t;
     let n=new Y(Id[t].x,xd(Id[t].x,Id[t].z)+.75,Id[t].z),
-      r=s.position.clone().sub(l.target).normalize().multiplyScalar(e.clientWidth<600?21:16.5);
+      r=s.position.clone().sub(l.target).normalize().multiplyScalar(e.clientWidth<600?22:17.5);
     lt={position:n.clone().add(r),target:n};
   }
   function _t(){
@@ -6006,7 +5964,6 @@ function qd(e,t,n){
     ot=n;
     let d=q?1-Math.exp(-u*6):1;
     q&&(it+=u,at+=c),P.update(at),builtLandmarks.updateCows(at);
-    // Wag the Golden Retriever puppy's tail and gentle head nod!
     pTail.rotation.y=Math.sin(at*7.5)*.34;
     pHead.rotation.z=Math.sin(at*2.2)*.045;
 
@@ -6034,7 +5991,7 @@ function qd(e,t,n){
         let isTall=e.dataset.location==="helpdesk"||e.dataset.location==="github";
         et.set(t.x,xd(t.x,t.z)+(isTall?1.25:.55),t.z+(isTall?.95:1.25)).project(s),e.style.left=((et.x*.5+.5)*r)+"px",e.style.top=((-et.y*.5+.5)*i)+"px";
       }
-      pe&&(fe.camera.getWorldPosition(et),et.y+=.12,et.project(s),pe.style.left=((et.x*.5+.5)*r)+"px",pe.style.top=((-et.y*.5+.5)*i)+"px"),et.set(f.x,xd(f.x,f.z)+.45,f.z+1.5).project(s);
+      et.set(f.x,xd(f.x,f.z)+.45,f.z+1.5).project(s);
       let a=Math.max(146,146-n.left),c=Math.min(r-146,innerWidth-n.left-146);
       t.style.left=Math.max(a,Math.min(c,(et.x*.5+.5)*r))+"px",t.style.top=Math.max(60,Math.min(i-190,(-et.y*.5+.5)*i))+"px",o=!1,Ct=f;
     }
@@ -6053,7 +6010,8 @@ function qd(e,t,n){
           performance.mark("map:shaders-ready"),a=!0,Tt(performance.now()),requestAnimationFrame(()=>{
             tt||Ot||(l.enabled=!0,ot=0,e.dataset.materials="loaded",performance.mark("map:first-textured-frame"),n.progress(100),n.ready(),Dt=setTimeout(()=>{Et=!0,X();},50));
           });
-        }catch{
+        }catch(err){
+          console.error("ONLOAD CATCH:",err);
           tt||(e.dataset.materials="failed",n.failed());
         }
       }
