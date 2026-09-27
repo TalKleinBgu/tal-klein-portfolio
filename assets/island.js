@@ -613,7 +613,7 @@
   // never leave a hole under the buildings.
   async function loadIslandTerrainGlb() {
     try {
-      const response = await fetch('./assets/island-terrain.glb?v=6', { cache: 'force-cache' });
+      const response = await fetch('./assets/island-terrain.glb?v=7', { cache: 'force-cache' });
       if (!response.ok) throw new Error(`Terrain model request failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
       const view = new DataView(buffer);
@@ -677,7 +677,9 @@
           : new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, metalness: 0, side: THREE.DoubleSide });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.name = isMeadow ? 'GLB meadow terrain' : 'GLB sculpted coastal cliffs';
-        mesh.visible = true;
+        // The custom GLB meadow still shades black in Three r128 on some GPUs;
+        // keep the textured fallback meadow visible while using the GLB cliffs.
+        mesh.visible = !isMeadow;
         // Broad triangulated meadows can self-shadow across shallow slopes.
         mesh.receiveShadow = !isMeadow;
         mesh.castShadow = !isMeadow;
@@ -686,10 +688,7 @@
       islandGroup.add(terrain);
       if (terrainFallbackGroup) {
         terrainFallbackGroup.children.forEach((object) => {
-          if (object.name === 'Procedural meadow plateau') {
-            object.visible = false;
-            return;
-          }
+          if (object.name === 'Procedural meadow plateau') return;
           object.visible = false;
           if (object.geometry) object.geometry.dispose();
           if (object.material) object.material.dispose();
