@@ -62,24 +62,24 @@
 
     microsoft: {
       id: 'microsoft',
-      name: 'Cloud & AI Systems',
+      name: 'Cloud AI & IDF C4I',
       logo: './assets/acrokat/brands/microsoft.svg',
-      role: 'Data Scientist & Systems Engineer',
-      cardDesc: 'Distributed search engine over 6.4M+ Wikipedia articles on Cloud (0.67s latency) & Whisper speech AI',
-      tag: 'Production Engineering · Cloud & Big Data',
-      title: 'Cloud & AI Systems Lab',
-      subtitle: 'Distributed Search, Speech Diarization & Scalable ML',
-      icon: '💻',
-      desc: 'From indexing 6.4 million Wikipedia articles on Google Cloud Platform to building real-time speaker diarization and reinforcement learning agents, this modern timber-and-glass lab showcases production systems engineering.',
+      role: 'Data Scientist · IDF C4I Combat Comms',
+      cardDesc: 'Distributed search over 6.4M+ docs on Cloud (0.67s latency), Whisper AI & IDF C4I tactical radar systems',
+      tag: 'Production Engineering · Cloud AI & IDF C4I',
+      title: 'Cloud AI Lab & IDF C4I Comms Tower',
+      subtitle: 'Distributed Search, Speech AI & Tactical RF Networks',
+      icon: '📡',
+      desc: 'Flanked by the IDF C4I Tactical Radar & Communications Tower, this timber-and-glass engineering complex represents both production machine learning at scale (6.4M+ Wikipedia search engine on GCP, real-time Whisper speaker diarization) and mission-critical military communications.',
       stats: [
         { v: '6.4M+', k: 'Docs Indexed' },
-        { v: '0.67s', k: 'Mean Latency' },
-        { v: '100%', k: 'Recall@10' }
+        { v: '0.67s', k: 'Search Latency' },
+        { v: 'C4I', k: 'IDF Full Honors' }
       ],
       bullets: [
         'Architected a distributed Wikipedia search engine with custom inverted indexes, BM25, and PageRank on Cloud.',
         'Built a real-time speaker diarization and Whisper transcription pipeline with custom voice embeddings.',
-        'Trained autonomous Deep Q-Network (DQN) agents and multimodal deep learning classifiers.'
+        'IDF Combat Communications Specialist (2015–2018): managed encrypted tactical RF networks and field command systems.'
       ],
       jumpSection: '#projects',
       jumpLabel: 'See All 6 Engineering Projects'
@@ -112,25 +112,25 @@
 
     blaze: {
       id: 'blaze',
-      name: 'IDF C4I & Heritage',
-      logo: './assets/acrokat/brands/blaze.svg',
-      role: 'Combat Comms · Guide-Dog Trainer · Farm Roots',
-      cardDesc: 'IDF C4I encrypted tactical networks, 1+ year guide-dog puppy foster & family dairy farm roots',
-      tag: 'Military Service, Community & Roots',
-      title: 'IDF C4I, Guide-Dog Foster & Family Roots',
-      subtitle: 'Leadership Under Pressure · Heart & Work Ethic',
-      icon: '🦮',
+      name: 'Dairy Farm, Guide Dog & Court',
+      logo: './assets/acrokat/brands/dairy-icon.svg',
+      role: 'Family Dairy Farm · Guide-Dog Trainer · Basketball',
+      cardDesc: 'Grew up on our family dairy farm with cows, fostered a guide-dog puppy for 1+ year & lifelong basketball player',
+      tag: 'Personal Roots · Farm, Guide Dog & Basketball',
+      title: 'Family Dairy Barn, Guide-Dog Foster & Half Court',
+      subtitle: '05:00 AM Farm Grit · Guide-Dog Puppy · Lifelong Hoops',
+      icon: '🐄',
       image: './assets/guide-dog.webp',
-      desc: 'Beyond datasets and neural networks: serving with full honors in IDF C4I tactical communications, raising and training a future guide dog for the blind for over a year, and growing up on my family’s dairy farm.',
+      desc: 'Who I am beyond algorithms: growing up working alongside Holstein cows on our family dairy farm, raising and training a future guide-dog puppy for the blind for over a year, and shooting hoops on the basketball court my entire life (click the basketball on the court to shoot a 3-pointer!).',
       stats: [
-        { v: 'C4I', k: 'IDF Full Honors' },
+        { v: 'Dairy', k: 'Family Farm Roots' },
         { v: '1+ Yr', k: 'Guide-Dog Foster' },
-        { v: 'Roots', k: 'Family Dairy Farm' }
+        { v: 'Hoops', k: 'Lifelong Player' }
       ],
       bullets: [
-        'IDF Combat Communications Specialist (2015–2018): managed mission-critical encrypted RF networks and field command systems.',
-        'Fostered and trained a guide-dog puppy for 1+ year with the Israel Guide Dog Center for the Blind, bringing him to university lectures and labs daily.',
-        'Raised on a family dairy farm — instilling 05:00 AM grit, ownership, and practical problem solving.'
+        'Raised on a family dairy farm with Holstein cows — instilling 05:00 AM work ethic, ownership, and hands-on problem solving.',
+        'Fostered and trained a Golden Retriever guide-dog puppy for 1+ year with the Israel Guide Dog Center, bringing him to BGU lectures and labs daily.',
+        'Lifelong basketball player — built for team chemistry, court vision, and clutch execution under pressure.'
       ],
       jumpSection: '#about',
       jumpLabel: 'Read More in About Me'
