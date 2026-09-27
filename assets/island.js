@@ -1970,17 +1970,36 @@
     boat.position.set(1.12, -0.78, 4.35);
     boat.rotation.y = 0.28;
     const hullMat = new THREE.MeshStandardMaterial({ color: 0xE9E2D4, roughness: 0.55 });
-    const hull = new THREE.Mesh(new THREE.CapsuleGeometry(0.28, 0.9, 4, 12), hullMat);
-    hull.rotation.x = Math.PI / 2;
-    hull.scale.set(1.2, 0.55, 1);
+    const hullShape = new THREE.Shape();
+    hullShape.moveTo(-0.3, -0.78);
+    hullShape.quadraticCurveTo(-0.38, -0.1, -0.28, 0.55);
+    hullShape.quadraticCurveTo(0, 0.94, 0.28, 0.55);
+    hullShape.quadraticCurveTo(0.38, -0.1, 0.3, -0.78);
+    hullShape.quadraticCurveTo(0, -0.92, -0.3, -0.78);
+    const hullGeometry = new THREE.ExtrudeGeometry(hullShape, {
+      depth: 0.17,
+      bevelEnabled: true,
+      bevelSegments: 2,
+      steps: 1,
+      bevelSize: 0.035,
+      bevelThickness: 0.025
+    });
+    hullGeometry.rotateX(Math.PI / 2);
+    const hull = new THREE.Mesh(hullGeometry, hullMat);
+    hull.position.y = 0.16;
     hull.castShadow = true;
     boat.add(hull);
 
-    const gunwale = new THREE.Mesh(new THREE.CapsuleGeometry(0.31, 0.92, 3, 12), woodMat);
-    gunwale.rotation.x = Math.PI / 2;
-    gunwale.scale.set(1.2, 0.28, 1);
-    gunwale.position.y = 0.09;
-    boat.add(gunwale);
+    [-0.29, 0.29].forEach(x => {
+      const gunwale = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.055, 1.55), woodMat);
+      gunwale.position.set(x, 0.2, -0.02);
+      boat.add(gunwale);
+    });
+    [-0.35, 0.28].forEach(z => {
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.045, 0.12), plankMat);
+      seat.position.set(0, 0.18, z);
+      boat.add(seat);
+    });
 
     const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.024, 1.55, 8), woodMat);
     mast.position.set(0, 0.78, 0);
