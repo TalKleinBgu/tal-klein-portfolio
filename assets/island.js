@@ -1,9 +1,8 @@
 /**
- * 🏝️ Tal Klein — Interactive 3D Career & Life Island (acrokat.me PBR & Shader Diorama)
- * Powered by acrokat-diorama.js (Three.js r186 + PBR brickwork, sandstone, slate,
- * 4-texture blended cobblestones, refined meadow grass shader, triplanar coastal cliffs,
- * custom GLSL wave & sunken river stream shaders, HDR environment lighting, and
- * frosted-glass 3D-anchored cards).
+ * 🏝️ Tal Klein — Interactive 3D Career & Life Island
+ * Powered by island-scene.js (Three.js + PBR brickwork, sandstone, slate,
+ * blended cobblestones, meadow grass shader, coastal cliffs,
+ * custom GLSL water & river stream shaders, and frosted-glass 3D-anchored cards).
  */
 
 (function () {
@@ -13,7 +12,7 @@
     deepmind: {
       id: 'deepmind',
       name: 'Data Scientist & ML Engineer',
-      logo: './assets/acrokat/brands/deepmind.svg',
+      logo: './assets/scene/brands/ai-icon.svg',
       role: 'Data Scientist & ML Researcher · Socially Embedded Lab, BGU (2024 – Present)',
       cardDesc: 'End-to-end NLP pipeline extracting 30+ structured features from 4,000+ Hebrew court verdicts (0.92 F1) & causal inference',
       tag: 'Current Role & Springer Publication · Beer Sheva',
@@ -40,7 +39,7 @@
     michigan: {
       id: 'michigan',
       name: 'Ben-Gurion University',
-      logo: './assets/acrokat/brands/bgu-icon.svg',
+      logo: './assets/scene/brands/bgu-icon.svg',
       role: 'M.Sc. Software & Information Systems Eng. (GPA 92) · B.Sc. Data Eng. (GPA 86)',
       cardDesc: 'Meitar Excellence Program M.Sc. (2024–2026, GPA 92) & B.Sc. in Data Engineering (2021–2025, GPA 86) at BGU',
       tag: 'Education · Ben-Gurion University of the Negev',
@@ -65,7 +64,7 @@
     github: {
       id: 'github',
       name: 'GitHub & ML Projects',
-      logo: './assets/acrokat/brands/github.svg',
+      logo: './assets/scene/brands/github.svg',
       role: '7 Production & Research ML Projects · Open Source',
       cardDesc: '6.4M-doc Wikipedia IR Engine (8× speedup), Gemma-3 12B QLoRA Fine-Tuning (0.71 F1), DictaBERT Legal Classifier (91% acc) & Multimodal AI',
       tag: 'Selected Work · github.com/TalKleinBgu',
@@ -91,7 +90,7 @@
     helpdesk: {
       id: 'helpdesk',
       name: 'Matrix · IT Support & Help Desk',
-      logo: './assets/acrokat/brands/helpdesk-icon.svg',
+      logo: './assets/scene/brands/helpdesk-icon.svg',
       role: 'IT Support & Help Desk · Matrix Israel (2020 – 2021)',
       cardDesc: 'Technical support and troubleshooting for enterprise clients across hardware, software, and network issues with rapid diagnosis',
       tag: 'Career Experience · Matrix Israel (2020 – 2021)',
@@ -116,7 +115,7 @@
     microsoft: {
       id: 'microsoft',
       name: 'IDF Communications & Operations',
-      logo: './assets/acrokat/brands/microsoft.svg',
+      logo: './assets/scene/brands/idf.svg',
       role: 'Communications & Operations NCO · Israel Defense Forces (2017 – 2020)',
       cardDesc: 'Managed mission-critical communications systems, operational coordination, and team training in a high-tempo environment',
       tag: 'Military Service · IDF (2017 – 2020)',
@@ -141,7 +140,7 @@
     blaze: {
       id: 'blaze',
       name: 'Dairy Farm, Guide Dog & Basketball',
-      logo: './assets/acrokat/brands/dairy-icon.svg',
+      logo: './assets/scene/brands/dairy-icon.svg',
       role: 'Guide-Dog Puppy Raiser (2025–2026) · Family Farm & Basketball',
       cardDesc: 'Raised and socialized a guide-dog puppy for 1.5 years (Israel Guide Dog Center), family dairy farm roots & lifelong basketball fan',
       tag: 'Volunteering & Personal Life · Israel',
@@ -176,7 +175,7 @@
     const anchorEl = document.getElementById('islandAnchor');
     const loadFill = document.getElementById('islandLoadFill');
 
-    if (!islandView || !worldEl || !anchorEl || typeof window.createAcrokatDiorama !== 'function') {
+    if (!islandView || !worldEl || !anchorEl || typeof window.createIslandScene !== 'function') {
       return;
     }
 
@@ -274,9 +273,9 @@
       }
     }
 
-    // Mount the exact acrokat.me 3D Diorama engine
+    // Mount the 3D Island engine
     try {
-      diorama = window.createAcrokatDiorama(worldEl, anchorEl, {
+      diorama = window.createIslandScene(worldEl, anchorEl, {
         hover: (id) => {
           updateHover(id);
         },

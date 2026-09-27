@@ -1,146 +1,22 @@
 # Tal Klein — Portfolio
 
-Personal portfolio site for Tal Klein — Data Scientist & ML Researcher.
+Personal portfolio and interactive 3D Career Island for **Tal Klein** — Data Scientist & ML Engineer.
 
-Built with vanilla HTML, JavaScript, and Tailwind CSS. No frameworks.
+🔗 **Live Site:** [tal-klein-portfolio.vercel.app](https://tal-klein-portfolio.vercel.app/)
 
-## Run locally
+## Highlights
+- **Interactive 3D Career Island** — Explore key milestones across Data Science & NLP research, Ben-Gurion University (M.Sc. & B.Sc.), GitHub ML projects, Matrix IT Support, IDF Operations, and personal life.
+- **Classic CV & Portfolio View** — Full academic, research, and project breakdown with instant toggle.
+
+## Run Locally
 
 ```bash
 npm install
 npm run build
+npx serve .
 ```
 
-Then open `index.html` (or `npx serve .`). Use `npm run watch` to rebuild on changes.
-
-## Rebuild the 3D island
-
-The complete island scene is authored in Blender. Open `assets/portfolio-island.blend`
-to edit it. With Blender 5.2 installed, run `node scripts/generate-island-glb.js`
-to regenerate the editable `.blend` source and the website's `assets/island-terrain.glb`.
-The site keeps its interactive landmark labels and animated water around the exported scene.
-
-## Deploy
-
-Hosted on Vercel — every push to `main` redeploys automatically.
-`vercel.json` runs `npm run build` to generate `style.css` (which is gitignored).
-
-## Analytics
-
-Two services, because they cover different things. Nothing runs on `localhost`.
-
-- **Vercel Web Analytics + Speed Insights** — visitors, page views, referrers,
-  countries, devices, and Core Web Vitals.
-- **Umami Cloud** — average visit duration plus the custom engagement events in
-  `assets/site-analytics.js`. Vercel's custom events are a Pro-only feature, so
-  they live here instead; Umami's free Hobby tier allows 100k events/month.
-
-### Umami setup (required once)
-
-1. Create a website at [cloud.umami.is](https://cloud.umami.is).
-2. Copy its **Website ID** from Settings → Websites.
-3. Paste it into `WEBSITE_ID` at the top of `assets/umami-init.js`.
-
-Until that ID is set, the tracker is not loaded at all and a note is logged to
-the console. Everything else keeps working.
-
-`HOST_URL` pins collection to `cloud.umami.is`. Umami Cloud otherwise auto-detects
-a regional collector, and those domains have changed more than once without
-notice — pinning keeps the `Content-Security-Policy` in `vercel.json` down to one
-allowed origin. If events ever stop arriving, check the browser console for a CSP
-violation first: the fix is to add the new collector origin to `connect-src`.
-
-### Excluding my own visits
-
-Open **`https://tal-klein-portfolio.vercel.app/?analytics=off`** once in each
-browser/device I use. The choice is stored in `localStorage`, so every later visit
-from that browser is invisible to Web Analytics, Speed Insights and Umami alike —
-no visitor, no page view, no events. `?analytics=on` undoes it. The query
-parameter is stripped from the URL right after it is applied.
-
-Caveats: `localStorage` is per browser profile *and per origin*, so incognito
-windows and cleared site data start counting again, and attaching a custom domain
-later means opting out again on that domain. Other people's visits are of course
-unaffected.
-
-If a custom domain is attached later, update the absolute URLs in `index.html`
-(`canonical`, `og:url`, `og:image`, `twitter:image`, the JSON-LD `url`), plus
-`sitemap.xml` and `robots.txt` — and redo the opt-out on the new origin.
-
-### Custom events
-
-Sent to Umami. Every event fires at most once per page view, so the counts are
-visitor counts rather than click counts.
-
-| Event | Meaning |
-| --- | --- |
-| `time_10s` … `time_300s` | Reached that many seconds of *active* time (the clock pauses while the tab is hidden). The drop-off between thresholds is the read-time distribution. |
-| `session_end` | Best-effort summary at unload: `duration` bucket, `seconds`, max `scroll` %, `sections` reached. |
-| `scroll_25` … `scroll_100` | Scroll depth reached. |
-| `section_about` … `section_contact` | Section scrolled into view. |
-| `project_view` | Project card scrolled into view (`project` property). |
-| `visitor_new` / `visitor_returning` | First visit vs. a repeat visit from the same browser. |
-| `cv_download`, `contact_email`, `contact_linkedin`, `contact_github` | Intent signals. |
-| `email_copied`, `phone_copied`, `page_printed` | Stronger intent — someone is taking the details away with them. |
-| `project_github`, `project_dataset`, `project_open`, `skills_network`, `contact_copy_email`, `theme_toggle` | Interactions. |
-| `rage_click` | Three clicks in one spot within a second — something looks clickable but isn't. |
-| `deep_read` | Human, 60s+ active, scrolled past 75%. The visit that actually matters. |
-| `connection_slow` | Visitor on 2G/3G — context for a bad Speed Insights sample. |
-
-### Telling people from bots
-
-Each visit ends with exactly one verdict event:
-
-| Verdict | Meaning |
-| --- | --- |
-| `visit_human` | Interacted, and the pointer path looks like a hand. |
-| `visit_suspicious` | Interacted, but the mouse path is mechanical — steady speed or a dead-straight line. Security sandboxes simulate mouse movement on purpose, so "a pointer moved" is not proof on its own. |
-| `visit_passive` | Ran JavaScript, never interacted. Usually a scraper; occasionally a real person who opened a tab and walked away. |
-| `visit_automated` | Declared itself automation, or looked structurally impossible. `signals` says which checks tripped. |
-
-Supporting events: `human_confirmed` (with `via` and `ms_to_interact`) and
-`bot_suspected` (with the `signals` list).
-
-`session_end` repeats `verdict`, `signals` and `interacted` alongside its
-`seconds`/`scroll`/`sections`, so a whole visit can be judged from that one
-event's properties without cross-referencing anything.
-
-Three layers, because each is defeatable alone.
-
-1. **Declarative** — `navigator.webdriver`, headless/bot user-agent strings, empty
-   `navigator.languages`, zero-sized window/screen.
-2. **Trust** — events synthesised by page script report `isTrusted: false` and are
-   never accepted as proof. Real input, including input driven by assistive
-   technology, comes from the browser and is trusted.
-3. **Shape** — the mouse path is scored, because a sandbox that simulates movement
-   defeats layers 1 and 2. Reported raw on `visit_*` and `session_end` so the
-   thresholds can be checked against real traffic:
-
-   | Property | Hand | Script |
-   | --- | --- | --- |
-   | `speed_cv` | ~0.5 | ~0.06 |
-   | `straightness` | ~0.92 | 1.0 |
-   | `turns` | ≥1 | 0 |
-
-   A path counts as mechanical when `speed_cv < 0.15`, or when it is straighter
-   than 0.98 with no direction change at all — deliberately conservative, so a
-   borderline path is called human.
-
-Verified in headless Chromium across four inputs: a scripted straight-line move
-(→ suspicious), a curved variable-speed move (→ human), JS-synthesised untrusted
-events (→ passive), and no interaction (→ passive).
-
-**This cannot see vulnerability scanners.** `curl`, `nuclei`, `sqlmap` and friends
-never execute JavaScript, so they never load this file and never appear in Umami
-at all. Requests that never run JS are only visible in the Vercel Firewall and
-runtime logs. Treat every verdict here as a strong hint, not proof: privacy
-browsers, accessibility tooling and some in-app webviews produce false positives.
-
-Duration is reported as a *funnel of threshold events* rather than a single event
-at unload, because unload-time sends are unreliable on mobile. `session_end` is a
-bonus, not the source of truth.
-
-A visitor who reads the whole page generates roughly 20 events, so the Hobby plan
-event quota covers a few thousand visitors a month. Trim `TIME_THRESHOLDS`,
-`SCROLL_MARKS`, or `SECTIONS` at the top of `assets/site-analytics.js` to reduce
-that.
+## Contact
+- **LinkedIn:** [linkedin.com/in/talklein21](https://www.linkedin.com/in/talklein21/)
+- **GitHub:** [github.com/TalKleinBgu](https://github.com/TalKleinBgu)
+- **Email:** [kleintal7@gmail.com](mailto:kleintal7@gmail.com)
