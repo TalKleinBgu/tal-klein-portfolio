@@ -2915,16 +2915,62 @@
     .island-social-links { justify-content: center; gap: 15px; margin: 12px 0 14px; }
     .island-world { inset: 185px -5% 105px; }
     .island-footer { gap: 14px; bottom: 22px; left: 12px; right: 12px; }
-    .acro-card { width: 270px; }
+    /* Phones: the summary card docks as a compact sheet at the bottom instead of floating
+       over the building the camera just flew to; the pause/reset pill steps aside meanwhile */
+    .island-view:has(.acro-anchor:not([hidden]) .acro-card) .island-footer { opacity: 0; pointer-events: none; }
+    .island-view:has(.acro-anchor:not([hidden]) .acro-card) .island-pill-controls { pointer-events: none; }
+    .acro-card {
+      position: fixed;
+      top: auto;
+      left: 50%;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      width: min(calc(100vw - 24px), 420px);
+      padding: 13px 15px 11px;
+      border-radius: 15px;
+    }
+    .acro-card h2 { font-size: 17px; gap: 8px; padding-right: 28px; line-height: 1.2; }
+    .acro-card h2 img { width: 20px; height: 20px; }
+    .acro-card-role {
+      margin: 7px 0 3px;
+      font-size: 12.5px;
+      line-height: 1.35;
+      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+    }
+    .acro-card-desc {
+      font-size: 12.5px;
+      line-height: 1.45;
+      display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden;
+    }
+    .acro-card-actions { margin-top: 8px; padding-top: 7px; }
+    .acro-card-more { font-size: 12.5px; padding: 4px 0; }
+    .acro-card-close { top: 4px; right: 4px; width: 32px; height: 32px; font-size: 20px; }
     .acro-load-indicator { width: 140px; bottom: 72px; left: 50%; }
-    .landmark-modal { padding: 12px; align-items: flex-end; }
+    .landmark-modal { padding: 10px; align-items: flex-end; }
     .landmark-modal-card {
-      max-height: 80vh;
-      padding: 20px;
-      border-radius: 20px;
+      max-height: 72vh;
+      max-height: 72svh;
+      padding: 16px 16px 14px;
+      border-radius: 18px;
       transform: translateY(40px);
     }
     .landmark-modal.active .landmark-modal-card { transform: translateY(0); }
+    .landmark-modal-x { top: 10px; right: 10px; width: 30px; height: 30px; }
+    .landmark-modal-header { gap: 12px; margin-bottom: 12px; padding-right: 34px; }
+    .landmark-modal-icon { width: 40px; height: 40px; font-size: 21px; border-radius: 12px; }
+    .landmark-modal-badge { font-size: 10px; letter-spacing: .3px; line-height: 1.35; }
+    .landmark-modal-title { font-size: 16.5px; }
+    .landmark-modal-subtitle { font-size: 11.5px; line-height: 1.4; }
+    .landmark-modal-desc { font-size: 13px; line-height: 1.55; margin-bottom: 14px; }
+    .landmark-modal-img { margin-bottom: 14px; }
+    .landmark-modal-img img { max-height: 190px; object-position: center 30%; }
+    .landmark-modal-stats { gap: 6px; margin-bottom: 14px; }
+    .landmark-modal-stats .stat-pill { padding: 7px 4px; border-radius: 10px; }
+    .landmark-modal-stats .stat-pill .v { font-size: 14.5px; }
+    .landmark-modal-stats .stat-pill .k { font-size: 10px; line-height: 1.25; }
+    .landmark-modal-bullets { gap: 8px; margin-bottom: 16px; }
+    .landmark-modal-bullets li { font-size: 12.5px; padding-left: 16px; }
+    .landmark-modal-bullets li::before { left: 2px; top: 6px; width: 5px; height: 5px; }
+    .landmark-jump-btn { padding: 10px; font-size: 13px; border-radius: 12px; }
     .switch-to-island-btn {
       bottom: 20px;
       left: 20px;
