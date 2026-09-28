@@ -1657,6 +1657,8 @@
   /* ── Footer ──────────────────────────────────────────────────────────── */
   footer { text-align: center; padding: 72px 16px calc(48px + env(safe-area-inset-bottom)); color: var(--ink-faint); font-size: 13px; line-height: 1.8; }
   footer .credit { display: block; }
+  /* keep the credit clear of the floating 3D-Island / back-to-top buttons on phones */
+  @media (max-width: 700px) { footer { padding-bottom: calc(104px + env(safe-area-inset-bottom)); } }
   .to-top {
     display: inline-flex; align-items: center; justify-content: center;
     width: 42px; height: 42px; margin-bottom: 14px;
@@ -1828,6 +1830,7 @@
     color: var(--btn-fg);
     box-shadow: 0 2px 6px -2px var(--shadow);
   }
+  .proj-expand-toggle[hidden] { display: none; }
   .proj-expand-toggle {
     font-family: inherit;
     font-size: 12.5px;
@@ -1889,7 +1892,7 @@
     background: transparent !important;
     gap: 12px;
   }
-  .plist.grid-view .prow-h { margin-bottom: 12px; }
+  .plist.grid-view .prow-h { margin-bottom: 14px; }
   .plist.grid-view .prow-chev { display: none; }
   .plist.grid-view .prow-title {
     font-size: 19px;
@@ -1899,17 +1902,26 @@
     font-size: 14.5px;
     margin-top: 6px;
   }
+  /* Body follows the header directly; the card's spare height goes above the footer links */
   .plist.grid-view .prow-body {
     grid-template-rows: 1fr !important;
-    margin-top: auto;
+    flex: 1;
   }
+  .plist.grid-view .prow-body > div { display: flex; flex-direction: column; }
   .plist.grid-view .prow-inner {
     padding: 14px 0 0 0;
     border-top: 1px solid var(--border-soft);
-    margin-top: 14px;
+    margin-top: 2px;
     max-width: 100%;
     gap: 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
+  /* The headline number already appears in the card's metrics strip */
+  .plist.grid-view .prow-key { display: none; }
+  /* Grid cards are always "open", so their comparison bars are drawn too */
+  .plist.grid-view .pc-bar { transform: scaleX(1); }
   .plist.grid-view .prow-about {
     font-size: 14px;
     line-height: 1.6;
@@ -1931,7 +1943,8 @@
     color: var(--accent);
   }
   .plist.grid-view .prow-foot {
-    margin-top: 8px;
+    margin-top: auto;
+    padding-top: 8px;
   }
 
   /* Filter animation for project cards */

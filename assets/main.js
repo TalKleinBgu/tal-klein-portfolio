@@ -401,7 +401,7 @@ if(window.matchMedia('(hover: hover)').matches){
   const LAYER_DEFS=[
     ['TK'],
     ['Python','SQL','Linux','Git','Docker','Jupyter','VS Code'],
-    ['Machine Learning','scikit-learn','Gradient Boosting','Feature Engineering','Causal Inference','Statistical Modeling','Dimensionality Reduction','A/B testing','Classification','Clustering','Model Evaluation'],
+    ['Machine Learning','scikit-learn','Gradient Boosting','Feature Engineering','Causal Inference','Statistical Modeling','Dimensionality Reduction','A/B Testing','Classification','Clustering','Model Evaluation'],
     ['PyTorch','Neural Networks','Fine-Tuning','LoRA / QLoRA','Transformers Architecture','Text Classification','Sentence Embeddings','Tokenization','Information Extraction','Image Classification','Object Detection','OpenCV','YOLO'],
     ['Prompt Engineering','RAG','Vector Search','Hugging Face','LangGraph','CrewAI','MCP','APIs','Structured Outputs','Few-shot Learning','LLM Evaluation'],
     ['Pandas','NumPy','Data Visualization','Matplotlib','Plotly','Tableau','ETL Pipelines','PostgreSQL','GCP','Weights & Biases (W&B)','FastAPI'],
@@ -692,6 +692,9 @@ if(window.matchMedia('(hover: hover)').matches){
 
   function setView(isGrid) {
     plist.classList.toggle('grid-view', isGrid);
+    // Grid cards always show their details, so "Expand All" only applies to the list view
+    const expandBtn = document.getElementById('projExpandToggle');
+    if (expandBtn) expandBtn.hidden = isGrid;
     if (listBtn) {
       listBtn.classList.toggle('active', !isGrid);
       listBtn.setAttribute('aria-pressed', !isGrid);
