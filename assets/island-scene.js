@@ -4246,18 +4246,18 @@ var Td=new Pi([
 // Pathways ONLY cross the river directly over Bridge 1 or Bridge 2!
 var Sd=[
   // West side paths (Shoreline Dock & Gate -> GitHub -> BGU -> Matrix Help Desk)
-  {id:"dock-to-south-bridge",width:.68,points:[[-11.0,5.55],[-10.15,5.08],[-8.3,4.15],[-6.2,3.15],[-4.4,2.5],[-3.25,2.2]]},
+  {id:"dock-to-south-bridge",width:.68,points:[[-11.0,5.55],[-10.15,5.08],[-8.3,4.35],[-6.2,3.95],[-4.3,3.3],[-3.25,2.2]]},
   {id:"south-bridge-crossing",width:.66,points:[[-3.25,2.2],[-2.3,2.2],[-1.35,2.2]]},
-  {id:"west-github-spur",width:.62,points:[[-6.35,2.45],[-6.2,3.15]]},
+  {id:"west-github-spur",width:.62,points:[[-6.95,4.1],[-6.95,3.5]]},
   {id:"west-github-to-bgu-and-north-bridge",width:.62,points:[[-6.2,1.1],[-5.4,-.7],[-4.0,-2.1],[-3.1,-2.75],[-1.65,-2.85]]},
-  {id:"bgu-entrance-spur",width:.58,points:[[-5.4,-.7],[-6.1,-.95],[-6.75,-1.15]]},
+  {id:"bgu-entrance-spur",width:.58,points:[[-5.4,-.7],[-6.7,-.85],[-7.95,-1.05]]},
   {id:"west-helpdesk-spur",width:.6,points:[[-3.2,-4.4],[-3.1,-2.85]]},
   {id:"north-bridge-crossing",width:.66,points:[[-1.65,-2.85],[-.68,-2.85],[.3,-2.85]]},
   // East side paths (IDF, Data Scientist & ML Engineer front sidewalk, Dairy Barn & Basketball Court)
   {id:"north-bridge-to-idf",width:.62,points:[[.3,-2.85],[1.5,-3.3],[2.2,-4.1]]},
   {id:"north-bridge-to-farm",width:.62,points:[[.3,-2.85],[1.9,-1.8],[3.3,-1.15]]},
-  {id:"south-bridge-to-ds-front-entrance",width:.68,points:[[-1.35,2.2],[-.3,3.9],[.8,5.55],[1.45,6.05],[2.65,6.05]]},
-  {id:"ds-entrance-to-farm-and-dog",width:.62,points:[[2.65,6.05],[3.6,4.8],[4.1,3.5],[4.55,2.3],[4.8,1.75]]},
+  {id:"south-bridge-to-ds-front-entrance",width:.68,points:[[-1.35,2.2],[-1.0,3.5],[-.95,5.2],[-.5,6.6],[.8,6.75],[2.7,6.65]]},
+  {id:"ds-entrance-to-farm-and-dog",width:.62,points:[[2.7,6.65],[3.8,6.2],[4.3,4.9],[4.55,3.3],[4.8,1.75]]},
   {id:"east-spine-to-court",width:.6,points:[[3.3,-1.15],[5.3,-1.35],[7.3,-1.75]]}
 ];
 
@@ -4510,7 +4510,7 @@ function Fd(e,t="#8eafb6",n,r=!1){
 //   - deepmind (Data Scientist & ML Engineer): {x: 1.45, z: 4.55}
 // Middle Row:
 //   - github (GitHub & ML Projects): {x: -6.4, z: 1.65}
-//   - michigan (Ben-Gurion University — behind GitHub, set back & left): {x: -6.3, z: -2.6}
+//   - michigan (Ben-Gurion University — behind GitHub, set back & left): {x: -7.5, z: -2.6}
 //   - blaze (Dairy Farm & Large Green Grass Cow Yard — toward the east shore): {x: 5.5, z: 0.6}
 //   - Half Basketball Court (se — flush with ground, set back): {x: 8.8, z: -1.9}
 // Back Row:
@@ -4521,7 +4521,7 @@ var Id={
   deepmind:{x:1.45,z:4.55},
   blaze:{x:5.5,z:.6},
   github:{x:-6.4,z:1.65},
-  michigan:{x:-6.3,z:-2.6},
+  michigan:{x:-7.5,z:-2.6},
   helpdesk:{x:-3.2,z:-5.5},
   microsoft:{x:2.2,z:-5.2}
 };
@@ -4586,7 +4586,7 @@ function Ld(e,t,n,r){
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // 1. BEN-GURION UNIVERSITY (michigan) — Behind GitHub (-6.3, -2.6)
+  // 1. BEN-GURION UNIVERSITY (michigan) — Behind GitHub, west (-7.5, -2.6)
   // ═══════════════════════════════════════════════════════════════════════════
   let C=y("michigan");
   C.rotation.y=.18;
@@ -4762,8 +4762,6 @@ function Ld(e,t,n,r){
   }
   v(H,1.76,.09,1.52,n.slate,0,3.5,-.04);
   v(H,1.14,.18,.98,blueAccent,0,3.62,-.04);
-  v(H,1.24,.6,.09,d,0,1.18,.75);
-  b(H,"helpdesk",1.14,.543,0,1.18,.805);
   // Matrix logo on the tower crown, readable from across the island
   v(H,1.18,.56,.05,d,0,3.24,.66);
   b(H,"helpdesk",1.1,.524,0,3.24,.69);
@@ -5724,20 +5722,20 @@ function qd(e,t,n){
   }
 
   ke(-9.4,1.6,1.05,"orange");
-  ke(-8.9,-3.9,1.02,"lemon");
+  ke(-8.3,-5.0,1.02,"lemon");
   ke(-1.8,-7.2,1.08,"orange");
   ke(5.8,-6.2,1.04,"lemon");
   ke(10.3,2.6,1.02,"orange");
-  ke(3.5,6.6,.96,"lemon");
+  ke(4.9,6.9,.96,"lemon");
   ke(-4.2,5.8,.94,"orange");
   ke(8.1,-4.9,.98,null);
-  let U=ke(-6.8,3.6,.92,null);
+  let U=ke(-7.8,5.3,.92,null);
   U.name="apple-tree";
   let Ae=Rd(U,{geometries:f,materials:p,textures:m});
 
   buildCypress(6.8,-4.2,.98);
   buildCypress(-.2,-7.6,.92);
-  buildCypress(-8.9,-1.6,.94);
+  buildCypress(-10.0,-1.2,.94);
   buildCypress(10.4,-.2,.95);
 
   for(let[e,t,n]of[[4.2,-7.6,.88],[7.8,-6.2,.84],[-6.2,-6.8,.82]]){
@@ -5760,12 +5758,12 @@ function qd(e,t,n){
   let W=g("#2b394a",{metalness:.68,roughness:.3}),
     je=g("#60a5fa",{metalness:.72,roughness:.28}),
     lampCoords=[
-      [-9.1,4.45],
-      [-5.6,2.85],
-      [-4.2,-3.45],
+      [-9.1,4.15],
+      [-5.5,4.3],
+      [-5.4,-3.1],
       [-1.1,2.2],
       [.45,-2.5],
-      [.55,5.35],
+      [.2,7.25],
       [6.7,-.95]
     ],
     Me=lampCoords.map(([lx,lz],n)=>{
@@ -5798,11 +5796,11 @@ function qd(e,t,n){
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REALISTIC SCULPTED 3D GOLDEN RETRIEVER GUIDE-DOG (Fe / Ie / puppy)
-  // Positioned on open lush green grass at (4.35, 4.15) — over 1.6m clear of any fence!
+  // Positioned on open grass east of the DS-to-farm path at (6.0, 4.4), clear of the fence
   // ═══════════════════════════════════════════════════════════════════════════
   let Fe=new Cn;
   Fe.name="guide-dog-bay";
-  Fe.position.set(4.35,xd(4.35,4.15),4.15);
+  Fe.position.set(6.0,xd(6.0,4.4),4.4);
   O.add(Fe);
   let Ie=new Cn;
   Ie.name="guide-dog-haven";
