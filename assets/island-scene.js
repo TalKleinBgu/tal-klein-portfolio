@@ -6030,17 +6030,28 @@ function qd(e,t,n){
     lt={position:n.clone().add(r),target:n};
   }
   function _t(){
-    nt=null,lt={position:c.clone().multiplyScalar(e.clientWidth<600?1.45:1),target:new Y(0,1.4,0)};
+    nt=null,lt={position:c.clone().multiplyScalar(fitMul()),target:new Y(0,1.4,0)};
   }
 
   let vt=r.domElement;
   vt.addEventListener("pointermove",ft),vt.addEventListener("pointerdown",pt),vt.addEventListener("pointerup",mt),vt.addEventListener("pointerleave",ht),vt.addEventListener("pointercancel",ht);
   let yt=e=>{e.preventDefault(),r.setAnimationLoop(null),n.failed();};
   vt.addEventListener("webglcontextlost",yt);
+  // Pull the default camera back far enough that the whole island width fits the viewport
+  // (portrait phones/tablets need more distance than the desktop framing)
+  let lastFit=1;
+  function fitMul(){
+    let asp=e.clientWidth/Math.max(1,e.clientHeight),halfH=Math.atan(Math.tan(17*Math.PI/180)*asp);
+    return Math.max(1,Math.min(1.8,15.2/Math.tan(halfH)/c.length()));
+  }
   function bt(){
     a=!0,o=!0;
     let t=e.clientWidth,n=e.clientHeight;
-    r.setSize(t,n),s.aspect=t/n,s.updateProjectionMatrix(),!nt&&t<600&&s.position.length()<40&&s.position.copy(c).multiplyScalar(1.45);
+    r.setSize(t,n),s.aspect=t/n,s.updateProjectionMatrix();
+    let m=fitMul();
+    l.maxDistance=Math.max(62,c.length()*m+2);
+    if(!nt&&Math.abs(s.position.length()-c.length()*lastFit)<.5)s.position.copy(c).multiplyScalar(m);
+    lastFit=m;
   }
   let xt=new ResizeObserver(bt);
   xt.observe(e),bt();
