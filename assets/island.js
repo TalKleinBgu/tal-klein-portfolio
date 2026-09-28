@@ -249,9 +249,16 @@
       if (moreBtn) {
         moreBtn.addEventListener('click', (e) => {
           e.stopPropagation();
+          emitIslandEvent({ type: 'full_story', place: place.id });
           openLandmarkModal(place);
         });
       }
+    }
+
+    function emitIslandEvent(detail) {
+      try {
+        window.dispatchEvent(new CustomEvent('island:event', { detail }));
+      } catch { /* ignore */ }
     }
 
     function selectLocation(id) {
@@ -259,6 +266,7 @@
       selectedId = id;
       updateHover(null);
       renderFrostedCard(id);
+      emitIslandEvent({ type: 'select', place: id });
       if (diorama) {
         diorama.select(id);
       }
@@ -283,6 +291,7 @@
           selectedId = id;
           updateHover(null);
           renderFrostedCard(id);
+          emitIslandEvent({ type: 'select', place: id });
         },
         progress: (pct) => {
           if (loadFill) {
@@ -297,6 +306,7 @@
             el.hidden = false;
           });
           anchorEl.hidden = !selectedId;
+          emitIslandEvent({ type: 'ready' });
         },
         failed: () => {
           islandView.setAttribute('data-scene-status', 'ready');

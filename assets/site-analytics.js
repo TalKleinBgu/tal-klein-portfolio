@@ -338,6 +338,39 @@ if ('IntersectionObserver' in window) {
   }
 }
 
+/* ── Traffic source & Recruiter attribution (?ref=cv, ?ref=linkedin, etc.) ── */
+try {
+  const params = new URLSearchParams(window.location.search);
+  const explicitSource = params.get('ref') || params.get('from') || params.get('utm_source');
+  const refHost = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : 'direct';
+  if (explicitSource || (refHost && refHost !== window.location.hostname)) {
+    once('traffic_source', {
+      source: explicitSource || refHost,
+      referrer: refHost,
+      campaign: params.get('utm_campaign') || params.get('company') || 'none'
+    });
+  }
+} catch { /* ignore malformed URLs */ }
+
+/* ── 3D Island & Classic CV view tracking ────────────────────────────── */
+let islandPlacesSeen = 0;
+let switchedToClassic = false;
+
+window.addEventListener('island:event', (e) => {
+  const detail = (e && e.detail) || {};
+  if (detail.type === 'ready') {
+    once('island_ready');
+  } else if (detail.type === 'select' && detail.place) {
+    if (!sent.has(`island_select:${detail.place}`)) islandPlacesSeen++;
+    once('island_select', { place: detail.place }, `island_select:${detail.place}`);
+  } else if (detail.type === 'full_story' && detail.place) {
+    once('island_full_story', { place: detail.place }, `island_full_story:${detail.place}`);
+  } else if (detail.type === 'view_switch' && detail.to) {
+    if (detail.to === 'classic_cv') switchedToClassic = true;
+    once('view_switch', { to: detail.to }, `view_switch:${detail.to}`);
+  }
+});
+
 /* ── Interactions worth knowing about ────────────────────────────────── */
 
 document.addEventListener('click', (event) => {
@@ -346,6 +379,15 @@ document.addEventListener('click', (event) => {
 
   if (link.matches('.nav-cv, .mm-dl, .cv-download') || link.hasAttribute('download')) {
     once('cv_download');
+    return;
+  }
+  if (link.id === 'switchToClassicBtn') {
+    switchedToClassic = true;
+    once('view_switch', { to: 'classic_cv' }, 'view_switch:classic_cv');
+    return;
+  }
+  if (link.id === 'switchToIslandBtn' || link.id === 'navIslandBtn' || link.id === 'mmIslandBtn') {
+    once('view_switch', { to: '3d_island' }, 'view_switch:3d_island');
     return;
   }
   if (link.matches('.project-git')) {
@@ -416,14 +458,21 @@ addEventListener('pagehide', () => {
     signals: botFlags.join('+') || 'none',
     seconds,
     scroll: maxScroll,
+    island_places: islandPlacesSeen,
+    switched_to_cv: switchedToClassic,
     interacted,
     via: interactionKind || 'none',
     ...sig
   });
 
-  // Read the whole thing and stayed: the visit that actually matters.
-  if (call === 'human' && seconds >= 60 && maxScroll >= 75) {
-    once('deep_read', { seconds, scroll: maxScroll });
+  // Engaged visit: either read >=75% of the Classic CV for 60s+, or explored 2+ landmarks on the 3D Island for 45s+
+  if (call === 'human' && ((seconds >= 60 && maxScroll >= 75) || (seconds >= 45 && islandPlacesSeen >= 2))) {
+    once('deep_read', {
+      seconds,
+      scroll: maxScroll,
+      island_places: islandPlacesSeen,
+      switched_to_cv: switchedToClassic
+    });
   }
 
   // verdict and signals are repeated here on purpose: session_end is the one
@@ -438,7 +487,9 @@ addEventListener('pagehide', () => {
     duration: durationBucket(seconds),
     seconds,
     scroll: maxScroll,
-    sections: sectionsSeen
+    sections: sectionsSeen,
+    island_places: islandPlacesSeen,
+    switched_to_cv: switchedToClassic
   });
 }, { once: true });
 
