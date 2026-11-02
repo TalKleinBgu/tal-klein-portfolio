@@ -198,12 +198,22 @@ document.querySelectorAll('.pc-bar[data-w]').forEach(b=>b.style.setProperty('--w
 /* ── Hero numbers count up once on load ──────────────────────────────── */
 (function(){
   if(REDUCE_MOTION())return;
+  /* the site opens behind the 3D island: count up when the hero is actually revealed */
+  const iv=document.getElementById('islandView');
+  if(iv&&!iv.classList.contains('hidden-view')){
+    window.addEventListener('island:view',function onView(e){
+      if(!e.detail||e.detail.view!=='classic')return;
+      window.removeEventListener('island:view',onView);
+      run(250);
+    });
+  }else run(600);
+  function run(base){
   document.querySelectorAll('.hero-stats .v').forEach((el,i)=>{
     const m=el.textContent.match(/^([\d,]+)(.*)$/);
     if(!m)return;
     const target=parseInt(m[1].replace(/,/g,''),10),suffix=m[2],final=el.textContent;
     if(!(target>1))return;
-    const dur=1400,delay=600+i*120;
+    const dur=1400,delay=base+i*120;
     el.textContent='0'+suffix;
     setTimeout(()=>{
       const t0=performance.now();
@@ -214,6 +224,7 @@ document.querySelectorAll('.pc-bar[data-w]').forEach(b=>b.style.setProperty('--w
       })(t0);
     },delay);
   });
+  }
 })();
 
 /* ── Journey line fills as you scroll; each dot lights once passed ───── */
@@ -355,10 +366,14 @@ if(window.matchMedia('(hover: hover)').matches){
     const top=clearEls[0].getBoundingClientRect().top,bottom=clearEls[clearEls.length-1].getBoundingClientRect().bottom;
     return top>60||bottom<window.innerHeight-60;
   }
-  let last=0;
+  /* the 3D island covers the whole page on load - don't paint an invisible canvas underneath it */
+  const islandView=document.getElementById('islandView');
+  const islandOn=()=>!!islandView&&!islandView.classList.contains('hidden-view');
+  let last=0,running=false;
   function loop(t){
+    if(document.hidden||islandOn()){running=false;return;}
     requestAnimationFrame(loop);
-    if(document.hidden||REDUCE_MOTION()||t-last<33)return;   // ~30fps is plenty
+    if(REDUCE_MOTION()||t-last<33)return;   // ~30fps is plenty
     last=t;
     if(!netVisible()){if(pulses.length){pulses=[];draw();}return;}
     while(pulses.length<7){const p=spawn();if(!p)break;p.t=Math.random()*0.3;pulses.push(p);}
@@ -366,7 +381,10 @@ if(window.matchMedia('(hover: hover)').matches){
     pulses=pulses.map(p=>p.t>=1?spawn()||p:p);
     draw();
   }
-  requestAnimationFrame(loop);
+  function start(){if(!running){running=true;requestAnimationFrame(loop);}}
+  start();
+  document.addEventListener('visibilitychange',start);
+  window.addEventListener('island:view',start);
   document.addEventListener('themechange',draw);
   let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,120);});
   resize();
