@@ -4373,7 +4373,11 @@ function jd(e=!1){
   let s=new kr;
   return s.setAttribute("position",new Q(t,3)),s.setAttribute("uv",new Q(n,2)),s.setIndex(r),s.computeVertexNormals(),s;
 }
-var Md={"/textures/brick_wall_07_diff_1k.jpg":"/textures/optimized/brick_wall_07_diff_1k.e0d55c56c6fe.webp","/textures/brick_wall_07_nor_gl_1k.jpg":"/textures/optimized/brick_wall_07_nor_gl_1k.526d6e8d4ea1.webp","/textures/brick_wall_07_rough_1k.jpg":"/textures/optimized/brick_wall_07_rough_1k.c15f4356b6cf.webp","/textures/white_sandstone_blocks_02_diff_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_diff_1k.3b034b51c2cf.webp","/textures/white_sandstone_blocks_02_nor_gl_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_nor_gl_1k.0e6f7be65b5a.webp","/textures/white_sandstone_blocks_02_rough_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_rough_1k.77d3531cada5.webp","/textures/wood_planks_diff_1k.jpg":"/textures/optimized/wood_planks_diff_1k.faab9e1347f5.webp","/textures/wood_planks_nor_gl_1k.jpg":"/textures/optimized/wood_planks_nor_gl_1k.d02abf113e17.jpg","/textures/wood_planks_rough_1k.jpg":"/textures/optimized/wood_planks_rough_1k.15a1f68dc00f.webp","/textures/garden/grass-color.jpg":"/textures/optimized/garden-grass-color.c2b25b759514.webp","/textures/garden/grass-normal.jpg":"/textures/optimized/garden-grass-normal.bdc4e6200535.jpg","/textures/garden/grass-rough.jpg":"/textures/optimized/garden-grass-rough.9c7825a2e709.webp","/textures/garden/limestone-color.jpg":"/textures/optimized/garden-limestone-color.c695674e146c.webp","/textures/garden/limestone-normal.jpg":"/textures/optimized/garden-limestone-normal.e4a644563324.jpg","/textures/garden/limestone-rough.jpg":"/textures/optimized/garden-limestone-rough.7460d7ef2308.webp","/textures/garden/slate-color.jpg":"/textures/optimized/garden-slate-color.621246195a20.webp","/textures/garden/slate-normal.jpg":"/textures/optimized/garden-slate-normal.ca74e0fb3982.jpg","/textures/garden/slate-rough.jpg":"/textures/optimized/garden-slate-rough.672b1b04bffd.webp","/textures/garden/light-cobblestone-1.png":"/textures/optimized/garden-light-cobblestone-1.10bca9547514.webp","/textures/garden/light-cobblestone-2.png":"/textures/optimized/garden-light-cobblestone-2.575be752439c.webp","/textures/garden/light-cobblestone-3.png":"/textures/optimized/garden-light-cobblestone-3.057d7eeb19cf.webp","/textures/garden/light-cobblestone-4.png":"/textures/optimized/garden-light-cobblestone-4.fbe4e7e1655b.webp","/textures/garden/meadow-variation.png":"/textures/optimized/garden-meadow-variation.ab6a8e79d404.webp","/textures/garden/granite-variation.png":"/textures/optimized/garden-granite-variation.472a030dee28.webp","/textures/garden/granite-sandy-variation.png":"/textures/optimized/garden-granite-sandy-variation.caba57fef839.webp","/textures/garden/water-height-color.jpg":"/textures/optimized/garden-water-height-color.b2bc36e17996.jpg","/textures/chelsea/rock_3_diff_2k.jpg":"/textures/optimized/chelsea-rock_3_diff_2k.2d085b3856d7.webp","/textures/chelsea/sandstone_blocks_08_diff_2k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_diff_2k.9a92cae1a2e5.webp","/textures/chelsea/sandstone_blocks_08_nor_gl_1k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_nor_gl_1k.d8d515c5c391.jpg","/textures/chelsea/sandstone_blocks_08_rough_1k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_rough_1k.fe720bd2fca2.webp","/textures/aristea_wreck_1k.hdr":"/textures/optimized/aristea-wreck.f59cbff2c000.hdr"},Nd={grass:"/textures/optimized/refined-grass.2af9339267cd.webp","coastal-stone":"/textures/optimized/refined-coastal-stone.33a5b267a216.webp",wood:"/textures/optimized/refined-wood.724874e7846e.webp"};
+// Identical rounded boxes share one BufferGeometry: far less CPU while building the scene and
+// far fewer vertex buffers to upload to the GPU on the first frame.
+var boxGeoCache=new Map;
+function cachedBox(k,make){let g=boxGeoCache.get(k);return g||(g=make(),boxGeoCache.set(k,g)),g}
+var Md={"/textures/brick_wall_07_diff_1k.jpg":"/textures/optimized/brick_wall_07_diff_1k.f0fc52860f9e.webp","/textures/brick_wall_07_nor_gl_1k.jpg":"/textures/optimized/brick_wall_07_nor_gl_1k.35ef930e8a79.webp","/textures/brick_wall_07_rough_1k.jpg":"/textures/optimized/brick_wall_07_rough_1k.55d7f70e0daf.webp","/textures/white_sandstone_blocks_02_diff_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_diff_1k.1b77635b53f0.webp","/textures/white_sandstone_blocks_02_nor_gl_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_nor_gl_1k.d44bf0269a1e.webp","/textures/white_sandstone_blocks_02_rough_1k.jpg":"/textures/optimized/white_sandstone_blocks_02_rough_1k.de9a76ceec04.webp","/textures/wood_planks_diff_1k.jpg":"/textures/optimized/wood_planks_diff_1k.faab9e1347f5.webp","/textures/wood_planks_nor_gl_1k.jpg":"/textures/optimized/wood_planks_nor_gl_1k.21c2627bb1f9.webp","/textures/wood_planks_rough_1k.jpg":"/textures/optimized/wood_planks_rough_1k.15a1f68dc00f.webp","/textures/garden/grass-color.jpg":"/textures/optimized/garden-grass-color.c2b25b759514.webp","/textures/garden/grass-normal.jpg":"/textures/optimized/garden-grass-normal.bdc4e6200535.jpg","/textures/garden/grass-rough.jpg":"/textures/optimized/garden-grass-rough.9c7825a2e709.webp","/textures/garden/limestone-color.jpg":"/textures/optimized/garden-limestone-color.4a431cfdee46.webp","/textures/garden/limestone-normal.jpg":"/textures/optimized/garden-limestone-normal.a02002fc3ab2.webp","/textures/garden/limestone-rough.jpg":"/textures/optimized/garden-limestone-rough.7460d7ef2308.webp","/textures/garden/slate-color.jpg":"/textures/optimized/garden-slate-color.2dd9cbbcd1e2.webp","/textures/garden/slate-normal.jpg":"/textures/optimized/garden-slate-normal.27a1da1994c4.webp","/textures/garden/slate-rough.jpg":"/textures/optimized/garden-slate-rough.672b1b04bffd.webp","/textures/garden/light-cobblestone-1.png":"/textures/optimized/garden-light-cobblestone-1.6b050f15b66a.webp","/textures/garden/light-cobblestone-2.png":"/textures/optimized/garden-light-cobblestone-2.3325c4bba3c7.webp","/textures/garden/light-cobblestone-3.png":"/textures/optimized/garden-light-cobblestone-3.e6b1d709c59d.webp","/textures/garden/light-cobblestone-4.png":"/textures/optimized/garden-light-cobblestone-4.ae0b82dcf8ef.webp","/textures/garden/meadow-variation.png":"/textures/optimized/garden-meadow-variation.ab6a8e79d404.webp","/textures/garden/granite-variation.png":"/textures/optimized/garden-granite-variation.4d2746ccc073.webp","/textures/garden/granite-sandy-variation.png":"/textures/optimized/garden-granite-sandy-variation.45fdb5fabe47.webp","/textures/garden/water-height-color.jpg":"/textures/optimized/garden-water-height-color.5600e0deb0d4.webp","/textures/chelsea/rock_3_diff_2k.jpg":"/textures/optimized/chelsea-rock_3_diff_2k.2d085b3856d7.webp","/textures/chelsea/sandstone_blocks_08_diff_2k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_diff_2k.9a92cae1a2e5.webp","/textures/chelsea/sandstone_blocks_08_nor_gl_1k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_nor_gl_1k.5867c0e18234.webp","/textures/chelsea/sandstone_blocks_08_rough_1k.jpg":"/textures/optimized/chelsea-sandstone_blocks_08_rough_1k.fe720bd2fca2.webp","/textures/aristea_wreck_1k.hdr":"/textures/optimized/aristea-wreck.9755a7a5aed0.hdr"},Nd={grass:"/textures/optimized/refined-grass.ffec30b9bbc3.webp","coastal-stone":"/textures/optimized/refined-coastal-stone.2649b8b5e381.webp",wood:"/textures/optimized/refined-wood.bb9e31a98442.webp"};
 function Pd(e,t,n){
   let i=new Ao;
   i.setURLModifier(e=>"./assets/scene"+(Md[e]??e));
@@ -4545,11 +4549,14 @@ function Ld(e,t,n,r){
       return c.position.set(r,o,s),c.castShadow=!0,c.receiveShadow=!0,n.add(c),c;
     },
     v=(e,t,n,r,i,a=0,o=0,s=0)=>{
+      let c=cachedBox("L"+t+","+n+","+r+","+!!i.userData.architecturalGlass,()=>{
       let c=new vd(t,n,r,2,Math.min(.025,t/3,n/3,r/3)),l=c.attributes.position,u=c.attributes.normal,d=c.attributes.uv;
       for(let e=0;e<l.count;e++){
         let a=Math.abs(u.getX(e)),o=Math.abs(u.getY(e)),s=Math.abs(u.getZ(e));
         i.userData.architecturalGlass?o>a&&o>s?d.setXY(e,l.getX(e)/t+.5,l.getZ(e)/r+.5):a>s?d.setXY(e,l.getZ(e)/r+.5,l.getY(e)/n+.5):d.setXY(e,l.getX(e)/t+.5,l.getY(e)/n+.5):o>a&&o>s?d.setXY(e,l.getX(e),l.getZ(e)):a>s?d.setXY(e,l.getZ(e),l.getY(e)):d.setXY(e,l.getX(e),l.getY(e));
       }
+      return c;
+      });
       return _(c,i,e,a,o,s);
     },
     // Multi-part Realistic Architectural Window Builder (Recessed Casing + Glass + Mullions + Sill)
@@ -5373,11 +5380,14 @@ function Kd(e,t,n,bx=1.6,bz=1.1,brot=-Math.PI/3,hasNotebook=!0){
     return c.position.set(a,o,s),c.castShadow=!0,c.receiveShadow=!0,n.add(c),c;
   }
   function d(e,n,r,i,a,o=0,s=0,c=0){
+    let l=cachedBox("K"+e+","+n+","+r+","+(i===t),()=>{
     let l=new vd(e,n,r,2,Math.min(.012,e/3,n/3,r/3));
     if(i===t){
       let e=l.attributes.position,t=l.attributes.normal,n=l.attributes.uv;
       for(let r=0;r<e.count;r++)Math.abs(t.getY(r))>.5?n.setXY(r,e.getX(r),e.getZ(r)):Math.abs(t.getX(r))>.5?n.setXY(r,e.getZ(r),e.getY(r)):n.setXY(r,e.getX(r),e.getY(r));
     }
+    return l;
+    });
     return u(l,i,a,o,s,c);
   }
   let f=(e,t,n,r)=>u(new qa(new Pi(e),32,t,6,!1),n,r);
@@ -5410,11 +5420,11 @@ function Kd(e,t,n,bx=1.6,bz=1.1,brot=-Math.PI/3,hasNotebook=!0){
 function qd(e,t,n){
   performance.mark("map:scene-start");
   let r=new Ku({antialias:!0,alpha:!0,powerPreference:"high-performance"});
-  r.setPixelRatio(Math.min(devicePixelRatio,2)),r.shadowMap.enabled=!0,r.shadowMap.type=1,r.toneMapping=4,r.toneMappingExposure=1,r.domElement.setAttribute("aria-hidden","true"),e.appendChild(r.domElement);
+  r.setPixelRatio(Math.min(devicePixelRatio,matchMedia("(pointer: coarse)").matches?1.5:2)),r.shadowMap.enabled=!0,r.shadowMap.type=1,r.toneMapping=4,r.toneMappingExposure=1,r.domElement.setAttribute("aria-hidden","true"),e.appendChild(r.domElement);
   let i=new jn,a=!0,o=!0,s=new $o(34,1,.1,130),c=new Y(6.4,22.8,34.5);
   s.position.copy(c);
   let l=new rd(s,r.domElement);
-  l.target.set(0,1.4,0),l.enableDamping=!0,l.dampingFactor=.065,l.enablePan=!1,l.enabled=!1,l.minDistance=11,l.maxDistance=62,l.minPolarAngle=.4,l.maxPolarAngle=1.22,l.rotateSpeed=.55,l.zoomSpeed=.65,l.addEventListener("change",()=>{a=!0,o=!0}),i.environmentIntensity=.46,i.add(new Vo(14806271,9215644,.84));
+  l.target.set(0,1.4,0),l.enableDamping=!0,l.dampingFactor=.065,l.enablePan=!1,l.enabled=!1,l.minDistance=11,l.maxDistance=62,l.minPolarAngle=.4,l.maxPolarAngle=1.22,l.rotateSpeed=.55,l.zoomSpeed=.65,l.addEventListener("change",()=>{a=!0,o=!0}),l.addEventListener("start",()=>{lt=null,flyRate=6}),i.environmentIntensity=.46,i.add(new Vo(14806271,9215644,.84));
   let u=new is(16770242,1.5);
   u.position.set(-10,7,16),i.add(u);
   let d=new is(16773082,1.65);
@@ -5439,7 +5449,7 @@ function qd(e,t,n){
     }
     return e;
   }
-  let w=(e,t,n,r,i,a=0,o=0,s=0,c=.06)=>S(r.userData.architecturalGlass?new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3)):C(new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3))),r,i,a,o,s),
+  let w=(e,t,n,r,i,a=0,o=0,s=0,c=.06)=>S(cachedBox("Q"+e+","+t+","+n+","+c+","+!!r.userData.architecturalGlass,()=>r.userData.architecturalGlass?new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3)):C(new vd(e,t,n,3,Math.min(c,e/3,t/3,n/3)))),r,i,a,o,s),
     T=(e,t,n,r,i=0,a=0,o=0)=>S(new Si(e,e,t,36),n,r,i,a,o),
     E=(e,t,n,r)=>S(new qa(new Pi(e),Math.max(8,e.length*3),t,5,!1),n,r),
     D=S(new Wa(240,240),new Vr({color:"#eef3f9",toneMapped:!1}),i,0,-.33,0);
@@ -5972,6 +5982,9 @@ function qd(e,t,n){
   Ze.castShadow=!1,Ze.receiveShadow=!0,Ze.renderOrder=1;
 
   let Qe=new Ss,$e=new J,et=new Y,tt=!1,nt=null,rt=null,q=!0,it=0,at=0,ot=0,st=.16,ct=null,lt=null;
+  // flyRate: camera glide speed (slower for the intro). perf*: adaptive resolution — if frames stay
+  // slower than ~26fps, step the pixel ratio down (never up, so it cannot oscillate).
+  let flyRate=6,perfEMA=0,perfN=0;
   function ut(e){
     let t=r.domElement.getBoundingClientRect();
     $e.set((e.clientX-t.left)/t.width*2-1,1-(e.clientY-t.top)/t.height*2),Qe.setFromCamera($e,s);
@@ -6024,13 +6037,13 @@ function qd(e,t,n){
   }
   function ht(){dt(null),ct=null;}
   function gt(t="deepmind"){
-    nt=t;
+    nt=t,flyRate=6;
     let n=new Y(Id[t].x,xd(Id[t].x,Id[t].z)+.75,Id[t].z),
       r=s.position.clone().sub(l.target).normalize().multiplyScalar(e.clientWidth<600?22:17.5);
     lt={position:n.clone().add(r),target:n};
   }
   function _t(){
-    nt=null,lt={position:c.clone().multiplyScalar(fitMul()),target:new Y(0,1.4,0)};
+    nt=null,flyRate=6,lt={position:c.clone().multiplyScalar(fitMul()),target:new Y(0,1.4,0)};
   }
 
   let vt=r.domElement;
@@ -6062,12 +6075,16 @@ function qd(e,t,n){
     a=!1;
     let c=ot?Math.max(0,(n-ot)/1e3):0,u=Math.min(ot?c:1/60,.06);
     ot=n;
-    let d=q?1-Math.exp(-u*6):1;
+    if(q&&c>0&&c<.25){
+      perfEMA=perfEMA?perfEMA*.95+c*.05:c;
+      if(++perfN>150&&perfEMA>.038&&r.getPixelRatio()>1){r.setPixelRatio(Math.max(1,r.getPixelRatio()-.25)),perfN=0,perfEMA=0,o=!0;}
+    }
+    let d=q?1-Math.exp(-u*flyRate):1;
     q&&(it+=u,at+=c),P.update(at),builtLandmarks.updateCows(at);
     pTail.rotation.y=Math.sin(at*7.5)*.34;
     pHead.rotation.z=Math.sin(at*2.2)*.045;
 
-    lt&&(s.position.lerp(lt.position,d),l.target.lerp(lt.target,d),s.position.distanceTo(lt.position)<.005&&(lt=null)),l.enableDamping=q,l.update();
+    lt&&(s.position.lerp(lt.position,d),l.target.lerp(lt.target,d),s.position.distanceTo(lt.position)<.005&&(lt=null,flyRate=6)),l.enableDamping=q,l.update();
     for(let[e,t]of Object.entries(oe))t.position.y=wt.lerp(t.position.y,xd(t.position.x,t.position.z)+(rt===e?.075:0),d);
     if(Oe.forEach((e,t)=>{e.rotation.z=Math.sin(it*.65+t)*.012;}),Ae.update(at),fe.update(at),A.time.value=it,q&&ue>0){
       let e=ue*Math.exp(-u*1.55),t=(ue-e)/1.55;
@@ -6097,17 +6114,27 @@ function qd(e,t,n){
     }
     r.render(i,s);
   }
-  let Et=!1,Dt;
-  function X(){document.hidden?r.setAnimationLoop(null):Et&&!tt&&(ot=0,r.setAnimationLoop(Tt));}
+  let Et=!1,Dt,viewOn=!0;
+  function X(){document.hidden||!viewOn?r.setAnimationLoop(null):Et&&!tt&&(ot=0,r.setAnimationLoop(Tt));}
   document.addEventListener("visibilitychange",X);
   let Ot=!1;
-  return h.manager.onProgress=(e,t,r)=>{tt||n.progress(Math.round(t/r*95));},
+  return h.manager.onProgress=(e,t,r)=>{tt||n.progress(Math.round(t/r*80),"Loading map");},
     h.manager.onLoad=async()=>{
       if(!(tt||Ot)){
-        performance.mark("map:textures-loaded"),n.progress(95);
+        performance.mark("map:textures-loaded"),n.progress(82,"Preparing scene");
         try{
-          if(m.forEach(e=>r.initTexture(e)),await r.compileAsync(i,s),tt)return;
-          performance.mark("map:shaders-ready"),a=!0,Tt(performance.now()),requestAnimationFrame(()=>{
+          // Upload textures in ~12ms slices, yielding between them so the loader keeps animating
+          let sliceStart=performance.now(),done=0;
+          for(let t of m){
+            if(tt)return;
+            r.initTexture(t),done++;
+            if(performance.now()-sliceStart>12){n.progress(82+Math.round(done/m.size*8),"Preparing scene");await new Promise(e=>setTimeout(e,0));sliceStart=performance.now();}
+          }
+          if(n.progress(91,"Preparing scene"),await new Promise(e=>setTimeout(e,0)),await r.compileAsync(i,s),tt)return;
+          performance.mark("map:shaders-ready"),n.progress(97,"Almost there");
+          // Intro: start slightly pulled back & rotated, then glide into the resting view
+          if(q&&!nt){let fp=c.clone().multiplyScalar(fitMul());s.position.copy(fp).multiplyScalar(1.08).applyAxisAngle(new Y(0,1,0),-.1),l.target.set(0,1.4,0),flyRate=2.4,lt={position:fp,target:new Y(0,1.4,0)};}
+          a=!0,Tt(performance.now()),requestAnimationFrame(()=>{
             tt||Ot||(l.enabled=!0,ot=0,e.dataset.materials="loaded",performance.mark("map:first-textured-frame"),n.progress(100),n.ready(),Dt=setTimeout(()=>{Et=!0,X();},50));
           });
         }catch(err){
@@ -6121,6 +6148,7 @@ function qd(e,t,n){
       ringBike:We,
       toggleLamp:Ne,
       motion(e){q=e,ot=0,a=!0;},
+      active(e){viewOn=!!e,a=!0,X();},
       select:gt,
       dismiss(){nt=null,a=!0;},
       reset:_t,

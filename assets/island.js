@@ -167,17 +167,46 @@
   let diorama = null;
   let hoveredId = null;
   let selectedId = null;
-  let isMotionEnabled = true;
+  // Visitors who ask the OS for reduced motion get a still island (camera moves become instant)
+  const prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let isMotionEnabled = !prefersReducedMotion;
 
   function initIsland() {
     const islandView = document.getElementById('islandView');
     const worldEl = document.getElementById('islandWorld');
     const anchorEl = document.getElementById('islandAnchor');
-    const loadFill = document.getElementById('islandLoadFill');
-
-    if (!islandView || !worldEl || !anchorEl || typeof window.createIslandScene !== 'function') {
+    if (!islandView || !worldEl || !anchorEl) {
       return;
     }
+
+    const loadFill = document.getElementById('islandLoadFill');
+    const loadTrack = loadFill ? loadFill.parentElement : null;
+    const loadCaption = document.querySelector('#islandLoadIndicator .acro-load-caption');
+    let loadPct = 0;
+
+    // Progress is drawn with transform: scaleX (compositor-only, never janks layout) and only moves forward
+    function setLoadProgress(pct, stage) {
+      pct = Math.max(loadPct, Math.min(100, pct));
+      loadPct = pct;
+      if (loadFill) loadFill.style.transform = `scaleX(${Math.max(0.06, pct / 100)})`;
+      if (loadTrack) loadTrack.setAttribute('aria-valuenow', String(Math.round(pct)));
+      if (stage && loadCaption && !slowLoad) loadCaption.textContent = stage;
+    }
+
+    // If the network is slow, reassure instead of looking frozen
+    let slowLoad = false;
+    const slowTimer = setTimeout(() => {
+      if (islandView.getAttribute('data-scene-status') !== 'loading') return;
+      slowLoad = true;
+      if (loadCaption) loadCaption.textContent = 'Still loading the island…';
+    }, 9000);
+
+    function markFailed() {
+      clearTimeout(slowTimer);
+      islandView.setAttribute('data-scene-status', 'failed');
+      worldEl.setAttribute('aria-busy', 'false');
+    }
+
 
     const locationButtons = {};
     worldEl.querySelectorAll('[data-location]').forEach((btn) => {
@@ -283,6 +312,7 @@
 
     // Mount the 3D Island engine
     try {
+      if (typeof window.createIslandScene !== 'function') throw new Error('island-scene.js did not load');
       diorama = window.createIslandScene(worldEl, anchorEl, {
         hover: (id) => {
           updateHover(id);
@@ -293,13 +323,10 @@
           renderFrostedCard(id);
           emitIslandEvent({ type: 'select', place: id });
         },
-        progress: (pct) => {
-          if (loadFill) {
-            loadFill.style.width = `${Math.max(15, pct)}%`;
-          }
-        },
+        progress: (pct, stage) => setLoadProgress(pct, stage),
         ready: () => {
-          if (loadFill) loadFill.style.width = '100%';
+          clearTimeout(slowTimer);
+          setLoadProgress(100);
           islandView.setAttribute('data-scene-status', 'ready');
           worldEl.setAttribute('aria-busy', 'false');
           worldEl.querySelectorAll('[data-location], [data-bike-bell], [data-lamp-id], [data-camera-hint]').forEach((el) => {
@@ -308,22 +335,29 @@
           anchorEl.hidden = !selectedId;
           emitIslandEvent({ type: 'ready' });
         },
-        failed: () => {
-          islandView.setAttribute('data-scene-status', 'ready');
-        }
+        failed: markFailed
       });
+      if (!isMotionEnabled && diorama) diorama.motion(false);
+      // The page can open on the Full Website (e.g. a #section link) — don't render offscreen
+      if (diorama && diorama.active && islandView.classList.contains('hidden-view')) diorama.active(false);
     } catch (err) {
       console.error('Failed to initialize 3D island diorama:', err);
+      markFailed();
     }
 
     // Bind bottom pill controls (Pause/Play motion Ⅱ / ▷ and Reset ↺)
     const pauseBtn = document.getElementById('pauseIslandBtn');
     if (pauseBtn) {
-      pauseBtn.addEventListener('click', () => {
-        isMotionEnabled = !isMotionEnabled;
+      const syncPauseBtn = () => {
         pauseBtn.textContent = isMotionEnabled ? 'Ⅱ' : '▷';
         pauseBtn.setAttribute('aria-label', isMotionEnabled ? 'Pause motion' : 'Resume motion');
+        pauseBtn.setAttribute('title', isMotionEnabled ? 'Pause motion' : 'Resume motion');
         pauseBtn.setAttribute('aria-pressed', String(!isMotionEnabled));
+      };
+      syncPauseBtn();
+      pauseBtn.addEventListener('click', () => {
+        isMotionEnabled = !isMotionEnabled;
+        syncPauseBtn();
         if (diorama) diorama.motion(isMotionEnabled);
       });
     }
@@ -432,7 +466,11 @@
     const islandView = document.getElementById('islandView');
     if (islandView) islandView.classList.add('hidden-view');
     document.body.style.overflow = '';
-    if (diorama) diorama.motion(false);
+    if (diorama) {
+      diorama.motion(false);
+      if (diorama.active) diorama.active(false);
+    }
+    window.dispatchEvent(new CustomEvent('island:view', { detail: { view: 'classic' } }));
 
     if (targetSelector) {
       setTimeout(() => {
@@ -446,7 +484,11 @@
     const islandView = document.getElementById('islandView');
     if (islandView) islandView.classList.remove('hidden-view');
     document.body.style.overflow = 'hidden';
-    if (diorama && isMotionEnabled) diorama.motion(true);
+    if (diorama) {
+      if (diorama.active) diorama.active(true);
+      if (isMotionEnabled) diorama.motion(true);
+    }
+    window.dispatchEvent(new CustomEvent('island:view', { detail: { view: 'island' } }));
   }
 
   if (document.readyState === 'loading') {
