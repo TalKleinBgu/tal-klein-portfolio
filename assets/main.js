@@ -678,7 +678,7 @@ if(window.matchMedia('(hover: hover)').matches){
     prows.forEach(row => {
       const cat = row.dataset.category || '';
       const text = ((row.dataset.keywords || '') + ' ' + (row.textContent || '')).toLowerCase();
-      const matchCat = activeCategory === 'all' || cat === activeCategory;
+      const matchCat = activeCategory === 'all' || cat.split(/\s+/).includes(activeCategory);
       const matchSearch = !searchQuery || text.includes(searchQuery);
       const isVisible = matchCat && matchSearch;
       row.classList.toggle('filtered-out', !isVisible);
