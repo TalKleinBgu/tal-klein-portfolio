@@ -13,13 +13,13 @@
       id: 'deepmind',
       name: 'Data Scientist & ML Engineer',
       logo: './assets/scene/brands/ai-icon.svg',
-      role: 'Data Scientist & ML Researcher · Socially Embedded Lab, BGU (2024 – Present)',
+      role: 'Data Scientist & ML Researcher · Socially Embedded Lab, BGU (2024 – 2026)',
       cardDesc: 'End-to-end NLP pipeline extracting 30+ structured features from 4,000+ Hebrew court verdicts (0.92 F1) & causal inference',
-      tag: 'Current Role & Springer Publication · Beer Sheva',
+      tag: 'Research Role & Springer Publication · Beer Sheva',
       title: 'Data Scientist & Machine Learning Engineer',
-      subtitle: 'Socially Embedded Lab, Ben-Gurion University · 2024 – Present',
+      subtitle: 'Socially Embedded Lab, Ben-Gurion University · 2024 – 2026',
       icon: '🧠',
-      desc: 'Specializing in GenAI, LLMs, deep learning, production-scale NLP pipelines, RAG architectures, and causal inference. Currently leading LLM-driven feature extraction and causal sentencing analysis at BGU, with our paper under review at Artificial Intelligence and Law (Springer, 2026).',
+      desc: 'Specializing in GenAI, LLMs, deep learning, production-scale NLP pipelines, RAG architectures, and causal inference. Led LLM-driven feature extraction and causal sentencing analysis at BGU, with our paper under review at Artificial Intelligence and Law (Springer, 2026).',
       stats: [
         { v: '0.92', k: 'F1 Score' },
         { v: '4,000+', k: 'Court Verdicts' },
@@ -165,6 +165,8 @@
   };
 
   let diorama = null;
+  let sceneRequested = false;
+  let mountScene = () => {};
   let hoveredId = null;
   let selectedId = null;
   // Visitors who ask the OS for reduced motion get a still island (camera moves become instant)
@@ -195,11 +197,12 @@
 
     // If the network is slow, reassure instead of looking frozen
     let slowLoad = false;
-    const slowTimer = setTimeout(() => {
+    let slowTimer = 0;
+    const startSlowTimer = () => { slowTimer = setTimeout(() => {
       if (islandView.getAttribute('data-scene-status') !== 'loading') return;
       slowLoad = true;
       if (loadCaption) loadCaption.textContent = 'Still loading the island…';
-    }, 9000);
+    }, 9000); };
 
     function markFailed() {
       clearTimeout(slowTimer);
@@ -310,7 +313,16 @@
       }
     }
 
-    // Mount the 3D Island engine
+    // Mount the 3D Island engine (island-scene.js is fetched the first time the island is opened)
+    mountScene = () => {
+    if (sceneRequested) return;
+    sceneRequested = true;
+    startSlowTimer();
+    const script = document.createElement('script');
+    script.src = './assets/island-scene.js?v=11';
+    script.async = true;
+    script.onerror = () => { console.error('Failed to load island-scene.js'); markFailed(); };
+    script.onload = () => {
     try {
       if (typeof window.createIslandScene !== 'function') throw new Error('island-scene.js did not load');
       diorama = window.createIslandScene(worldEl, anchorEl, {
@@ -344,6 +356,9 @@
       console.error('Failed to initialize 3D island diorama:', err);
       markFailed();
     }
+    };
+    document.head.appendChild(script);
+    };
 
     // Bind bottom pill controls (Pause/Play motion Ⅱ / ▷ and Reset ↺)
     const pauseBtn = document.getElementById('pauseIslandBtn');
@@ -383,6 +398,8 @@
     if (switchToIslandBtn) switchToIslandBtn.addEventListener('click', () => switchToIslandView());
     if (navIslandBtn) navIslandBtn.addEventListener('click', () => switchToIslandView());
     if (mmIslandBtn) mmIslandBtn.addEventListener('click', () => switchToIslandView());
+    const footerIslandBtn = document.getElementById('footerIslandBtn');
+    if (footerIslandBtn) footerIslandBtn.addEventListener('click', () => switchToIslandView());
 
     // Bind Modal close events
     const closeBtn = document.getElementById('landmarkCloseBtn');
@@ -471,6 +488,7 @@
       if (diorama.active) diorama.active(false);
     }
     window.dispatchEvent(new CustomEvent('island:view', { detail: { view: 'classic' } }));
+    if (location.hash === '#island') history.replaceState(null, '', location.pathname + location.search);
 
     if (targetSelector) {
       setTimeout(() => {
@@ -484,6 +502,7 @@
     const islandView = document.getElementById('islandView');
     if (islandView) islandView.classList.remove('hidden-view');
     document.body.style.overflow = 'hidden';
+    mountScene();
     if (diorama) {
       if (diorama.active) diorama.active(true);
       if (isMotionEnabled) diorama.motion(true);
@@ -491,13 +510,13 @@
     window.dispatchEvent(new CustomEvent('island:view', { detail: { view: 'island' } }));
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.style.overflow = 'hidden';
-      initIsland();
-    });
-  } else {
-    document.body.style.overflow = 'hidden';
+  function boot() {
     initIsland();
+    if (location.hash === '#island') switchToIslandView();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();
